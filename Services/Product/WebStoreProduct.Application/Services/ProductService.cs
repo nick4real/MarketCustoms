@@ -10,15 +10,15 @@ namespace WebStoreProduct.Application.Services;
 
 public class ProductService(IProductRepository productRepository, IMapper mapper) : IProductService
 {
-    public async Task<Result<Product>> GetDetailedProductByIdAsync(uint id)
+    public async Task<Result<ProductDetailedResponse>> GetDetailedProductByIdAsync(uint id)
     {
         var product = await productRepository.GetProductByIdAsync(id);
         if (product is null)
         {
-            return Result<Product>.Failure(new Error(ErrorCode.NotFound, $"Product with ID {id} was not found."));
+            return Result<ProductDetailedResponse>.Failure(new Error(ErrorCode.NotFound, $"Product with ID {id} was not found."));
         }
 
-        return Result<Product>.Success(product);
+        return Result<ProductDetailedResponse>.Success(mapper.Map<ProductDetailedResponse>(product));
     }
 
     public async Task<Result<PaginatedResponse<ProductDto>>> GetProductsAsync(int page, int size, ProductParams? productParams = null)

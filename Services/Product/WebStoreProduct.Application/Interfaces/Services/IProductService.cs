@@ -8,5 +8,5 @@ namespace WebStoreProduct.Application.Interfaces.Services;
 public interface IProductService
 {
     Task<Result<PaginatedResponse<ProductDto>>> GetProductsAsync(int page, int size, ProductParams productParams);
-    Task<Result<Product>> GetDetailedProductByIdAsync(uint id);
+    Task<Result<ProductDetailedResponse>> GetDetailedProductByIdAsync(uint id);
 }
