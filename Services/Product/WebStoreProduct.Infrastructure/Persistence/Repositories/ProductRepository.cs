@@ -8,10 +8,10 @@ namespace WebStoreProduct.Infrastructure.Persistence.Repositories;
 
 public class ProductRepository(AppDbContext dbContext) : IProductRepository
 {
-    public async Task<Product?> GetProductByIdAsync(uint id)
+    public async Task<Product?> GetProductByIdAsync(uint id, CancellationToken ct)
         => await dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
 
-    public async Task<PaginatedList<ProductDto>?> GetProductsAsync(int page, int size, ProductParams? productParams = null)
+    public async Task<PaginatedList<ProductDto>?> GetProductsAsync(int page, int size, CancellationToken ct, ProductParams? productParams = null)
     {
         var query = dbContext.Products.AsNoTracking();
 

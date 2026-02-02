@@ -11,9 +11,9 @@ public class ProductsController(IProductService productService) : ControllerBase
 {
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int size = 12, [FromBody] ProductParams productParams = null)
+    public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] int page = 1, [FromQuery] int size = 12, [FromBody] ProductParams productParams = null)
     {
-        var productsResult = await productService.GetProductsAsync(page, size, productParams);
+        var productsResult = await productService.GetProductsAsync(page, size, ct, productParams);
 
         if (!productsResult.IsSuccess)
         {
@@ -25,9 +25,9 @@ public class ProductsController(IProductService productService) : ControllerBase
 
     [HttpGet("{productId}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAllByCategory(uint productId)
+    public async Task<IActionResult> GetAllByCategory(CancellationToken ct, uint productId)
     {
-        var productsResult = await productService.GetDetailedProductByIdAsync(productId);
+        var productsResult = await productService.GetDetailedProductByIdAsync(productId, ct);
         if (!productsResult.IsSuccess)
         {
             return BadRequest(productsResult.Error);
