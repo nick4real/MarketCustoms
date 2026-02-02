@@ -1,8 +1,6 @@
-﻿using Mapster;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebStoreProduct.Application.Common;
 using WebStoreProduct.Application.Interfaces.Repositories;
 using WebStoreProduct.Application.Interfaces.Services;
 using WebStoreProduct.Application.Services;
@@ -17,9 +15,6 @@ public static class ServiceCollectionExtension
     {
         public IServiceCollection AddInfrastructure(IConfiguration configuration)
         {
-            services.AddMapster();
-            MapsterConfig.Configure();
-
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ProductDatabase"), builder =>
                 {

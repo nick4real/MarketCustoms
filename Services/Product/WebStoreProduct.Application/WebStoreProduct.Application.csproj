@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebStoreProduct.Domain\WebStoreProduct.Domain.csproj" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
+	<PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mapster" Version="7.4.0" />
+    <ProjectReference Include="..\WebStoreProduct.Domain\WebStoreProduct.Domain.csproj" />
   </ItemGroup>
 
 </Project>
