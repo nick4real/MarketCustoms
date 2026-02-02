@@ -1,4 +1,6 @@
-﻿using Mapster;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using WebStoreProduct.Application.Common;
 using WebStoreProduct.Application.Interfaces.Services;
@@ -17,6 +19,9 @@ public static class ServiceCollectionExtension
 
             // Services
             services.AddScoped<IProductService, ProductService>();
+
+            // Validators
+            services.AddFluentValidationAutoValidation();
 
             return services;
         }

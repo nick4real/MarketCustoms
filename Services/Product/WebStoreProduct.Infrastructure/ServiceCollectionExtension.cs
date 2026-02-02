@@ -22,10 +22,6 @@ public static class ServiceCollectionExtension
             // Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
 
-            // Validators
-            //services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
-            //services.AddFluentValidationAutoValidation();
-
             return services;
         }
     }
