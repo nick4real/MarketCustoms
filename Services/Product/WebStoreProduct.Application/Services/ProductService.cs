@@ -21,20 +21,9 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
         return Result<Product>.Success(product);
     }
 
-    public async Task<Result<PaginatedResponse<ProductDto>>> GetProductsAsync(int page, int size)
+    public async Task<Result<PaginatedResponse<ProductDto>>> GetProductsAsync(int page, int size, ProductParams? productParams = null)
     {
-        var products = await productRepository.GetProductsAsync(page, size);
-        if (products is null)
-        {
-            return Result<PaginatedResponse<ProductDto>>.Failure(new Error(ErrorCode.NotFound, "No products were found."));
-        }
-
-        return Result<PaginatedResponse<ProductDto>>.Success(mapper.Map<PaginatedResponse<ProductDto>>(products));
-    }
-
-    public async Task<Result<PaginatedResponse<ProductDto>>> GetProductsByCategoryAsync(uint categoryId, int page, int size)
-    {
-        var products = await productRepository.GetProductsByCategoryAsync(categoryId, page, size);
+        var products = await productRepository.GetProductsAsync(page, size, productParams);
         if (products is null)
         {
             return Result<PaginatedResponse<ProductDto>>.Failure(new Error(ErrorCode.NotFound, "No products were found."));

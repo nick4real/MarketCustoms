@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebStoreProduct.Application.DTOs;
 using WebStoreProduct.Application.Interfaces.Services;
 
 namespace WebStoreProduct.API.Controllers;
@@ -10,11 +11,9 @@ public class ProductsController(IProductService productService) : ControllerBase
 {
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAll([FromQuery] uint categoryId = 0, [FromQuery] int page = 1, [FromQuery] int size = 12)
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int size = 12, [FromBody] ProductParams productParams = null)
     {
-        var productsResult = categoryId == 0
-            ? await productService.GetProductsAsync(page, size)
-            : await productService.GetProductsByCategoryAsync(categoryId, page, size);
+        var productsResult = await productService.GetProductsAsync(page, size, productParams);
 
         if (!productsResult.IsSuccess)
         {

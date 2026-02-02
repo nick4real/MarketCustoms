@@ -7,4 +7,4 @@ public record ProductDto(
     string Title,
     string Description,
     decimal Price,
-    ImageLink Image);
+    ImageLink? Image);

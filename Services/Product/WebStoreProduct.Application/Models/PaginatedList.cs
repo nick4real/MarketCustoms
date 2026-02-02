@@ -2,21 +2,26 @@
 
 namespace WebStoreProduct.Application.Models;
 
-public record PaginatedList<T> : IReadOnlyList<T>
+public class PaginatedList<T> : IReadOnlyList<T>
 {
-    public T[] Items { get; }
+    public T[] Items { get; init; }
     public int Count => Items.Length;
 
-    public int PageIndex { get; }
+    public int PageSize { get; init; }
+    public int PageIndex { get; init; }
+    public int TotalItems { get; init; }
     public int TotalPages { get; }
     public bool HasPreviousPage => PageIndex > 1;
     public bool HasNextPage => PageIndex < TotalPages;
 
-    public PaginatedList(T[] items, int pageIndex, int totalPages)
+    public PaginatedList(T[] items, int totalItems, int pageIndex, int pageSize)
     {
         Items = items;
+        TotalItems = totalItems;
         PageIndex = pageIndex;
-        TotalPages = totalPages;
+        PageSize = pageSize;
+
+        TotalPages = (int)Math.Ceiling(TotalItems / (double)PageSize);
     }
 
     public T this[int index] => Items[index];
