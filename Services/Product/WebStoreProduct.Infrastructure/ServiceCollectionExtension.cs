@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebStoreProduct.Application.Interfaces.Repositories;
-using WebStoreProduct.Application.Interfaces.Services;
-using WebStoreProduct.Application.Services;
 using WebStoreProduct.Infrastructure.Persistence;
 using WebStoreProduct.Infrastructure.Persistence.Repositories;
 
@@ -23,9 +21,6 @@ public static class ServiceCollectionExtension
 
             // Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
-
-            // Services
-            services.AddScoped<IProductService, ProductService>();
 
             // Validators
             //services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
