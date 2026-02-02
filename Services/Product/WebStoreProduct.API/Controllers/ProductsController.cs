@@ -7,20 +7,14 @@ namespace WebStoreProduct.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductsController(IProductService productService) : ControllerBase
+public class ProductsController(IProductService productService) : CustomController
 {
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] int page = 1, [FromQuery] int size = 12, [FromBody] ProductParams productParams = null)
     {
         var productsResult = await productService.GetProductsAsync(page, size, ct, productParams);
-
-        if (!productsResult.IsSuccess)
-        {
-            return BadRequest(productsResult.Error);
-        }
-
-        return Ok(productsResult.Value);
+        return HandleResult(productsResult);
     }
 
     [HttpGet("{productId}")]
@@ -28,11 +22,6 @@ public class ProductsController(IProductService productService) : ControllerBase
     public async Task<IActionResult> GetAllByCategory(CancellationToken ct, uint productId)
     {
         var productsResult = await productService.GetDetailedProductByIdAsync(productId, ct);
-        if (!productsResult.IsSuccess)
-        {
-            return BadRequest(productsResult.Error);
-        }
-
-        return Ok(productsResult.Value);
+        return HandleResult(productsResult);
     }
 }

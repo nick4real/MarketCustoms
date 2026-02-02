@@ -1,9 +1,10 @@
-﻿namespace WebStoreProduct.Application.Common;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace WebStoreProduct.Application.Common;
 
 public enum ErrorCode
 {
-    NotFound,
-    ValidationFailed,
-    Conflict,
-    InternalError
+    ValidationFailed = StatusCodes.Status400BadRequest,
+    NotFound = StatusCodes.Status404NotFound,
+    Conflict = StatusCodes.Status409Conflict
 }
