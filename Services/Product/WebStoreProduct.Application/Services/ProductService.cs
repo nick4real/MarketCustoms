@@ -22,6 +22,15 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
 
     public async Task<Result<PaginatedResponse<ProductDto>>> GetProductsAsync(int page, int size, CancellationToken ct, ProductParams? productParams = null)
     {
+        if (page <= 0 || size <= 0)
+        {
+            return Result<PaginatedResponse<ProductDto>>.Failure(new Error(ErrorCode.ValidationFailed, "Page and size must be greater than zero."));
+        }
+        else if (size > 48)
+        {
+            return Result<PaginatedResponse<ProductDto>>.Failure(new Error(ErrorCode.ValidationFailed, "Page size is greater than allowed."));
+        }
+
         var products = await productRepository.GetProductsAsync(page, size, ct, productParams);
         if (products is null)
         {

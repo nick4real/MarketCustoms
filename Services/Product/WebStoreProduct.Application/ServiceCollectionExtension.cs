@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebStoreProduct.Application.Common;
 using WebStoreProduct.Application.Interfaces.Services;
 using WebStoreProduct.Application.Services;
+using WebStoreProduct.Application.Validators;
 
 namespace WebStoreProduct.Application;
 
@@ -21,6 +22,7 @@ public static class ServiceCollectionExtension
             services.AddScoped<IProductService, ProductService>();
 
             // Validators
+            services.AddValidatorsFromAssemblyContaining<ProductParamsValidator>();
             services.AddFluentValidationAutoValidation();
 
             return services;
