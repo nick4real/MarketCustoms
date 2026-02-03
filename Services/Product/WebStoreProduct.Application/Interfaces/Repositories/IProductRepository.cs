@@ -1,12 +1,11 @@
-﻿using WebStoreProduct.Application.DTOs;
-using WebStoreProduct.Application.Models;
+﻿using WebStoreProduct.Application.Models;
 using WebStoreProduct.Domain.Entities;
+using WebStoreProduct.Domain.Views;
 
 namespace WebStoreProduct.Application.Interfaces.Repositories;
 
 public interface IProductRepository
 {
-    Task<PaginatedList<ProductDto>?> GetProductsAsync(int page, int size);
-    Task<PaginatedList<ProductDto>?> GetProductsByCategoryAsync(uint categoryId, int page, int size);
-    Task<Product?> GetProductByIdAsync(uint id);
+    Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams queryParams);
+    Task<Product?> GetProductByIdAsync(uint id, CancellationToken ct);
 }

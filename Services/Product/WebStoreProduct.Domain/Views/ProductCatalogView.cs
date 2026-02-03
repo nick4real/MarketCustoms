@@ -1,10 +1,10 @@
 ﻿using WebStoreProduct.Domain.Entities;
 
-namespace WebStoreProduct.Application.DTOs;
+namespace WebStoreProduct.Domain.Views;
 
-public record ProductDto(
+public record ProductCatalogView(
     uint Id,
     string Title,
     string Description,
     decimal Price,
-    ImageLink Image);
+    ImageLink? Image);

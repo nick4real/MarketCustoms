@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using WebStoreProduct.Infrastructure.Persistence;
 using WebStoreProduct.Infrastructure;
+using WebStoreProduct.Application;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

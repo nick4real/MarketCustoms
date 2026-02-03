@@ -1,39 +1,35 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStoreProduct.Application.Interfaces.Services;
+using WebStoreProduct.Application.Models;
 
 namespace WebStoreProduct.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductsController(IProductService productService) : ControllerBase
+public class ProductsController(IProductService productService) : CustomController
 {
-    [HttpGet]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetAll([FromQuery] uint categoryId = 0, [FromQuery] int page = 1, [FromQuery] int size = 12)
-    {
-        var productsResult = categoryId == 0
-            ? await productService.GetProductsAsync(page, size)
-            : await productService.GetProductsByCategoryAsync(categoryId, page, size);
-
-        if (!productsResult.IsSuccess)
-        {
-            return BadRequest(productsResult.Error);
-        }
-
-        return Ok(productsResult.Value);
-    }
-
     [HttpGet("{productId}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAllByCategory(uint productId)
+    public async Task<IActionResult> GetAllByCategory(CancellationToken ct, uint productId)
     {
-        var productsResult = await productService.GetDetailedProductByIdAsync(productId);
-        if (!productsResult.IsSuccess)
-        {
-            return BadRequest(productsResult.Error);
-        }
+        var productsResult = await productService.GetDetailedProductByIdAsync(productId, ct);
+        return HandleResult(productsResult);
+    }
 
-        return Ok(productsResult.Value);
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] PaginationParams paginationParams = default!)
+    {
+        var productsResult = await productService.GetProductsAsync(ct, paginationParams, null!);
+        return HandleResult(productsResult);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAllByParams(CancellationToken ct, [FromBody] ProductParams productParams, [FromQuery] PaginationParams paginationParams = default!)
+    {
+        var productsResult = await productService.GetProductsAsync(ct, paginationParams, productParams);
+        return HandleResult(productsResult);
     }
 }
