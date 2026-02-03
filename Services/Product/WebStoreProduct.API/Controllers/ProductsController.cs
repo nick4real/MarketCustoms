@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebStoreProduct.Application.DTOs;
 using WebStoreProduct.Application.Interfaces.Services;
+using WebStoreProduct.Application.Models;
 
 namespace WebStoreProduct.API.Controllers;
 
@@ -9,19 +9,27 @@ namespace WebStoreProduct.API.Controllers;
 [Route("[controller]")]
 public class ProductsController(IProductService productService) : CustomController
 {
-    [HttpGet]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] int page = 1, [FromQuery] int size = 12, [FromBody] ProductParams productParams = null)
-    {
-        var productsResult = await productService.GetProductsAsync(page, size, ct, productParams);
-        return HandleResult(productsResult);
-    }
-
     [HttpGet("{productId}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetAllByCategory(CancellationToken ct, uint productId)
     {
         var productsResult = await productService.GetDetailedProductByIdAsync(productId, ct);
+        return HandleResult(productsResult);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] PaginationParams paginationParams = default!)
+    {
+        var productsResult = await productService.GetProductsAsync(ct, paginationParams, null!);
+        return HandleResult(productsResult);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAllByParams(CancellationToken ct, [FromBody] ProductParams productParams, [FromQuery] PaginationParams paginationParams = default!)
+    {
+        var productsResult = await productService.GetProductsAsync(ct, paginationParams, productParams);
         return HandleResult(productsResult);
     }
 }

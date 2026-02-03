@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using WebStoreProduct.Application.DTOs;
+using WebStoreProduct.Application.Models;
 
 namespace WebStoreProduct.Application.Validators;
 
@@ -8,6 +8,6 @@ public class ProductParamsValidator : AbstractValidator<ProductParams>
     public ProductParamsValidator()
     {
         RuleFor(p => p.CategoryId)
-            .GreaterThan(0).WithMessage("Id cannot be lower than 0");
+            .GreaterThan((uint)0).WithMessage("ID cannot be lower than 0");
     }
 }

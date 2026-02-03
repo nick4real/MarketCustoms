@@ -1,9 +1,10 @@
 ﻿using MapsterMapper;
 using WebStoreProduct.Application.Common;
-using WebStoreProduct.Application.DTOs;
 using WebStoreProduct.Application.Interfaces.Repositories;
 using WebStoreProduct.Application.Interfaces.Services;
+using WebStoreProduct.Application.Models;
 using WebStoreProduct.Application.Responses;
+using WebStoreProduct.Domain.Views;
 
 namespace WebStoreProduct.Application.Services;
 
@@ -20,23 +21,27 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
         return Result<ProductDetailedResponse>.Success(mapper.Map<ProductDetailedResponse>(product));
     }
 
-    public async Task<Result<PaginatedResponse<ProductDto>>> GetProductsAsync(int page, int size, CancellationToken ct, ProductParams? productParams = null)
+    public async Task<Result<PaginatedResponse<ProductCatalogView>>> GetProductsAsync(CancellationToken ct, PaginationParams paginationParams, ProductParams productParams)
     {
-        if (page <= 0 || size <= 0)
+        int skip = (paginationParams.PageIndex - 1) * paginationParams.PageSize;
+        int take = paginationParams.PageSize;
+
+        var pagedProducts = await productRepository.GetProductsCatalogViewAsync(skip, take, ct, productParams);
+        if (pagedProducts is null)
         {
-            return Result<PaginatedResponse<ProductDto>>.Failure(new Error(ErrorCode.ValidationFailed, "Page and size must be greater than zero."));
-        }
-        else if (size > 48)
-        {
-            return Result<PaginatedResponse<ProductDto>>.Failure(new Error(ErrorCode.ValidationFailed, "Page size is greater than allowed."));
+            return Result<PaginatedResponse<ProductCatalogView>>.Failure(new Error(ErrorCode.NotFound, "No products were found."));
         }
 
-        var products = await productRepository.GetProductsAsync(page, size, ct, productParams);
-        if (products is null)
-        {
-            return Result<PaginatedResponse<ProductDto>>.Failure(new Error(ErrorCode.NotFound, "No products were found."));
-        }
+        int totalPages = (int)Math.Ceiling(pagedProducts.TotalItems / (double)paginationParams.PageSize);
+        bool hasPreviousPage = paginationParams.PageIndex > 1;
+        bool hasNextPage = (paginationParams.PageIndex * paginationParams.PageSize) < pagedProducts.TotalItems;
 
-        return Result<PaginatedResponse<ProductDto>>.Success(mapper.Map<PaginatedResponse<ProductDto>>(products));
+        return Result<PaginatedResponse<ProductCatalogView>>.Success(new PaginatedResponse<ProductCatalogView>(
+            pagedProducts.Items,
+            paginationParams.PageSize,
+            paginationParams.PageIndex,
+            totalPages,
+            hasPreviousPage,
+            hasNextPage));
     }
 }
