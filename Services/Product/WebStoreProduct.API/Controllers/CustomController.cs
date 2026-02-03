@@ -13,7 +13,7 @@ public class CustomController : ControllerBase
         {
             ErrorCode.ValidationFailed => BadRequest(result.Error),
             ErrorCode.NotFound => NotFound(result.Error),
-            ErrorCode.Conflict => BadRequest(result.Error),
+            ErrorCode.Conflict => Conflict(result.Error),
             _ => StatusCode(StatusCodes.Status500InternalServerError, "Unknown error.")
         };
     }
