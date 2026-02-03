@@ -1,5 +1,6 @@
 ﻿using MapsterMapper;
 using WebStoreProduct.Application.Common;
+using WebStoreProduct.Application.DTOs;
 using WebStoreProduct.Application.Interfaces.Repositories;
 using WebStoreProduct.Application.Interfaces.Services;
 using WebStoreProduct.Application.Models;
@@ -21,7 +22,7 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
         return Result<ProductDetailedResponse>.Success(mapper.Map<ProductDetailedResponse>(product));
     }
 
-    public async Task<Result<PaginatedResponse<ProductCatalogView>>> GetProductsAsync(CancellationToken ct, PaginationParams paginationParams, ProductParams productParams)
+    public async Task<Result<PaginatedResponse<ProductCatalogViewDto>>> GetProductsAsync(CancellationToken ct, PaginationParams paginationParams, ProductParams productParams)
     {
         int skip = (paginationParams.PageIndex - 1) * paginationParams.PageSize;
         int take = paginationParams.PageSize;
@@ -29,15 +30,15 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
         var pagedProducts = await productRepository.GetProductsCatalogViewAsync(skip, take, ct, productParams);
         if (pagedProducts is null)
         {
-            return Result<PaginatedResponse<ProductCatalogView>>.Failure(new Error(ErrorCode.NotFound, "No products were found."));
+            return Result<PaginatedResponse<ProductCatalogViewDto>>.Failure(new Error(ErrorCode.NotFound, "No products were found."));
         }
 
         int totalPages = (int)Math.Ceiling(pagedProducts.TotalItems / (double)paginationParams.PageSize);
         bool hasPreviousPage = paginationParams.PageIndex > 1;
         bool hasNextPage = (paginationParams.PageIndex * paginationParams.PageSize) < pagedProducts.TotalItems;
 
-        return Result<PaginatedResponse<ProductCatalogView>>.Success(new PaginatedResponse<ProductCatalogView>(
-            pagedProducts.Items,
+        return Result<PaginatedResponse<ProductCatalogViewDto>>.Success(new PaginatedResponse<ProductCatalogViewDto>(
+            mapper.Map<ProductCatalogViewDto[]>(pagedProducts.Items),
             paginationParams.PageSize,
             paginationParams.PageIndex,
             totalPages,
