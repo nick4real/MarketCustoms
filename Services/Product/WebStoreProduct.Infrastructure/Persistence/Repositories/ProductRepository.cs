@@ -11,7 +11,7 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
     public async Task<Product?> GetProductByIdAsync(uint id, CancellationToken ct)
         => await dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
 
-    public async Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int page, int size, CancellationToken ct, ProductParams? productParams = null)
+    public async Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? productParams = null)
     {
         var query = dbContext.Products.AsNoTracking();
 
@@ -25,8 +25,8 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
 
         var products = await query
             .Include(p => p.Images)
-            .Skip((page - 1) * size)
-            .Take(size)
+            .Skip(skip)
+            .Take(take)
             .Select(p => new ProductCatalogView(
                 p.Id,
                 p.Title,
