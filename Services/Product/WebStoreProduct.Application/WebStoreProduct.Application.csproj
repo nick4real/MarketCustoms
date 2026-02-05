@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mapster" Version="7.4.0" />
-	<PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
-	<PackageReference Include="FluentValidation" Version="12.1.1" />
-	<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Mapster" />
+	<PackageReference Include="Mapster.DependencyInjection" />
+	<PackageReference Include="FluentValidation" />
+	<PackageReference Include="FluentValidation.AspNetCore" />
+	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
   </ItemGroup>
 
   <ItemGroup>

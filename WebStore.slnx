@@ -40,4 +40,7 @@
     <Project Path="Services/User/WebStoreUser.Domain/WebStoreUser.Domain.csproj" Id="82d1c68e-c4c8-44ae-b11d-7264bd549482" />
     <Project Path="Services/User/WebStoreUser.Infrastructure/WebStoreUser.Infrastructure.csproj" Id="d65215b8-cde3-44ef-a1db-787bdbe2470e" />
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
 </Solution>
