@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebStoreNotification.Application\MC.Notifications.Application.csproj" />
+    <ProjectReference Include="..\MC.Ordering.Domain\MC.Ordering.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -17,11 +17,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Clients\BlazorApp\BlazorApp.csproj" />
-    <ProjectReference Include="..\..\Gateway\WebStoreGateway\MC.Gateway.csproj" />
-    <ProjectReference Include="..\..\Services\Notification\WebStoreNotification.API\MC.Notifications.API.csproj" />
-    <ProjectReference Include="..\..\Services\Order\WebStoreOrder.API\MC.Ordering.API.csproj" />
-    <ProjectReference Include="..\..\Services\Product\WebStoreProduct.API\MC.Catalog.API.csproj" />
-    <ProjectReference Include="..\..\Services\User\WebStoreUser.API\MC.Profiles.API.csproj" />
+    <ProjectReference Include="..\..\Gateway\MC.Gateway\MC.Gateway.csproj" />
+    <ProjectReference Include="..\..\Services\Notifications\MC.Notifications.API\MC.Notifications.API.csproj" />
+    <ProjectReference Include="..\..\Services\Ordering\MC.Ordering.API\MC.Ordering.API.csproj" />
+    <ProjectReference Include="..\..\Services\Catalog\MC.Catalog.API\MC.Catalog.API.csproj" />
+    <ProjectReference Include="..\..\Services\Profiles\MC.Profiles.API\MC.Profiles.API.csproj" />
   </ItemGroup>
 
 </Project>
