@@ -10,12 +10,6 @@
     <Project Path="Gateway/WebStoreGateway/WebStoreGateway.csproj" />
   </Folder>
   <Folder Name="/Services/" />
-  <Folder Name="/Services/Feedback/">
-    <Project Path="Services/Feedback/WebStoreFeedback.API/WebStoreFeedback.API.csproj" />
-    <Project Path="Services/Feedback/WebStoreFeedback.Application/WebStoreFeedback.Application.csproj" Id="e546ead3-274e-406b-bfd0-ef8b6de06f89" />
-    <Project Path="Services/Feedback/WebStoreFeedback.Domain/WebStoreFeedback.Domain.csproj" Id="4d0990b3-9e84-411b-b123-195708c215f1" />
-    <Project Path="Services/Feedback/WebStoreFeedback.Infrastructure/WebStoreFeedback.Infrastructure.csproj" Id="e6e125d3-b8d7-4573-8e1e-80fc95f347a0" />
-  </Folder>
   <Folder Name="/Services/Notification/">
     <Project Path="Services/Notification/WebStoreNotification.API/WebStoreNotification.API.csproj" />
     <Project Path="Services/Notification/WebStoreNotification.Application/WebStoreNotification.Application.csproj" Id="35144a3d-9eb6-4bdb-81d3-f1230fd9dc88" />
