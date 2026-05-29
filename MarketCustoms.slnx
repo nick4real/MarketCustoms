@@ -7,32 +7,32 @@
     <Project Path="Clients/BlazorApp/BlazorApp.csproj" />
   </Folder>
   <Folder Name="/Gateway/">
-    <Project Path="Gateway/WebStoreGateway/WebStoreGateway.csproj" />
+    <Project Path="Gateway/WebStoreGateway/MC.Gateway.csproj" />
   </Folder>
   <Folder Name="/Services/" />
   <Folder Name="/Services/Notification/">
-    <Project Path="Services/Notification/WebStoreNotification.API/WebStoreNotification.API.csproj" />
-    <Project Path="Services/Notification/WebStoreNotification.Application/WebStoreNotification.Application.csproj" Id="35144a3d-9eb6-4bdb-81d3-f1230fd9dc88" />
-    <Project Path="Services/Notification/WebStoreNotification.Domain/WebStoreNotification.Domain.csproj" Id="777eb1ab-9933-4478-969f-9c63a62f7c8a" />
-    <Project Path="Services/Notification/WebStoreNotification.Infrastructure/WebStoreNotification.Infrastructure.csproj" Id="51f15a50-4984-41d5-8402-fe47b1e4c4c3" />
+    <Project Path="Services/Notification/WebStoreNotification.API/MC.Notifications.API.csproj" />
+    <Project Path="Services/Notification/WebStoreNotification.Application/MC.Notifications.Application.csproj" Id="35144a3d-9eb6-4bdb-81d3-f1230fd9dc88" />
+    <Project Path="Services/Notification/WebStoreNotification.Domain/MC.Notifications.Domain.csproj" Id="777eb1ab-9933-4478-969f-9c63a62f7c8a" />
+    <Project Path="Services/Notification/WebStoreNotification.Infrastructure/MC.Notifications.Infrastructure.csproj" Id="51f15a50-4984-41d5-8402-fe47b1e4c4c3" />
   </Folder>
   <Folder Name="/Services/Order/">
-    <Project Path="Services/Order/WebStoreOrder.API/WebStoreOrder.API.csproj" />
-    <Project Path="Services/Order/WebStoreOrder.Application/WebStoreOrder.Application.csproj" Id="be14b50b-b732-45be-b733-ed989ffeb437" />
-    <Project Path="Services/Order/WebStoreOrder.Domain/WebStoreOrder.Domain.csproj" Id="dfd0413b-132e-4f16-84a0-d41129325701" />
-    <Project Path="Services/Order/WebStoreOrder.Infrastructure/WebStoreOrder.Infrastructure.csproj" Id="c48b7221-dd68-43c3-a487-5a1dc4206f9b" />
+    <Project Path="Services/Order/WebStoreOrder.API/MC.Ordering.API.csproj" />
+    <Project Path="Services/Order/WebStoreOrder.Application/MC.Ordering.Application.csproj" Id="be14b50b-b732-45be-b733-ed989ffeb437" />
+    <Project Path="Services/Order/WebStoreOrder.Domain/MC.Ordering.Domain.csproj" Id="dfd0413b-132e-4f16-84a0-d41129325701" />
+    <Project Path="Services/Order/WebStoreOrder.Infrastructure/MC.Ordering.Infrastructure.csproj" Id="c48b7221-dd68-43c3-a487-5a1dc4206f9b" />
   </Folder>
   <Folder Name="/Services/Product/">
-    <Project Path="Services/Product/WebStoreProduct.API/WebStoreProduct.API.csproj" />
-    <Project Path="Services/Product/WebStoreProduct.Application/WebStoreProduct.Application.csproj" Id="15898b4c-fff2-47b9-9ea0-03b3e61b8712" />
-    <Project Path="Services/Product/WebStoreProduct.Domain/WebStoreProduct.Domain.csproj" Id="b10b449f-efca-4b10-af20-086c7b3777e7" />
-    <Project Path="Services/Product/WebStoreProduct.Infrastructure/WebStoreProduct.Infrastructure.csproj" Id="5034a131-fa2e-461e-8c9e-6de00c6058a5" />
+    <Project Path="Services/Product/WebStoreProduct.API/MC.Catalog.API.csproj" />
+    <Project Path="Services/Product/WebStoreProduct.Application/MC.Catalog.Application.csproj" Id="15898b4c-fff2-47b9-9ea0-03b3e61b8712" />
+    <Project Path="Services/Product/WebStoreProduct.Domain/MC.Catalog.Domain.csproj" Id="b10b449f-efca-4b10-af20-086c7b3777e7" />
+    <Project Path="Services/Product/WebStoreProduct.Infrastructure/MC.Catalog.Infrastructure.csproj" Id="5034a131-fa2e-461e-8c9e-6de00c6058a5" />
   </Folder>
   <Folder Name="/Services/User/">
-    <Project Path="Services/User/WebStoreUser.API/WebStoreUser.API.csproj" />
-    <Project Path="Services/User/WebStoreUser.Application/WebStoreUser.Application.csproj" Id="943424ba-8123-4bae-a5d6-10ab25a31850" />
-    <Project Path="Services/User/WebStoreUser.Domain/WebStoreUser.Domain.csproj" Id="82d1c68e-c4c8-44ae-b11d-7264bd549482" />
-    <Project Path="Services/User/WebStoreUser.Infrastructure/WebStoreUser.Infrastructure.csproj" Id="d65215b8-cde3-44ef-a1db-787bdbe2470e" />
+    <Project Path="Services/User/WebStoreUser.API/MC.Profiles.API.csproj" />
+    <Project Path="Services/User/WebStoreUser.Application/MC.Profiles.Application.csproj" Id="943424ba-8123-4bae-a5d6-10ab25a31850" />
+    <Project Path="Services/User/WebStoreUser.Domain/MC.Profiles.Domain.csproj" Id="82d1c68e-c4c8-44ae-b11d-7264bd549482" />
+    <Project Path="Services/User/WebStoreUser.Infrastructure/MC.Profiles.Infrastructure.csproj" Id="d65215b8-cde3-44ef-a1db-787bdbe2470e" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />

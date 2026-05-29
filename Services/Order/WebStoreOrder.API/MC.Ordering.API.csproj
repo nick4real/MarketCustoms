@@ -8,12 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-    <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\AspireApp.ServiceDefaults\AspireApp.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\WebStoreUser.Infrastructure\WebStoreUser.Infrastructure.csproj" />
+    <ProjectReference Include="..\WebStoreOrder.Infrastructure\MC.Ordering.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

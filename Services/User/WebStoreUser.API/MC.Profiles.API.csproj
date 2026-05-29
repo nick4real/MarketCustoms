@@ -8,11 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\AspireApp.ServiceDefaults\AspireApp.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\WebStoreNotification.Infrastructure\WebStoreNotification.Infrastructure.csproj" />
+    <ProjectReference Include="..\WebStoreUser.Infrastructure\MC.Profiles.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\WebStoreUser.Application\WebStoreUser.Application.csproj" />
+		<ProjectReference Include="..\WebStoreUser.Application\MC.Profiles.Application.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -15,7 +15,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

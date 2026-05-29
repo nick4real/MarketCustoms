@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebStoreUser.Domain\WebStoreUser.Domain.csproj" />
+    <ProjectReference Include="..\WebStoreUser.Domain\MC.Profiles.Domain.csproj" />
   </ItemGroup>
 
 </Project>

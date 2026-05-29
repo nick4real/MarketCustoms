@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\AspireApp.ServiceDefaults\AspireApp.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\WebStoreProduct.Infrastructure\WebStoreProduct.Infrastructure.csproj" />
+    <ProjectReference Include="..\WebStoreProduct.Infrastructure\MC.Catalog.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
