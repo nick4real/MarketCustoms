@@ -12,11 +12,8 @@ var productService = builder.AddProject<Projects.MC_Catalog_API>("catalogService
     .WaitFor(productDatabase)
     .WithReference(productDatabase, "ProductDatabase");
 
-var blazorWebApp = builder.AddProject<Projects.BlazorApp>("blazorWebApp");
-
 var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGateway")
     .WithReference(userService)
-    .WithReference(productService)
-    .WithReference(blazorWebApp);
+    .WithReference(productService);
 
 builder.Build().Run();
