@@ -3,7 +3,12 @@
     <Project Path="Aspire/AspireApp.AppHost/AspireApp.AppHost.csproj" Id="a3043152-1b5f-41a1-b82f-e9e8e6fad094" />
     <Project Path="Aspire/AspireApp.ServiceDefaults/AspireApp.ServiceDefaults.csproj" />
   </Folder>
-  <Folder Name="/Clients/" />
+  <Folder Name="/Clients/">
+    <Project Path="Clients/mc.market.reactwebapp/mc.market.reactwebapp.esproj">
+      <Build />
+      <Deploy />
+    </Project>
+  </Folder>
   <Folder Name="/Gateway/">
     <Project Path="Gateway/MC.Gateway/MC.Gateway.csproj" />
   </Folder>

@@ -16,4 +16,8 @@ var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGate
     .WithReference(userService)
     .WithReference(productService);
 
+var reactwebapp = builder.AddViteApp("MC-ReactWebApp", "./../../Clients/mc.market.reactwebapp", "dev")
+    .WithReference(webStoreGateway)
+    .WithExternalHttpEndpoints();
+
 builder.Build().Run();
