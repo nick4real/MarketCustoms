@@ -24,10 +24,9 @@ builder.Services.AddReverseProxy()
 
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
-
-app.MapReverseProxy();
-app.UseHttpsRedirection();
 app.UseAuthorization();
+
+app.MapDefaultEndpoints();
+app.MapReverseProxy();
 
 app.Run();

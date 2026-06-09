@@ -22,8 +22,6 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 await using (var serviceScope = app.Services.CreateAsyncScope())
