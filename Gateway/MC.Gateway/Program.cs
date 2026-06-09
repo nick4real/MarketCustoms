@@ -1,3 +1,4 @@
+// Builder
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -22,8 +23,10 @@ ConfigureReverseProxy();
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
+// App
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapDefaultEndpoints();

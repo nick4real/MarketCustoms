@@ -4,6 +4,7 @@ using WebStoreProduct.Infrastructure;
 using WebStoreProduct.Application;
 using Scalar.AspNetCore;
 
+// Builder
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -12,9 +13,10 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+// App
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -22,6 +24,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.MapDefaultEndpoints();
 app.MapControllers();
 
 await using (var serviceScope = app.Services.CreateAsyncScope())

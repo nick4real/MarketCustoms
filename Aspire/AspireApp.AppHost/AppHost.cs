@@ -12,7 +12,7 @@ var productService = builder.AddProject<Projects.MC_Catalog_API>("catalogService
     .WaitFor(productDatabase)
     .WithReference(productDatabase, "ProductDatabase");
 
-var reactwebapp = builder.AddViteApp("MC-ReactWebApp", "./../../Clients/mc.market.reactwebapp", "dev");
+var reactwebapp = builder.AddViteApp("reactWebApp", "./../../Clients/mc.market.reactwebapp", "dev");
 
 var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGateway")
     .WithExternalHttpEndpoints()

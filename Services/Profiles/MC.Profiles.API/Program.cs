@@ -20,7 +20,11 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
 });
-builder.Services.AddOpenApi();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddOpenApi();
+}
 
 // App
 var app = builder.Build();
@@ -33,8 +37,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
     ForwardLimit = 1
 });
-
-app.MapDefaultEndpoints();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -42,8 +45,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
+app.MapDefaultEndpoints();
 app.MapControllers();
 
 app.Run();
