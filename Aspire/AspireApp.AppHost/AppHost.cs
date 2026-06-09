@@ -12,12 +12,14 @@ var productService = builder.AddProject<Projects.MC_Catalog_API>("catalogService
     .WaitFor(productDatabase)
     .WithReference(productDatabase, "ProductDatabase");
 
-var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGateway")
-    .WithReference(userService)
-    .WithReference(productService);
+var reactwebapp = builder.AddViteApp("MC-ReactWebApp", "./../../Clients/mc.market.reactwebapp", "dev");
 
-var reactwebapp = builder.AddViteApp("MC-ReactWebApp", "./../../Clients/mc.market.reactwebapp", "dev")
-    .WithReference(webStoreGateway)
-    .WithExternalHttpEndpoints();
+var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGateway")
+    .WithExternalHttpEndpoints()
+    .WithReference(userService)
+    .WithReference(productService)
+    .WithReference(reactwebapp);
+
+reactwebapp.WithReference(webStoreGateway);
 
 builder.Build().Run();
