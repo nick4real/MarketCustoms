@@ -6,16 +6,37 @@ builder.AddServiceDefaults();
 // Configure the reverse proxy destinations based on Aspire environment variables
 void ConfigureReverseProxy()
 {
+    var routes = builder.Configuration.GetSection("ReverseProxy:Routes");
+
+    foreach (var route in routes.GetChildren())
+    {
+        // Extracts the service name from route key (e.g., "authService-route" -> "authService")
+        var serviceName = route.Key.Replace("-route", string.Empty);
+
+        // Look for Aspire service discovery environment variables
+        var aspireAddress = Environment.GetEnvironmentVariable($"services__{serviceName}__http__0")
+                            ?? Environment.GetEnvironmentVariable($"services__{serviceName}__https__0");
+
+        if (string.IsNullOrEmpty(aspireAddress))
+        {
+            Console.WriteLine($"Service '{serviceName}' not found");
+            continue;
+        }
+
+        var clusterId = $"{serviceName}-cluster";
+
+        // Update the Route to point to this new ClusterId
+        builder.Configuration[$"ReverseProxy:Routes:{route.Key}:ClusterId"] = clusterId;
+
+        // Create/Update the Cluster configuration with the destination address
+        builder.Configuration[$"ReverseProxy:Clusters:{clusterId}:Destinations:destination-1:Address"] = aspireAddress;
+    }
+
     var reverseProxyClusters = builder.Configuration.GetSection("ReverseProxy:Clusters");
 
     foreach (var cluster in reverseProxyClusters.GetChildren())
     {
-        var clusterName = cluster.Key.Replace("-cluster", string.Empty);
-
-        var clusterAddress = builder.Configuration.GetSection($"ReverseProxy:Clusters:{cluster.Key}:Destinations:destination-1:Address");
-        var aspireAddress = Environment.GetEnvironmentVariable($"services__{clusterName}__http__0")!;
-
-        clusterAddress.Value = aspireAddress;
+        Console.WriteLine($"Initialized cluster '{cluster.Key}'");
     }
 }
 ConfigureReverseProxy();
