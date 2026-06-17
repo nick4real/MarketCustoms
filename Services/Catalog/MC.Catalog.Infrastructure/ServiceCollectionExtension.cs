@@ -14,7 +14,7 @@ public static class ServiceCollectionExtension
         public IServiceCollection AddInfrastructure(IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ProductDatabase"), builder =>
+                options.UseSqlServer(configuration.GetConnectionString("CatalogDatabase"), builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
