@@ -11,7 +11,7 @@ public class ProductsController(IProductService productService) : CustomControll
 {
     [HttpGet("{productId}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAllByCategory(CancellationToken ct, uint productId)
+    public async Task<IActionResult> GetAllByCategory(CancellationToken ct, string productId)
     {
         var productsResult = await productService.GetDetailedProductByIdAsync(productId, ct);
         return HandleResult(productsResult);

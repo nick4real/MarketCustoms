@@ -10,7 +10,7 @@ namespace MC.Catalog.Application.Services;
 
 public class ProductService(IProductRepository productRepository, IMapper mapper) : IProductService
 {
-    public async Task<Result<ProductDetailedResponse>> GetDetailedProductByIdAsync(uint id, CancellationToken ct)
+    public async Task<Result<ProductDetailedResponse>> GetDetailedProductByIdAsync(string id, CancellationToken ct)
     {
         var product = await productRepository.GetProductByIdAsync(id, ct);
         if (product is null)

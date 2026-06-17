@@ -1,7 +1,13 @@
-﻿namespace MC.Catalog.Domain.Entities;
+﻿using MC.Catalog.Domain.Entities;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-public class Product
+namespace MC.Catalog.Infrastructure.Models;
+
+public class ProductBson
 {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;

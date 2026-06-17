@@ -3,7 +3,7 @@
 namespace MC.Catalog.Domain.Views;
 
 public record ProductCatalogView(
-    uint Id,
+    string Id,
     string Title,
     string Description,
     decimal Price,

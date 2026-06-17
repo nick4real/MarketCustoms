@@ -6,9 +6,9 @@ using MC.Catalog.Domain.Views;
 
 namespace MC.Catalog.Infrastructure.Persistence.Repositories;
 
-public class ProductRepository(AppDbContext dbContext) : IProductRepository
+public class ProductRepository(AppRelationalDbContext dbContext) : IProductRepository
 {
-    public async Task<Product?> GetProductByIdAsync(uint id, CancellationToken ct)
+    public async Task<Product?> GetProductByIdAsync(string id, CancellationToken ct)
         => await dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? productParams = null)
