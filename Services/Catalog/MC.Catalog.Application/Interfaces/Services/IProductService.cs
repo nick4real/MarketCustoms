@@ -1,9 +1,9 @@
-﻿using WebStoreProduct.Application.Common;
-using WebStoreProduct.Application.DTOs;
-using WebStoreProduct.Application.Models;
-using WebStoreProduct.Application.Responses;
+﻿using MC.Catalog.Application.Common;
+using MC.Catalog.Application.DTOs;
+using MC.Catalog.Application.Models;
+using MC.Catalog.Application.Responses;
 
-namespace WebStoreProduct.Application.Interfaces.Services;
+namespace MC.Catalog.Application.Interfaces.Services;
 
 public interface IProductService
 {

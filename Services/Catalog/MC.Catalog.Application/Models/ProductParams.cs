@@ -1,3 +1,3 @@
-﻿namespace WebStoreProduct.Application.Models;
+﻿namespace MC.Catalog.Application.Models;
 
 public record ProductParams(uint? CategoryId);

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebStoreProduct.Application.Interfaces.Repositories;
-using WebStoreProduct.Application.Models;
-using WebStoreProduct.Domain.Entities;
-using WebStoreProduct.Domain.Views;
+using MC.Catalog.Application.Interfaces.Repositories;
+using MC.Catalog.Application.Models;
+using MC.Catalog.Domain.Entities;
+using MC.Catalog.Domain.Views;
 
-namespace WebStoreProduct.Infrastructure.Persistence.Repositories;
+namespace MC.Catalog.Infrastructure.Persistence.Repositories;
 
 public class ProductRepository(AppDbContext dbContext) : IProductRepository
 {

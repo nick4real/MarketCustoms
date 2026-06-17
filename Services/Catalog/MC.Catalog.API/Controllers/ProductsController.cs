@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebStoreProduct.Application.Interfaces.Services;
-using WebStoreProduct.Application.Models;
+using MC.Catalog.Application.Interfaces.Services;
+using MC.Catalog.Application.Models;
 
-namespace WebStoreProduct.API.Controllers;
+namespace MC.Catalog.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,6 +1,6 @@
-﻿using WebStoreProduct.Domain.Entities;
+﻿using MC.Catalog.Domain.Entities;
 
-namespace WebStoreProduct.Domain.Views;
+namespace MC.Catalog.Domain.Views;
 
 public record ProductCatalogView(
     uint Id,

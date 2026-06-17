@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using WebStoreProduct.Infrastructure.Persistence;
-using WebStoreProduct.Infrastructure;
-using WebStoreProduct.Application;
+using MC.Catalog.Infrastructure.Persistence;
+using MC.Catalog.Infrastructure;
+using MC.Catalog.Application;
 using Scalar.AspNetCore;
 
 // Builder

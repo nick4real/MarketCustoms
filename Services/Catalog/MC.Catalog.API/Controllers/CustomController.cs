@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebStoreProduct.Application.Common;
+using MC.Catalog.Application.Common;
 
-namespace WebStoreProduct.API.Controllers;
+namespace MC.Catalog.API.Controllers;
 
 public class CustomController : ControllerBase
 {

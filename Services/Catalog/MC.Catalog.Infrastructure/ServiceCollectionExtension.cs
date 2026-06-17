@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebStoreProduct.Application.Interfaces.Repositories;
-using WebStoreProduct.Infrastructure.Persistence;
-using WebStoreProduct.Infrastructure.Persistence.Repositories;
+using MC.Catalog.Application.Interfaces.Repositories;
+using MC.Catalog.Infrastructure.Persistence;
+using MC.Catalog.Infrastructure.Persistence.Repositories;
 
-namespace WebStoreProduct.Infrastructure;
+namespace MC.Catalog.Infrastructure;
 
 public static class ServiceCollectionExtension
 {

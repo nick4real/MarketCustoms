@@ -2,11 +2,11 @@
 using FluentValidation.AspNetCore;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
-using WebStoreProduct.Application.Interfaces.Services;
-using WebStoreProduct.Application.Services;
-using WebStoreProduct.Application.Validators;
+using MC.Catalog.Application.Interfaces.Services;
+using MC.Catalog.Application.Services;
+using MC.Catalog.Application.Validators;
 
-namespace WebStoreProduct.Application;
+namespace MC.Catalog.Application;
 
 public static class ServiceCollectionExtension
 {

@@ -1,3 +1,3 @@
-﻿namespace WebStoreProduct.Application.Common;
+﻿namespace MC.Catalog.Application.Common;
 
 public record Error(ErrorCode Code, string Message);

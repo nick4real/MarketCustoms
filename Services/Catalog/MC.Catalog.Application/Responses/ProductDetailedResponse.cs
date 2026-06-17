@@ -1,6 +1,6 @@
-﻿using WebStoreProduct.Domain.Entities;
+﻿using MC.Catalog.Domain.Entities;
 
-namespace WebStoreProduct.Application.Responses;
+namespace MC.Catalog.Application.Responses;
 
 public record ProductDetailedResponse(
     uint Id,

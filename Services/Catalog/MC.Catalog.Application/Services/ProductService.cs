@@ -1,13 +1,12 @@
 ﻿using MapsterMapper;
-using WebStoreProduct.Application.Common;
-using WebStoreProduct.Application.DTOs;
-using WebStoreProduct.Application.Interfaces.Repositories;
-using WebStoreProduct.Application.Interfaces.Services;
-using WebStoreProduct.Application.Models;
-using WebStoreProduct.Application.Responses;
-using WebStoreProduct.Domain.Views;
+using MC.Catalog.Application.Common;
+using MC.Catalog.Application.DTOs;
+using MC.Catalog.Application.Interfaces.Repositories;
+using MC.Catalog.Application.Interfaces.Services;
+using MC.Catalog.Application.Models;
+using MC.Catalog.Application.Responses;
 
-namespace WebStoreProduct.Application.Services;
+namespace MC.Catalog.Application.Services;
 
 public class ProductService(IProductRepository productRepository, IMapper mapper) : IProductService
 {

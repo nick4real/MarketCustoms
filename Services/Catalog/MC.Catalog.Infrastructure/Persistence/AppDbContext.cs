@@ -1,8 +1,8 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
-using WebStoreProduct.Domain.Entities;
+using MC.Catalog.Domain.Entities;
 
-namespace WebStoreProduct.Infrastructure.Persistence;
+namespace MC.Catalog.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext
 {

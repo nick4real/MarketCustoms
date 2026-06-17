@@ -1,8 +1,8 @@
-﻿using WebStoreProduct.Application.Models;
-using WebStoreProduct.Domain.Entities;
-using WebStoreProduct.Domain.Views;
+﻿using MC.Catalog.Application.Models;
+using MC.Catalog.Domain.Entities;
+using MC.Catalog.Domain.Views;
 
-namespace WebStoreProduct.Application.Interfaces.Repositories;
+namespace MC.Catalog.Application.Interfaces.Repositories;
 
 public interface IProductRepository
 {

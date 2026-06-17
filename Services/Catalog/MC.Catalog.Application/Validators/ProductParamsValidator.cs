@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using WebStoreProduct.Application.Models;
+using MC.Catalog.Application.Models;
 
-namespace WebStoreProduct.Application.Validators;
+namespace MC.Catalog.Application.Validators;
 
 public class ProductParamsValidator : AbstractValidator<ProductParams>
 {

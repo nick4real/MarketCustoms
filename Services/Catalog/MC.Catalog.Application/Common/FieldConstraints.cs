@@ -1,4 +1,4 @@
-﻿namespace WebStoreProduct.Application.Common;
+﻿namespace MC.Catalog.Application.Common;
 
 public static class FieldConstraints
 {

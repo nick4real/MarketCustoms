@@ -1,6 +1,6 @@
-﻿using WebStoreProduct.Domain.Entities;
+﻿using MC.Catalog.Domain.Entities;
 
-namespace WebStoreProduct.Application.DTOs;
+namespace MC.Catalog.Application.DTOs;
 
 public record ProductCatalogViewDto(
     uint Id,

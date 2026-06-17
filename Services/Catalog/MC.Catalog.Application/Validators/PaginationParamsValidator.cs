@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using WebStoreProduct.Application.Common;
-using WebStoreProduct.Application.Models;
+using MC.Catalog.Application.Common;
+using MC.Catalog.Application.Models;
 
-namespace WebStoreProduct.Application.Validators;
+namespace MC.Catalog.Application.Validators;
 
 public class PaginationParamsValidator : AbstractValidator<PaginationParams>
 {

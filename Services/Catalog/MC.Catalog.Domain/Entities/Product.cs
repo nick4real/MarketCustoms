@@ -1,4 +1,4 @@
-﻿namespace WebStoreProduct.Domain.Entities;
+﻿namespace MC.Catalog.Domain.Entities;
 
 public class Product
 {
