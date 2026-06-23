@@ -15,10 +15,12 @@ public static class ServiceCollectionExtension
         public IServiceCollection AddInfrastructure(IConfiguration configuration)
         {
             services.AddDbContext<AppRelationalDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("CatalogDatabase"), builder =>
+                options.UseSqlServer(configuration.GetConnectionString("catalogSqlDatabase"), builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
+
+            services.AddSingleton<AppMongoDbContext>();
 
             // Options
             services.Configure<MongoDbOptions>(configuration);

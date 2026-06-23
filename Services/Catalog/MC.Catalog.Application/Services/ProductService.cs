@@ -4,7 +4,9 @@ using MC.Catalog.Application.DTOs;
 using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Models;
+using MC.Catalog.Application.Requests;
 using MC.Catalog.Application.Responses;
+using MC.Catalog.Domain.Entities;
 
 namespace MC.Catalog.Application.Services;
 
@@ -12,6 +14,11 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
 {
     public async Task<Result<ProductDetailedResponse>> GetDetailedProductByIdAsync(string id, CancellationToken ct)
     {
+        if (id.Length != 24)
+        {
+            return Result<ProductDetailedResponse>.Failure(new Error(ErrorCode.ValidationFailed, "Invalid product ID format."));
+        }
+
         var product = await productRepository.GetProductByIdAsync(id, ct);
         if (product is null)
         {
@@ -44,4 +51,20 @@ public class ProductService(IProductRepository productRepository, IMapper mapper
             hasPreviousPage,
             hasNextPage));
     }
+
+    public async Task<Result<ProductDetailedResponse>> CreateProductAsync(CreateProductRequest request, CancellationToken ct)
+    {
+        try
+        {
+            var product = mapper.Map<Product>(request);
+            product.CreatedAt = DateTime.UtcNow;
+            await productRepository.AddProductAsync(product, ct);
+            return Result<ProductDetailedResponse>.Success(mapper.Map<ProductDetailedResponse>(product));
+        }
+        catch
+        {
+            return Result<ProductDetailedResponse>.Failure(new Error(ErrorCode.InternalServerError, "An error occurred while creating the product."));
+        }
+    }
 }
+ 

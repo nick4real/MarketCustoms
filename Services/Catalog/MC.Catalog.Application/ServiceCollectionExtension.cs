@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Services;
 using MC.Catalog.Application.Validators;
+using MC.Catalog.Application.Validators.Requests;
 
 namespace MC.Catalog.Application;
 
@@ -21,6 +22,7 @@ public static class ServiceCollectionExtension
 
             // Validators
             services.AddValidatorsFromAssemblyContaining<ProductParamsValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
             services.AddFluentValidationAutoValidation();
 
             return services;

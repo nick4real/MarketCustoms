@@ -11,4 +11,4 @@ public record ProductDetailedResponse(
     DateTime CreatedAt,
     decimal Price,
     int StockQuantity,
-    List<ImageLink> Images);
+    List<string> ImageLinks);

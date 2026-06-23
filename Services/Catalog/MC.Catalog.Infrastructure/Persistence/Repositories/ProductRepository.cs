@@ -3,41 +3,97 @@ using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Domain.Entities;
 using MC.Catalog.Domain.Views;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace MC.Catalog.Infrastructure.Persistence.Repositories;
 
-public class ProductRepository(AppRelationalDbContext dbContext) : IProductRepository
+public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbContext mongoContext) : IProductRepository
 {
     public async Task<Product?> GetProductByIdAsync(string id, CancellationToken ct)
-        => await dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
-
-    public async Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? productParams = null)
     {
-        var query = dbContext.Products.AsNoTracking();
+        var productBson = await mongoContext.Products.Find(p => p.Id == id).FirstOrDefaultAsync(ct);
 
-        if (productParams != null)
+        // Return detailed product information if found, otherwise return null
+        if (productBson == null) return null;
+
+        // Fetch the category from the relational database using the CategoryId from the product
+        var category = await sqlContext.Categories.FindAsync(productBson.CategoryId, ct);
+        if (category == null) return null;
+
+        return new Product
         {
-            if (productParams.CategoryId > 0) query = query.Where(p => p.CategoryId == productParams.CategoryId);
+            Id = productBson.Id,
+            OwnerId = productBson.OwnerId,
+            Title = productBson.Title,
+            Description = productBson.Description,
+            CategoryId = productBson.CategoryId,
+            Category = category,
+            CreatedAt = productBson.CreatedAt,
+            Price = productBson.Price,
+            StockQuantity = productBson.StockQuantity,
+            ImageLinks = productBson.ImageLinks,
+            Tags = productBson.Tags,
+            Parameters = productBson.Parameters
+        };
+    }
+
+    public async Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? productParams)
+    {
+        // Start with an empty filter
+        var filterBuilder = Builders<Models.ProductBson>.Filter;
+        var filter = filterBuilder.Empty; 
+
+        // Apply filtering based on ProductParams
+        if (productParams != null && productParams.CategoryId.HasValue)
+        {
+            filter &= filterBuilder.Eq(p => p.CategoryId, productParams.CategoryId.Value);
         }
 
-        var totalItems = await query.CountAsync();
-        if (totalItems == 0) return null;
-
-        var products = await query
-            .Include(p => p.Images)
+        // Fetching the products with pagination and projection to ProductCatalogView
+        var products = await mongoContext.Products
+            .Find(filter)
             .Skip(skip)
-            .Take(take)
-            .Select(p => new ProductCatalogView(
+            .Limit(take)
+            .Project(p => new ProductCatalogView(
                 p.Id,
                 p.Title,
                 p.Description,
                 p.Price,
-                p.Images.FirstOrDefault()))
-            .ToArrayAsync();
+                p.ImageLinks.FirstOrDefault() ?? string.Empty))
+            .ToListAsync(ct);
 
+        // If no products are found, return null
+        if (products.Count == 0) return null;
+
+        // Return the paged list of products along with the total count of them in the database
         return new PagedList<ProductCatalogView>(
-            products,
-            totalItems
+            products.ToArray(),
+            (int) await mongoContext.Products.CountDocumentsAsync(filter, cancellationToken: ct)
         );
+    }
+
+    public async Task AddProductAsync(Product product, CancellationToken ct)
+    {
+        var productBson = new Models.ProductBson
+        {
+            OwnerId = product.OwnerId,
+            Title = product.Title,
+            Description = product.Description,
+            CategoryId = product.CategoryId,
+            CreatedAt = product.CreatedAt,
+            Price = product.Price,
+            StockQuantity = product.StockQuantity,
+            ImageLinks = product.ImageLinks,
+            Tags = product.Tags,
+            Parameters = product.Parameters
+        };
+
+        await mongoContext.Products.InsertOneAsync(productBson, cancellationToken: ct);
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await sqlContext.SaveChangesAsync();
     }
 }

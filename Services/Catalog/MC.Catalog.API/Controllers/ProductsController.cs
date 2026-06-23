@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Models;
+using MC.Catalog.Application.Requests;
 
 namespace MC.Catalog.API.Controllers;
 
@@ -9,27 +10,35 @@ namespace MC.Catalog.API.Controllers;
 [Route("[controller]")]
 public class ProductsController(IProductService productService) : CustomController
 {
-    [HttpGet("{productId}")]
     [AllowAnonymous]
+    [HttpGet("{productId}")]
     public async Task<IActionResult> GetAllByCategory(CancellationToken ct, string productId)
     {
         var productsResult = await productService.GetDetailedProductByIdAsync(productId, ct);
         return HandleResult(productsResult);
     }
 
-    [HttpGet]
     [AllowAnonymous]
+    [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] PaginationParams paginationParams = default!)
     {
         var productsResult = await productService.GetProductsAsync(ct, paginationParams, null!);
         return HandleResult(productsResult);
     }
 
-    [HttpPost]
     [AllowAnonymous]
+    [HttpPost]
     public async Task<IActionResult> GetAllByParams(CancellationToken ct, [FromBody] ProductParams productParams, [FromQuery] PaginationParams paginationParams = default!)
     {
         var productsResult = await productService.GetProductsAsync(ct, paginationParams, productParams);
         return HandleResult(productsResult);
+    }
+
+    // TODO: Implement authentication
+    [AllowAnonymous]
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateProduct(CancellationToken ct, [FromBody] CreateProductRequest product)
+    {
+        throw new NotImplementedException();
     }
 }

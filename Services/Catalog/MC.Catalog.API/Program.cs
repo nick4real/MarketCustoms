@@ -27,19 +27,22 @@ if (app.Environment.IsDevelopment())
 app.MapDefaultEndpoints();
 app.MapControllers();
 
-await using (var serviceScope = app.Services.CreateAsyncScope())
-await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppRelationalDbContext>())
-{
-    var executionStrategy = dbContext.Database.CreateExecutionStrategy();
 
-    await executionStrategy.ExecuteAsync(async () =>
+if (!app.Environment.IsProduction())
+{
+    await using (var serviceScope = app.Services.CreateAsyncScope())
+    await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppRelationalDbContext>())
     {
-        if (!app.Environment.IsProduction())
+        var executionStrategy = dbContext.Database.CreateExecutionStrategy();
+
+        await executionStrategy.ExecuteAsync(async () =>
         {
             await dbContext.Database.EnsureDeletedAsync();
             await dbContext.Database.EnsureCreatedAsync();
-        }
-    });
+        });
+    }
 }
+
+
 
 app.Run();
