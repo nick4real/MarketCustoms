@@ -3,7 +3,7 @@
 namespace MC.Catalog.Application.Responses;
 
 public record ProductDetailedResponse(
-    uint Id,
+    string Id,
     string Title,
     string Description,
     uint CategoryId,

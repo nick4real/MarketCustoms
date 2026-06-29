@@ -1,7 +1,7 @@
 ﻿namespace MC.Catalog.Application.DTOs;
 
 public record ProductCatalogViewDto(
-    uint Id,
+    string Id,
     string Title,
     string Description,
     decimal Price,

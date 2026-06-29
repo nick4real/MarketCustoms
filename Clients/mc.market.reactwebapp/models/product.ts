@@ -1,12 +1,9 @@
 export interface Product {
-  id: number;
+  id: string;
   title: string;
   description: string;
   price: number;
-  image: {
-    id: number;
-    url: string;
-  };
+  imageLink: string;
 }
 
 export interface ProductPaginatedResponse {

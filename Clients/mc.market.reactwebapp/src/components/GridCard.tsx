@@ -10,8 +10,7 @@ function GridCard({ product }: Props) {
       <div className="border p-2 flex flex-col items-center">
         <div className="font-bold italic">{product.title}</div>
         <div className="">{product.price} zł</div>
-        <img
-          src={product.image.url}
+        <img src={product.imageLink}
           alt={product.title}
           className="w-full h-full object-cover"
         />
