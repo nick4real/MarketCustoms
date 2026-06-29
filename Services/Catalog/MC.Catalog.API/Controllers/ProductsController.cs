@@ -39,6 +39,7 @@ public class ProductsController(IProductService productService) : CustomControll
     [HttpPost("create")]
     public async Task<IActionResult> CreateProduct(CancellationToken ct, [FromBody] CreateProductRequest product)
     {
-        throw new NotImplementedException();
+        var result = await productService.CreateProductAsync(product, ct);
+        return HandleResult(result);
     }
 }
