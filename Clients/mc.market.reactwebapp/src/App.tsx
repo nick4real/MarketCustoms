@@ -1,6 +1,8 @@
 import "./App.css";
 import Home from "./pages/Home";
 import MainLayout from "./layouts/MainLayout";
+import Dashboard from "./pages/Dashboard";
+import { createBrowserRouter, RouterProvider } from "react-router";
 
 function App() {
   const body = document.body;
@@ -19,11 +21,26 @@ function App() {
   root.classList.add("flex-col");
   root.classList.add("min-w-[320px]");
 
-  return (
-    <MainLayout>
-      <Home />
-    </MainLayout>
-  );
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/dashboard",
+      element: (
+        <MainLayout>
+          <Dashboard />
+        </MainLayout>
+      ),
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;

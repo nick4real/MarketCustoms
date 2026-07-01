@@ -13,8 +13,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
-      <MenuPanel isMenuOpen={isMenuOpen} />
-      <main className="mt-14 border w-full lg:w-5xl">{children}</main>
+      <MenuPanel isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <main className="mt-14 border w-full xl:w-8xl flex">{children}</main>
       <Footer />
     </>
   );

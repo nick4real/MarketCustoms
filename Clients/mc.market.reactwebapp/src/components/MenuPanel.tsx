@@ -1,8 +1,10 @@
+import { Link } from "react-router";
 interface Props {
   isMenuOpen: boolean;
+  toggleMenu: () => void;
 }
 
-function MenuPanel({ isMenuOpen }: Props) {
+function MenuPanel({ isMenuOpen, toggleMenu }: Props) {
   if (!isMenuOpen) {
     return null;
   }
@@ -11,16 +13,14 @@ function MenuPanel({ isMenuOpen }: Props) {
     <>
       <menu className="flex flex-col gap-2 z-50 fixed top-0 left-0 h-full w-64 bg-amber-900/20 md:hidden">
         <li>
-          <a href="/">Home</a>
+          <Link to="/" onClick={toggleMenu}>
+            Home
+          </Link>
         </li>
         <li>
-          <a href="/">About</a>
-        </li>
-        <li>
-          <a href="/">Contact</a>
-        </li>
-        <li>
-          <a href="/">Login</a>
+          <Link to="/dashboard" onClick={toggleMenu}>
+            Dashboard
+          </Link>
         </li>
       </menu>
     </>
