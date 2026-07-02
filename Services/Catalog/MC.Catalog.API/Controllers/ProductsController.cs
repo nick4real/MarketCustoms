@@ -12,7 +12,7 @@ public class ProductsController(IProductService productService) : CustomControll
 {
     [AllowAnonymous]
     [HttpGet("{productId}")]
-    public async Task<IActionResult> GetAllByCategory(CancellationToken ct, string productId)
+    public async Task<IActionResult> GetById(CancellationToken ct, string productId)
     {
         var productsResult = await productService.GetDetailedProductByIdAsync(productId, ct);
         return HandleResult(productsResult);

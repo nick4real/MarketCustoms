@@ -18,8 +18,9 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         if (productBson == null) return null;
 
         // Fetch the category from the relational database using the CategoryId from the product
+        // TODO: Add CRUD categories 
         var category = await sqlContext.Categories.FindAsync(productBson.CategoryId, ct);
-        if (category == null) return null;
+        //if (category == null) return null;
 
         return new Product
         {
@@ -28,7 +29,7 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
             Title = productBson.Title,
             Description = productBson.Description,
             CategoryId = productBson.CategoryId,
-            Category = category,
+            Category = category ?? new Category { Id = 0, Name = "Root"}, // TODO: Add CRUD categories
             CreatedAt = productBson.CreatedAt,
             Price = productBson.Price,
             StockQuantity = productBson.StockQuantity,
