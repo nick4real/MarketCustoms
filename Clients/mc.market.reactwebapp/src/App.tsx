@@ -1,25 +1,39 @@
-import "./App.css";
-import Home from "./pages/Home";
-import MainLayout from "./layouts/MainLayout";
-import Dashboard from "./pages/Dashboard";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import MainLayout from "./layouts/MainLayout";
+import Home from "./pages/Home";
+import Browse from "./pages/Browse";
+import ProductDetail from "./pages/ProductDetail";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const body = document.body;
-  body.classList.add("dark:bg-neutral-950");
-  body.classList.add("dark:text-white");
-  body.classList.add("bg-white");
-  body.classList.add("text-black");
-  body.classList.add("overflow-x-hidden");
-  body.classList.add("min-h-screen");
-  body.classList.add("items-center");
+  useEffect(() => {
+    const body = document.body;
+    const root = document.getElementById("root");
 
-  const root = document.getElementById("root");
-  root.classList.add("w-full");
-  root.classList.add("items-center");
-  root.classList.add("flex");
-  root.classList.add("flex-col");
-  root.classList.add("min-w-[320px]");
+    body.classList.add(
+      "bg-white",
+      "text-black",
+      "dark:bg-neutral-950",
+      "dark:text-white",
+      "overflow-x-hidden",
+      "min-h-screen",
+    );
+
+    root?.classList.add("w-full", "flex", "flex-col", "min-w-[320px]", "min-h-screen");
+
+    return () => {
+      body.classList.remove(
+        "bg-white",
+        "text-black",
+        "dark:bg-neutral-950",
+        "dark:text-white",
+        "overflow-x-hidden",
+        "min-h-screen",
+      );
+      root?.classList.remove("w-full", "flex", "flex-col", "min-w-[320px]", "min-h-screen");
+    };
+  }, []);
 
   const router = createBrowserRouter([
     {
@@ -27,6 +41,22 @@ function App() {
       element: (
         <MainLayout>
           <Home />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/browse",
+      element: (
+        <MainLayout>
+          <Browse />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/products/:id",
+      element: (
+        <MainLayout>
+          <ProductDetail />
         </MainLayout>
       ),
     },
