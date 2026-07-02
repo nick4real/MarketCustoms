@@ -1,6 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.0" />
+<Project Sdk="Aspire.AppHost.Sdk/13.3.5">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,18 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.JavaScript" />
+    <PackageReference Include="Aspire.Hosting.MongoDB" />
     <PackageReference Include="Aspire.Hosting.SqlServer" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Clients\BlazorApp\BlazorApp.csproj" />
-    <ProjectReference Include="..\..\Gateway\WebStoreGateway\WebStoreGateway.csproj" />
-    <ProjectReference Include="..\..\Services\Feedback\WebStoreFeedback.API\WebStoreFeedback.API.csproj" />
-    <ProjectReference Include="..\..\Services\Notification\WebStoreNotification.API\WebStoreNotification.API.csproj" />
-    <ProjectReference Include="..\..\Services\Order\WebStoreOrder.API\WebStoreOrder.API.csproj" />
-    <ProjectReference Include="..\..\Services\Product\WebStoreProduct.API\WebStoreProduct.API.csproj" />
-    <ProjectReference Include="..\..\Services\User\WebStoreUser.API\WebStoreUser.API.csproj" />
+    <ProjectReference Include="..\..\Gateway\MC.Gateway\MC.Gateway.csproj" />
+    <ProjectReference Include="..\..\Services\Notifications\MC.Notifications.API\MC.Notifications.API.csproj" />
+    <ProjectReference Include="..\..\Services\Ordering\MC.Ordering.API\MC.Ordering.API.csproj" />
+    <ProjectReference Include="..\..\Services\Catalog\MC.Catalog.API\MC.Catalog.API.csproj" />
+    <ProjectReference Include="..\..\Services\Profiles\MC.Profiles.API\MC.Profiles.API.csproj" />
   </ItemGroup>
 
 </Project>

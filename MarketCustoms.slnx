@@ -1,0 +1,43 @@
+<Solution>
+  <Folder Name="/Aspire/">
+    <Project Path="Aspire/AspireApp.AppHost/AspireApp.AppHost.csproj" Id="a3043152-1b5f-41a1-b82f-e9e8e6fad094" />
+    <Project Path="Aspire/AspireApp.ServiceDefaults/AspireApp.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/Clients/">
+    <Project Path="Clients/mc.market.reactwebapp/mc.market.reactwebapp.esproj">
+      <Build />
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/Gateway/">
+    <Project Path="Gateway/MC.Gateway/MC.Gateway.csproj" />
+  </Folder>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/Catalog/">
+    <Project Path="Services/Catalog/MC.Catalog.API/MC.Catalog.API.csproj" />
+    <Project Path="Services/Catalog/MC.Catalog.Application/MC.Catalog.Application.csproj" Id="15898b4c-fff2-47b9-9ea0-03b3e61b8712" />
+    <Project Path="Services/Catalog/MC.Catalog.Domain/MC.Catalog.Domain.csproj" Id="b10b449f-efca-4b10-af20-086c7b3777e7" />
+    <Project Path="Services/Catalog/MC.Catalog.Infrastructure/MC.Catalog.Infrastructure.csproj" Id="5034a131-fa2e-461e-8c9e-6de00c6058a5" />
+  </Folder>
+  <Folder Name="/Services/Notifications/">
+    <Project Path="Services/Notifications/MC.Notifications.API/MC.Notifications.API.csproj" />
+    <Project Path="Services/Notifications/MC.Notifications.Application/MC.Notifications.Application.csproj" Id="35144a3d-9eb6-4bdb-81d3-f1230fd9dc88" />
+    <Project Path="Services/Notifications/MC.Notifications.Domain/MC.Notifications.Domain.csproj" Id="777eb1ab-9933-4478-969f-9c63a62f7c8a" />
+    <Project Path="Services/Notifications/MC.Notifications.Infrastructure/MC.Notifications.Infrastructure.csproj" Id="51f15a50-4984-41d5-8402-fe47b1e4c4c3" />
+  </Folder>
+  <Folder Name="/Services/Ordering/">
+    <Project Path="Services/Ordering/MC.Ordering.API/MC.Ordering.API.csproj" />
+    <Project Path="Services/Ordering/MC.Ordering.Application/MC.Ordering.Application.csproj" Id="be14b50b-b732-45be-b733-ed989ffeb437" />
+    <Project Path="Services/Ordering/MC.Ordering.Domain/MC.Ordering.Domain.csproj" Id="dfd0413b-132e-4f16-84a0-d41129325701" />
+    <Project Path="Services/Ordering/MC.Ordering.Infrastructure/MC.Ordering.Infrastructure.csproj" Id="c48b7221-dd68-43c3-a487-5a1dc4206f9b" />
+  </Folder>
+  <Folder Name="/Services/Profiles/">
+    <Project Path="Services/Profiles/MC.Profiles.API/MC.Profiles.API.csproj" />
+    <Project Path="Services/Profiles/MC.Profiles.Application/MC.Profiles.Application.csproj" Id="943424ba-8123-4bae-a5d6-10ab25a31850" />
+    <Project Path="Services/Profiles/MC.Profiles.Domain/MC.Profiles.Domain.csproj" Id="82d1c68e-c4c8-44ae-b11d-7264bd549482" />
+    <Project Path="Services/Profiles/MC.Profiles.Infrastructure/MC.Profiles.Infrastructure.csproj" Id="d65215b8-cde3-44ef-a1db-787bdbe2470e" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+</Solution>
