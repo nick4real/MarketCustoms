@@ -1,3 +1,4 @@
+using Auth0.AspNetCore.Authentication.Api;
 using Scalar.AspNetCore;
 using WebStoreUser.Infrastructure;
 using WebStoreUser.Infrastructure.Filters;
@@ -13,8 +14,8 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<ValidationFilter>();
 });
 
-//builder.Services.AddAuth0ApiAuthentication(builder.Configuration.GetSection("Auth0"));
-//builder.Services.AddAuthorization();
+builder.Services.AddAuth0ApiAuthentication(builder.Configuration.GetSection("Auth0"));
+builder.Services.AddAuthorization();
 
 if (builder.Environment.IsDevelopment())
 {
