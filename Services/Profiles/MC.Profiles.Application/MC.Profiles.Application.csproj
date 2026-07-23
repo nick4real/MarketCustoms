@@ -17,4 +17,13 @@
     <ProjectReference Include="..\MC.Profiles.Domain\MC.Profiles.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="Interfaces\Services\" />
+    <Folder Include="Requests\" />
+    <Folder Include="Responses\" />
+    <Folder Include="Services\" />
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>
