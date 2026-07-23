@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- 3rd party packages -->
-    <PackageVersion Include="Auth0.AspNetCore.Authentication.Api" Version="1.0.0" />
+    <PackageVersion Include="Auth0.AspNetCore.Authentication.Api" Version="1.0.1" />
     <PackageVersion Include="MongoDB.Driver" Version="3.9.0" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.12.18" />
     <PackageVersion Include="Mapster" Version="7.4.0" />
