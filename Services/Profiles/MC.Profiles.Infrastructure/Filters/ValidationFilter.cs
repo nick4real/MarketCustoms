@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace WebStoreUser.Infrastructure.Filters;
+namespace MC.Profiles.Infrastructure.Filters;
 
 public class ValidationFilter : IActionFilter
 {

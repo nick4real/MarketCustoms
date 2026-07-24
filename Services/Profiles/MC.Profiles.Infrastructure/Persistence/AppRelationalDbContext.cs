@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebStoreUser.Domain.Entities;
+using MC.Profiles.Domain.Entities;
 
-namespace WebStoreUser.Infrastructure.Persistence;
+namespace MC.Profiles.Infrastructure.Persistence;
 
 public class AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> options) : DbContext(options)
 {

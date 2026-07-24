@@ -1,4 +1,4 @@
-﻿namespace WebStoreUser.Domain.Enums;
+﻿namespace MC.Profiles.Domain.Enums;
 
 public enum UserRole
 {

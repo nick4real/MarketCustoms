@@ -1,7 +1,7 @@
-﻿using WebStoreUser.Domain.Common;
-using WebStoreUser.Domain.Enums;
+﻿using MC.Profiles.Domain.Common;
+using MC.Profiles.Domain.Enums;
 
-namespace WebStoreUser.Domain.Entities;
+namespace MC.Profiles.Domain.Entities;
 
 public class Profile : BaseEntity<Guid>
 {

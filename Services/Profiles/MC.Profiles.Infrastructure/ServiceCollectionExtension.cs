@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebStoreUser.Infrastructure.Persistence;
+using MC.Profiles.Infrastructure.Persistence;
 
-namespace WebStoreUser.Infrastructure;
+namespace MC.Profiles.Infrastructure;
 
 public static class ServiceCollectionExtension
 {

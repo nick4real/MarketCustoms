@@ -1,7 +1,7 @@
 using Auth0.AspNetCore.Authentication.Api;
 using Scalar.AspNetCore;
-using WebStoreUser.Infrastructure;
-using WebStoreUser.Infrastructure.Filters;
+using MC.Profiles.Infrastructure;
+using MC.Profiles.Infrastructure.Filters;
 
 // Builder
 var builder = WebApplication.CreateBuilder(args);
