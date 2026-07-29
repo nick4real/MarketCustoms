@@ -12,11 +12,11 @@ var mongoServer = builder.AddMongoDB("mongoServer")
         o.WithLifetime(ContainerLifetime.Persistent);
     });
 
-// TODO: Refactor to Profiles Service
-var userDatabase = sqlServer.AddDatabase("userDatabase");
-var userService = builder.AddProject<Projects.MC_Profiles_API>("profilesService")
-    .WaitFor(userDatabase)
-    .WithReference(userDatabase, "UserDatabase");
+// Profiles Service
+var profilesSqlDatabase = sqlServer.AddDatabase("profilesSqlDatabase");
+var profilesService = builder.AddProject<Projects.MC_Profiles_API>("profilesService")
+    .WaitFor(profilesSqlDatabase)
+    .WithReference(profilesSqlDatabase, "ProfilesSqlDatabase");
 
 // Catalog Service
 var mongoDatabaseName = "catalogMongoDatabase";
@@ -35,7 +35,7 @@ var reactwebapp = builder.AddViteApp("reactWebApp", "./../../Clients/mc.market.r
 // Gateway
 var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGateway")
     .WithExternalHttpEndpoints()
-    .WithReference(userService)
+    .WithReference(profilesService)
     .WithReference(catalogService)
     .WithReference(reactwebapp);
 

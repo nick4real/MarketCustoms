@@ -1,4 +1,4 @@
-﻿namespace WebStoreUser.Domain.Common;
+﻿namespace MC.Profiles.Domain.Common;
 
 public abstract class BaseEntity<TId>
 {

@@ -1,9 +1,9 @@
-﻿namespace WebStoreUser.Domain.Enums;
+﻿namespace MC.Profiles.Domain.Enums;
 
 public enum UserRole
 {
     Customer,
     Seller,
-    Both,
+    Combined,
     Admin
 }
