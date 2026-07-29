@@ -18,8 +18,4 @@
     <ProjectReference Include="..\MC.Profiles.Infrastructure\MC.Profiles.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
