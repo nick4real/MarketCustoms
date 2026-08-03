@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MC.Shared.API.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MC.Profiles.API.Controllers;
@@ -6,7 +7,7 @@ namespace MC.Profiles.API.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class ProfilesController : ControllerBase
+public class ProfilesController : CustomController
 {
     [HttpGet("me")]
     public async Task<IActionResult> GetMe()

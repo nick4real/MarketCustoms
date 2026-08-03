@@ -1,3 +1,3 @@
-﻿namespace MC.Catalog.Application.Common;
+﻿namespace MC.Shared.Common;
 
 public record Error(ErrorCode Code, string Message);

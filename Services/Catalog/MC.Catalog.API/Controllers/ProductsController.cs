@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Application.Requests;
+using MC.Shared.API.Controllers;
 
 namespace MC.Catalog.API.Controllers;
 

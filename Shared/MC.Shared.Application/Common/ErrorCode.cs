@@ -1,4 +1,4 @@
-﻿namespace MC.Catalog.Application.Common;
+﻿namespace MC.Shared.Common;
 
 public enum ErrorCode
 {

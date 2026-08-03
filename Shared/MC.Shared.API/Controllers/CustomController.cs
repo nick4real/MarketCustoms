@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MC.Catalog.Application.Common;
+﻿using MC.Shared.Common;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace MC.Catalog.API.Controllers;
+namespace MC.Shared.API.Controllers;
 
 public class CustomController : ControllerBase
 {

@@ -1,8 +1,8 @@
-﻿using MC.Catalog.Application.Common;
-using MC.Catalog.Application.DTOs;
+﻿using MC.Catalog.Application.DTOs;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Application.Requests;
 using MC.Catalog.Application.Responses;
+using MC.Shared.Common;
 
 namespace MC.Catalog.Application.Interfaces.Services;
 

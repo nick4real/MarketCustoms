@@ -37,6 +37,10 @@
     <Project Path="Services/Profiles/MC.Profiles.Domain/MC.Profiles.Domain.csproj" Id="82d1c68e-c4c8-44ae-b11d-7264bd549482" />
     <Project Path="Services/Profiles/MC.Profiles.Infrastructure/MC.Profiles.Infrastructure.csproj" Id="d65215b8-cde3-44ef-a1db-787bdbe2470e" />
   </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="Shared/MC.Shared.API/MC.Shared.API.csproj" Id="6705b7b5-0a95-429c-996e-724e526527fd" />
+    <Project Path="Shared/MC.Shared.Application/MC.Shared.Application.csproj" Id="b1a2ec45-06ce-4651-8e68-d12234a893b9" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>
