@@ -1,18 +1,15 @@
 using Auth0.AspNetCore.Authentication.Api;
-using Scalar.AspNetCore;
+using MC.Profiles.Application;
 using MC.Profiles.Infrastructure;
-using MC.Profiles.Infrastructure.Filters;
+using Scalar.AspNetCore;
 
 // Builder
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-//builder.Services.AddApplication();
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<ValidationFilter>();
-});
+builder.Services.AddControllers();
 
 builder.Services.AddAuth0ApiAuthentication(builder.Configuration.GetSection("Auth0"));
 builder.Services.AddAuthorization();

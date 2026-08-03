@@ -13,18 +13,14 @@ public static class ServiceCollectionExtension
         public IServiceCollection AddInfrastructure(IConfiguration configuration)
         {
             services.AddDbContext<AppRelationalDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ProfilesSqlDatabase"), builder =>
+                options.UseSqlServer(configuration.GetConnectionString("profilesSqlDatabase"), builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
 
+            // Options
+
             // Repositories
-
-            // Services
-
-            // Validators
-            //services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
-            services.AddFluentValidationAutoValidation();
 
             return services;
         }

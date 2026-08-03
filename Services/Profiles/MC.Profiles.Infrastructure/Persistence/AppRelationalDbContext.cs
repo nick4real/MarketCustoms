@@ -9,10 +9,10 @@ public class AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> opt
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Profile>()
             .HasIndex(p => p.Auth0UserId)
             .IsUnique();
-
-        base.OnModelCreating(modelBuilder);
     }
 }

@@ -13,21 +13,22 @@ var mongoServer = builder.AddMongoDB("mongoServer")
     });
 
 // Profiles Service
-var profilesSqlDatabase = sqlServer.AddDatabase("profilesSqlDatabase");
+var profilesSqlDatabaseName = "profilesSqlDatabase";
+var profilesSqlDatabase = sqlServer.AddDatabase(profilesSqlDatabaseName);
 var profilesService = builder.AddProject<Projects.MC_Profiles_API>("profilesService")
     .WaitFor(profilesSqlDatabase)
-    .WithReference(profilesSqlDatabase, "ProfilesSqlDatabase");
+    .WithReference(profilesSqlDatabase, profilesSqlDatabaseName);
 
 // Catalog Service
-var mongoDatabaseName = "catalogMongoDatabase";
-var sqlDatabaseName = "catalogSqlDatabase";
-var catalogSqlDatabase = sqlServer.AddDatabase(sqlDatabaseName);
-var catalogMongoDatabase = mongoServer.AddDatabase(mongoDatabaseName);
+var catalogSqlDatabaseName = "catalogSqlDatabase";
+var catalogMongoDatabaseName = "catalogMongoDatabase";
+var catalogSqlDatabase = sqlServer.AddDatabase(catalogSqlDatabaseName);
+var catalogMongoDatabase = mongoServer.AddDatabase(catalogMongoDatabaseName);
 var catalogService = builder.AddProject<Projects.MC_Catalog_API>("catalogService")
     .WaitFor(catalogSqlDatabase)
     .WaitFor(catalogMongoDatabase)
-    .WithReference(catalogSqlDatabase, sqlDatabaseName)
-    .WithReference(catalogMongoDatabase, mongoDatabaseName);
+    .WithReference(catalogSqlDatabase, catalogSqlDatabaseName)
+    .WithReference(catalogMongoDatabase, catalogMongoDatabaseName);
 
 // React Web App
 var reactwebapp = builder.AddViteApp("reactWebApp", "./../../Clients/mc.market.reactwebapp", "dev");

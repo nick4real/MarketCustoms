@@ -12,31 +12,28 @@ builder.AddServiceDefaults();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddOpenApi();
-}
 
 builder.Services.AddAuth0ApiAuthentication(builder.Configuration.GetSection("Auth0"));
 builder.Services.AddAuthorization();
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddOpenApi();
+}
 // App
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
-
 app.MapDefaultEndpoints();
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+
     await using (var serviceScope = app.Services.CreateAsyncScope())
     await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppRelationalDbContext>())
     {

@@ -3,10 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MC.Catalog.Infrastructure.Persistence;
 
-public class AppRelationalDbContext : DbContext
+public class AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> options) : DbContext(options)
 {
-    public AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> options) : base(options)
-    { }
     public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
