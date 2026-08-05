@@ -1,8 +1,10 @@
 ﻿using FluentValidation.AspNetCore;
+using MC.Profiles.Infrastructure.Persistence;
+using MC.Shared.Application.Interfaces.Services;
+using MC.Shared.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MC.Profiles.Infrastructure.Persistence;
 
 namespace MC.Profiles.Infrastructure;
 
@@ -17,6 +19,9 @@ public static class ServiceCollectionExtension
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             // Options
 

@@ -40,6 +40,7 @@
   <Folder Name="/Shared/">
     <Project Path="Shared/MC.Shared.API/MC.Shared.API.csproj" Id="6705b7b5-0a95-429c-996e-724e526527fd" />
     <Project Path="Shared/MC.Shared.Application/MC.Shared.Application.csproj" Id="b1a2ec45-06ce-4651-8e68-d12234a893b9" />
+    <Project Path="Shared/MC.Shared.Infrastructure/MC.Shared.Infrastructure.csproj" Id="1a4f4f8e-4948-4e07-855c-91fd837fb006" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />

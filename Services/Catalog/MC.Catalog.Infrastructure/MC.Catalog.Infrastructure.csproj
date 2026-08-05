@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Shared\MC.Shared.Infrastructure\MC.Shared.Infrastructure.csproj" />
 		<ProjectReference Include="..\MC.Catalog.Application\MC.Catalog.Application.csproj" />
 	</ItemGroup>
 

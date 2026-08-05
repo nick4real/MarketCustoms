@@ -5,6 +5,8 @@ using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Infrastructure.Persistence;
 using MC.Catalog.Infrastructure.Persistence.Repositories;
 using MC.Catalog.Infrastructure.Options;
+using MC.Shared.Application.Interfaces.Services;
+using MC.Shared.Infrastructure.Services;
 
 namespace MC.Catalog.Infrastructure;
 
@@ -21,6 +23,9 @@ public static class ServiceCollectionExtension
                 }));
 
             services.AddSingleton<AppMongoDbContext>();
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             // Options
             services.Configure<MongoDbOptions>(configuration);
