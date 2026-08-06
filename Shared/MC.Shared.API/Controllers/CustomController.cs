@@ -1,4 +1,4 @@
-﻿using MC.Shared.Common;
+﻿using MC.Shared.Application.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +13,8 @@ public class CustomController : ControllerBase
         return result.Error!.Code switch
         {
             ErrorCode.ValidationFailed => BadRequest(result.Error),
+            ErrorCode.Unauthorized => Unauthorized(result.Error),
+            ErrorCode.Forbidden => StatusCode(StatusCodes.Status403Forbidden, result.Error),
             ErrorCode.NotFound => NotFound(result.Error),
             ErrorCode.Conflict => Conflict(result.Error),
             _ => StatusCode(StatusCodes.Status500InternalServerError, "Unknown error.")

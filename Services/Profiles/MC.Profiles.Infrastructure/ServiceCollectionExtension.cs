@@ -1,5 +1,7 @@
 ﻿using FluentValidation.AspNetCore;
+using MC.Profiles.Application.Interfaces.Repositories;
 using MC.Profiles.Infrastructure.Persistence;
+using MC.Profiles.Infrastructure.Persistence.Repositories;
 using MC.Shared.Application.Interfaces.Services;
 using MC.Shared.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,7 @@ public static class ServiceCollectionExtension
             // Options
 
             // Repositories
+            services.AddScoped<IProfileRepository, ProfileRepository>();
 
             return services;
         }

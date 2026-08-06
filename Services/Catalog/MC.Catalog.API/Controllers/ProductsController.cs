@@ -9,6 +9,7 @@ namespace MC.Catalog.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class ProductsController(IProductService productService) : CustomController
 {
     [AllowAnonymous]
@@ -35,8 +36,6 @@ public class ProductsController(IProductService productService) : CustomControll
         return HandleResult(productsResult);
     }
 
-    // TODO: Implement authentication
-    [AllowAnonymous]
     [HttpPost("create")]
     public async Task<IActionResult> CreateProduct(CancellationToken ct, [FromBody] CreateProductRequest product)
     {

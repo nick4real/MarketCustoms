@@ -10,12 +10,7 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
     public string? UserId => User?.FindFirstValue(ClaimTypes.NameIdentifier)
         ?? User?.FindFirstValue("sub");
 
-    public string? Email => User?.FindFirstValue(ClaimTypes.Email)
-        ?? User?.FindFirstValue("email");
-
-    public string? TenantId => User?.FindFirstValue("tenant_id"); // ?
-
     public bool IsAuthenticated => User?.Identity?.IsAuthenticated ?? false;
-
-    public bool IsInRole(string role) => User?.IsInRole(role) ?? false;
+    // TODO: Test it
+    public bool IsSeller => User?.FindFirstValue("is_seller") == "true";
 }

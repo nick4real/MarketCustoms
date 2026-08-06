@@ -2,7 +2,7 @@
 using MC.Catalog.Application.Models;
 using MC.Catalog.Application.Requests;
 using MC.Catalog.Application.Responses;
-using MC.Shared.Common;
+using MC.Shared.Application.Common;
 
 namespace MC.Catalog.Application.Interfaces.Services;
 

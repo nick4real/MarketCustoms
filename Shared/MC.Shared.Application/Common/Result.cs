@@ -1,4 +1,4 @@
-﻿namespace MC.Shared.Common;
+﻿namespace MC.Shared.Application.Common;
 
 public record Result
 {

@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using MC.Catalog.Infrastructure.Persistence;
-using MC.Catalog.Infrastructure;
-using MC.Catalog.Application;
-using Scalar.AspNetCore;
 using Auth0.AspNetCore.Authentication.Api;
+using MC.Catalog.Application;
+using MC.Catalog.Infrastructure;
+using MC.Catalog.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 // Builder
 var builder = WebApplication.CreateBuilder(args);

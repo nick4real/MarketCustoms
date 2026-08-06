@@ -1,5 +1,5 @@
 ﻿using MapsterMapper;
-using MC.Shared.Common;
+using MC.Shared.Application.Common;
 using MC.Catalog.Application.DTOs;
 using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Application.Interfaces.Services;

@@ -12,7 +12,18 @@ public class AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> opt
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Profile>()
-            .HasIndex(p => p.Auth0UserId)
+            .HasKey(p => p.Id);
+
+        modelBuilder.Entity<Profile>()
+            .HasIndex(p => p.ExternalUserId)
+            .IsUnique();
+
+        modelBuilder.Entity<Profile>()
+            .HasIndex(p => p.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<Profile>()
+            .HasIndex(p => p.PhoneNumber)
             .IsUnique();
     }
 }
