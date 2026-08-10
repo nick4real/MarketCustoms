@@ -30,9 +30,9 @@ public class ProfileService(IProfileRepository profileRepository, ICurrentUserSe
         }
 
         return Result<ProfileInfoResponse>.Success(new ProfileInfoResponse(
-            profile.DisplayName, 
-            profile.PhoneNumber ?? string.Empty, 
-            profile.Email ?? string.Empty));
+            DisplayName: profile.DisplayName,
+            PhoneNumber: profile.PhoneNumber ?? string.Empty,
+            Email: profile.Email ?? string.Empty));
     }
 
     public async Task<Result<ProfileInfoResponse>> GetProfileInfo(CancellationToken ct, Guid id)
@@ -42,9 +42,9 @@ public class ProfileService(IProfileRepository profileRepository, ICurrentUserSe
             return Result<ProfileInfoResponse>.Failure(new Error(ErrorCode.NotFound, "Profile not found"));
 
         var response = new ProfileInfoResponse(
-            profile.DisplayName,
-            profile.IsPhonePublic ? profile.PhoneNumber ?? string.Empty : "Hidden",
-            profile.IsEmailPublic ? profile.Email ?? string.Empty : "Hidden");
+            DisplayName: profile.DisplayName,
+            PhoneNumber: profile.IsPhonePublic ? profile.PhoneNumber ?? string.Empty : "Hidden",
+            Email: profile.IsEmailPublic ? profile.Email ?? string.Empty : "Hidden");
 
         return Result<ProfileInfoResponse>.Success(response);
     }
