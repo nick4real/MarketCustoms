@@ -19,6 +19,7 @@ public static class ServiceCollectionExtension
 
             // Services
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             // Validators
             services.AddValidatorsFromAssemblyContaining<ProductParamsValidator>();

@@ -12,9 +12,9 @@ public class AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> opt
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Category>()
-            .HasMany(c => c.ChildCategories)
-            .WithOne(c => c.ParentCategory)
+            .HasOne(c => c.ParentCategory)
+            .WithMany(c => c.ChildCategories)
             .HasForeignKey(c => c.ParentCategoryId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
 }
