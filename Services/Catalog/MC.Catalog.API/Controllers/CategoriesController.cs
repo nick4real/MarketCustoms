@@ -13,10 +13,34 @@ public class CategoriesController(ICategoryService categoryService) : CustomCont
 {
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetFullRootCategory(CancellationToken ct)
+    public async Task<IActionResult> GetAllRoots(CancellationToken ct)
     {
-        var categoryResult = await categoryService.GetFullCategoryTreeAsync(ct);
-        return HandleResult(categoryResult);
+        var result = await categoryService.GetRootCategoriesAsync(ct);
+        return HandleResult(result);
+    }
+
+    [HttpGet("{categoryId}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetCategoryById(CancellationToken ct, uint categoryId)
+    {
+        var result = await categoryService.GetCategoryAsync(ct, categoryId);
+        return HandleResult(result);
+    }
+
+    [HttpGet("children/{categoryId}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetCategoryWithChildren(CancellationToken ct, uint categoryId)
+    {
+        var result = await categoryService.GetCategoryWithChildrenAsync(ct, categoryId);
+        return HandleResult(result);
+    }
+
+    [HttpGet("tree/{categoryId}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetCategoryFullTree(CancellationToken ct, uint categoryId)
+    {
+        var result = await categoryService.GetCategoryFullTreeAsync(ct, categoryId);
+        return HandleResult(result);
     }
 
     [HttpPost]
