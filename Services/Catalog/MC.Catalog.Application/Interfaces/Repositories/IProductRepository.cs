@@ -6,7 +6,7 @@ namespace MC.Catalog.Application.Interfaces.Repositories;
 
 public interface IProductRepository
 {
-    Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? queryParams);
+    Task<PagedList<ProductCatalogView>> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? queryParams);
     Task<Product?> GetProductByIdAsync(string id, CancellationToken ct);
     Task AddProductAsync(Product product, CancellationToken ct);
     Task SaveChangesAsync();

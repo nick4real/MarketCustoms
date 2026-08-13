@@ -15,7 +15,7 @@ public class ProductBson
     public DateTimeOffset CreatedAt { get; set; }
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
-    public List<string> ImageLinks { get; set; }
-    public List<string> Tags { get; set; }
-    public List<Tuple<string, string>> Parameters { get; set; }
+    public List<string> ImageLinks { get; set; } = [];
+    public List<string> Tags { get; set; } = [];
+    public List<Tuple<string, string>> Parameters { get; set; } = [];
 }

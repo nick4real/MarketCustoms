@@ -24,13 +24,13 @@ public class ProductsController(IProductService productService) : CustomControll
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct, [FromQuery] PaginationParams paginationParams = default!)
     {
-        var productsResult = await productService.GetProductsAsync(ct, paginationParams, null!);
+        var productsResult = await productService.GetProductsAsync(ct, paginationParams, null);
         return HandleResult(productsResult);
     }
 
     [AllowAnonymous]
     [HttpPost]
-    public async Task<IActionResult> GetAllByParams(CancellationToken ct, [FromBody] ProductParams productParams, [FromQuery] PaginationParams paginationParams = default!)
+    public async Task<IActionResult> GetAllByParams(CancellationToken ct, [FromBody] ProductParams? productParams, [FromQuery] PaginationParams paginationParams = default!)
     {
         var productsResult = await productService.GetProductsAsync(ct, paginationParams, productParams);
         return HandleResult(productsResult);

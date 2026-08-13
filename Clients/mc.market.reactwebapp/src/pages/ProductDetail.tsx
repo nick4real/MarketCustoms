@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Link, useParams } from "react-router";
 import { fetchProductById } from "../api/products";
 import type { ProductDetail } from "../../models/product";
@@ -6,36 +6,74 @@ import { formatPrice, productImageSrc } from "../lib/format";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EmptyState from "../components/EmptyState";
 
+type DetailState = {
+  product: ProductDetail | null;
+  loading: boolean;
+  error: string | null;
+};
+
+type DetailAction =
+  | { type: "start" }
+  | { type: "success"; product: ProductDetail }
+  | { type: "error"; message: string };
+
+const initialState: DetailState = {
+  product: null,
+  loading: true,
+  error: null,
+};
+
+function reducer(state: DetailState, action: DetailAction): DetailState {
+  switch (action.type) {
+    case "start":
+      return { ...state, loading: true, error: null };
+    case "success":
+      return { product: action.product, loading: false, error: null };
+    case "error":
+      return { ...state, loading: false, error: action.message };
+    default:
+      return state;
+  }
+}
+
 function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<ProductDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     if (!id) return;
-    setLoading(true);
-    setError(null);
+    let cancelled = false;
+
+    dispatch({ type: "start" });
     fetchProductById(id)
       .then((data) => {
-        setProduct(data);
-        setSelectedImage(0);
+        if (!cancelled) {
+          dispatch({ type: "success", product: data });
+          setSelectedImage(0);
+        }
       })
-      .catch((err: Error) => setError(err.message))
-      .finally(() => setLoading(false));
+      .catch((err: Error) => {
+        if (!cancelled) {
+          dispatch({ type: "error", message: err.message });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
-  if (loading) {
+  if (state.loading) {
     return <LoadingSpinner label="Loading product..." />;
   }
 
-  if (error || !product) {
+  if (state.error || !state.product) {
     return (
       <div className="w-full px-4 py-8 sm:px-6">
         <EmptyState
           title="Product not found"
-          description={error ?? "This product may have been removed."}
+          description={state.error ?? "This product may have been removed."}
         />
         <div className="mt-6 text-center">
           <Link
@@ -49,6 +87,7 @@ function ProductDetailPage() {
     );
   }
 
+  const product = state.product;
   const images =
     product.imageLinks.length > 0
       ? product.imageLinks
@@ -119,6 +158,42 @@ function ProductDetailPage() {
           <p className="leading-relaxed text-zinc-700 dark:text-zinc-300">
             {product.description}
           </p>
+
+          {product.parameters.length > 0 && (
+            <div>
+              <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">
+                Product parameters
+              </h2>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {product.parameters.map((parameter) => (
+                  <span
+                    key={`${parameter.name}-${parameter.value}`}
+                    className="rounded-full bg-zinc-100 px-3 py-1 text-sm text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                  >
+                    {parameter.name}: {parameter.value}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {product.tags.length > 0 && (
+            <div>
+              <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">
+                Tags
+              </h2>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {product.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-amber-100 px-3 py-1 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-200"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           <button
             type="button"

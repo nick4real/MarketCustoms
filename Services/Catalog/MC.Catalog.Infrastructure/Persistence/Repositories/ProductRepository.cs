@@ -5,6 +5,7 @@ using MC.Catalog.Domain.Entities;
 using MC.Catalog.Domain.Views;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System.Text.RegularExpressions;
 
 namespace MC.Catalog.Infrastructure.Persistence.Repositories;
 
@@ -33,44 +34,67 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
             CreatedAt = productBson.CreatedAt,
             Price = productBson.Price,
             StockQuantity = productBson.StockQuantity,
-            ImageLinks = productBson.ImageLinks,
-            Tags = productBson.Tags,
-            Parameters = productBson.Parameters
+            ImageLinks = productBson.ImageLinks ?? [],
+            Tags = productBson.Tags ?? [],
+            Parameters = productBson.Parameters ?? []
         };
     }
 
-    public async Task<PagedList<ProductCatalogView>?> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? productParams)
+    public async Task<PagedList<ProductCatalogView>> GetProductsCatalogViewAsync(int skip, int take, CancellationToken ct, ProductParams? productParams)
     {
-        // Start with an empty filter
         var filterBuilder = Builders<Models.ProductBson>.Filter;
-        var filter = filterBuilder.Empty; 
+        var filter = filterBuilder.Empty;
 
-        // Apply filtering based on ProductParams
         if (productParams != null && productParams.CategoryId.HasValue)
         {
             filter &= filterBuilder.Eq(p => p.CategoryId, productParams.CategoryId.Value);
         }
 
-        // Fetching the products with pagination and projection to ProductCatalogView
+        if (productParams != null && !string.IsNullOrWhiteSpace(productParams.Title))
+        {
+            var title = Regex.Escape(productParams.Title.Trim());
+            filter &= filterBuilder.Regex(p => p.Title, new MongoDB.Bson.BsonRegularExpression(title, "i"));
+        }
+
+        if (productParams?.Parameters is { Count: > 0 })
+        {
+            foreach (var parameter in productParams.Parameters)
+            {
+                var name = Regex.Escape(parameter.Name.Trim());
+                var value = Regex.Escape(parameter.Value.Trim());
+                filter &= filterBuilder.ElemMatch(
+                    p => p.Parameters,
+                    Builders<Tuple<string, string>>.Filter.Regex(x => x.Item1, new MongoDB.Bson.BsonRegularExpression($"^{name}$", "i"))
+                    & Builders<Tuple<string, string>>.Filter.Regex(x => x.Item2, new MongoDB.Bson.BsonRegularExpression($"^{value}$", "i")));
+            }
+        }
+
+        var totalItems = (int)await mongoContext.Products.CountDocumentsAsync(filter, cancellationToken: ct);
         var products = await mongoContext.Products
             .Find(filter)
+            .SortByDescending(p => p.CreatedAt)
             .Skip(skip)
             .Limit(take)
-            .Project(p => new ProductCatalogView(
+            .ToListAsync(ct);
+
+        var categoryIds = products.Select(p => p.CategoryId).Distinct().ToArray();
+        var categories = categoryIds.Length == 0
+            ? new Dictionary<uint, string>()
+            : await sqlContext.Categories
+                .Where(category => categoryIds.Contains(category.Id))
+                .ToDictionaryAsync(category => category.Id, category => category.Name, ct);
+
+        return new PagedList<ProductCatalogView>(
+            products.Select(p => new ProductCatalogView(
                 p.Id,
                 p.Title,
                 p.Description,
                 p.Price,
-                p.ImageLinks.FirstOrDefault() ?? string.Empty))
-            .ToListAsync(ct);
-
-        // If no products are found, return null
-        if (products.Count == 0) return null;
-
-        // Return the paged list of products along with the total count of them in the database
-        return new PagedList<ProductCatalogView>(
-            products.ToArray(),
-            (int) await mongoContext.Products.CountDocumentsAsync(filter, cancellationToken: ct)
+                p.ImageLinks?.FirstOrDefault() ?? string.Empty,
+                categories.TryGetValue(p.CategoryId, out var categoryName) ? categoryName : "Root",
+                (p.Parameters ?? []).Select(parameter => new ProductParameterView(parameter.Item1, parameter.Item2)).ToList()
+            )).ToArray(),
+            totalItems
         );
     }
 
@@ -85,9 +109,9 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
             CreatedAt = product.CreatedAt,
             Price = product.Price,
             StockQuantity = product.StockQuantity,
-            ImageLinks = product.ImageLinks,
-            Tags = product.Tags,
-            Parameters = product.Parameters
+            ImageLinks = product.ImageLinks ?? [],
+            Tags = product.Tags ?? [],
+            Parameters = product.Parameters ?? []
         };
 
         await mongoContext.Products.InsertOneAsync(productBson, cancellationToken: ct);
