@@ -21,12 +21,29 @@ function GridCard({ product }: Props) {
         />
       </div>
       <div className="flex flex-1 flex-col gap-1 p-3">
+        {product.categoryName && (
+          <p className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-400">
+            {product.categoryName}
+          </p>
+        )}
         <h3 className="line-clamp-2 text-sm font-semibold text-zinc-900 dark:text-white">
           {product.title}
         </h3>
         <p className="line-clamp-2 text-xs text-zinc-500 dark:text-zinc-400">
           {product.description}
         </p>
+        {product.parameters && product.parameters.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {product.parameters.slice(0, 2).map((parameter) => (
+              <span
+                key={`${parameter.name}-${parameter.value}`}
+                className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+              >
+                {parameter.name}: {parameter.value}
+              </span>
+            ))}
+          </div>
+        )}
         <p className="mt-auto pt-2 text-base font-bold text-amber-600 dark:text-amber-400">
           {formatPrice(product.price)}
         </p>

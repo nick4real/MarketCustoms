@@ -3,6 +3,7 @@ import type {
   Product,
   ProductDetail,
   ProductPaginatedResponse,
+  ProductSearchCriteria,
 } from "../../models/product";
 
 /* API Interfaces (camelCase — ASP.NET Core default JSON serialization) */
@@ -12,11 +13,18 @@ interface ApiProduct {
   description: string;
   price: number;
   imageLink: string;
+  categoryName: string;
+  parameters: ApiProductParameter[];
 }
 
 interface ApiCategory {
   id: number;
   name: string;
+}
+
+interface ApiProductParameter {
+  name: string;
+  value: string;
 }
 
 interface ApiProductDetail {
@@ -29,6 +37,8 @@ interface ApiProductDetail {
   price: number;
   stockQuantity: number;
   imageLinks: string[];
+  tags: string[];
+  parameters: ApiProductParameter[];
 }
 
 interface ApiPaginatedResponse<T> {
@@ -48,6 +58,8 @@ function mapProduct(api: ApiProduct): Product {
     description: api.description,
     price: api.price,
     imageLink: api.imageLink,
+    categoryName: api.categoryName,
+    parameters: api.parameters ?? [],
   };
 }
 
@@ -62,6 +74,8 @@ function mapProductDetail(api: ApiProductDetail): ProductDetail {
     price: api.price,
     stockQuantity: api.stockQuantity,
     imageLinks: api.imageLinks ?? [],
+    tags: api.tags ?? [],
+    parameters: api.parameters ?? [],
   };
 }
 
@@ -90,14 +104,34 @@ async function parseJson<T>(response: Response): Promise<T> {
 export async function fetchProducts(
   pageIndex = 1,
   pageSize = 24,
+  criteria?: ProductSearchCriteria,
 ): Promise<ProductPaginatedResponse> {
   const params = new URLSearchParams({
     PageIndex: String(pageIndex),
     PageSize: String(pageSize),
   });
-  const data = await parseJson<ApiPaginatedResponse<ApiProduct>>(
-    await fetch(`/api/products?${params}`),
-  );
+
+  const hasCriteria =
+    (Boolean(criteria?.searchText?.trim()) ||
+      Boolean(criteria?.categoryId) ||
+      Boolean(criteria?.parameters?.length));
+
+  const request = hasCriteria
+    ? fetch(`/api/products?${params}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          categoryId: criteria?.categoryId ?? null,
+          title: criteria?.searchText?.trim() ?? null,
+          parameters: (criteria?.parameters ?? []).map((parameter) => ({
+            name: parameter.name,
+            value: parameter.value,
+          })),
+        }),
+      })
+    : fetch(`/api/products?${params}`);
+
+  const data = await parseJson<ApiPaginatedResponse<ApiProduct>>(await request);
   return mapPaginatedResponse(data);
 }
 
@@ -110,11 +144,15 @@ export async function fetchProductById(id: string): Promise<ProductDetail> {
 
 export async function createProduct(
   payload: CreateProductPayload,
+  accessToken: string,
 ): Promise<ProductDetail> {
   const data = await parseJson<ApiProductDetail>(
     await fetch("/api/products/create", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
       body: JSON.stringify({
         OwnerId: payload.ownerId,
         Title: payload.title,

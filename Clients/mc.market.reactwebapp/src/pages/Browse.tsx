@@ -1,37 +1,88 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { fetchProducts } from "../api/products";
-import type { Product } from "../../models/product";
+import type { Product, ProductParameter } from "../../models/product";
 import Grid from "../components/Grid";
 import SearchBar from "../components/SearchBar";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EmptyState from "../components/EmptyState";
+import ProductFilters from "../components/ProductFilters";
+
+type BrowseState = {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+};
+
+type BrowseAction =
+  | { type: "start" }
+  | { type: "success"; products: Product[] }
+  | { type: "error"; message: string };
+
+const initialState: BrowseState = {
+  products: [],
+  loading: true,
+  error: null,
+};
+
+function reducer(state: BrowseState, action: BrowseAction): BrowseState {
+  switch (action.type) {
+    case "start":
+      return { ...state, loading: true, error: null };
+    case "success":
+      return { products: action.products, loading: false, error: null };
+    case "error":
+      return { ...state, loading: false, error: action.message };
+    default:
+      return state;
+  }
+}
 
 function Browse() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q")?.trim() ?? "";
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [filters, setFilters] = useState<ProductParameter[]>([]);
+
+  const activeFilters = useMemo(
+    () =>
+      filters.filter(
+        (filter) => filter.name.trim().length > 0 && filter.value.trim().length > 0,
+      ),
+    [filters],
+  );
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetchProducts(1, 48)
-      .then((response) => setProducts(response.items))
-      .catch((err: Error) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+    let cancelled = false;
+    dispatch({ type: "start" });
 
-  const filteredProducts = useMemo(() => {
-    if (!query) return products;
-    const lower = query.toLowerCase();
-    return products.filter(
-      (product) =>
-        product.title.toLowerCase().includes(lower) ||
-        product.description.toLowerCase().includes(lower),
-    );
-  }, [products, query]);
+    fetchProducts(
+      1,
+      48,
+      query || activeFilters.length > 0
+        ? {
+            searchText: query,
+            parameters: activeFilters,
+          }
+        : undefined,
+    )
+      .then((response) => {
+        if (!cancelled) {
+          dispatch({ type: "success", products: response.items });
+        }
+      })
+      .catch((err: Error) => {
+        if (!cancelled) {
+          dispatch({ type: "error", message: err.message });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeFilters, query]);
+
+  const clearFilters = () => setFilters([]);
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 py-8 sm:px-6">
@@ -46,28 +97,53 @@ function Browse() {
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
             {query ? `Results for "${query}"` : "Browse all products"}
           </h1>
-          {!loading && !error && (
+          {!state.loading && !state.error && (
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              {filteredProducts.length} product
-              {filteredProducts.length === 1 ? "" : "s"} found
+              {state.products.length} product{state.products.length === 1 ? "" : "s"} on this
+              page
+              {activeFilters.length > 0
+                ? ` · ${activeFilters.length} active filter${activeFilters.length === 1 ? "" : "s"}`
+                : ""}
             </p>
           )}
         </div>
-        <SearchBar initialQuery={query} className="sm:max-w-md" />
+        <SearchBar key={query} query={query} className="sm:max-w-md" />
       </div>
 
-      {loading && <LoadingSpinner />}
-      {!loading && error && (
-        <EmptyState title="Could not load products" description={error} />
+      <ProductFilters filters={filters} onChange={setFilters} />
+
+      {activeFilters.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          {activeFilters.map((filter) => (
+            <span
+              key={`${filter.name}-${filter.value}`}
+              className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-900 dark:bg-amber-950 dark:text-amber-200"
+            >
+              {filter.name}: {filter.value}
+            </span>
+          ))}
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="text-sm font-semibold text-zinc-500 hover:text-amber-600 dark:text-zinc-400"
+          >
+            Clear filters
+          </button>
+        </div>
       )}
-      {!loading && !error && filteredProducts.length === 0 && (
+
+      {state.loading && <LoadingSpinner />}
+      {!state.loading && state.error && (
+        <EmptyState title="Could not load products" description={state.error} />
+      )}
+      {!state.loading && !state.error && state.products.length === 0 && (
         <EmptyState
           title="No matching products"
-          description="Try a different search term or browse the full catalog."
+          description="Try a different search term or adjust the parameter filters."
         />
       )}
-      {!loading && !error && filteredProducts.length > 0 && (
-        <Grid products={filteredProducts} />
+      {!state.loading && !state.error && state.products.length > 0 && (
+        <Grid products={state.products} />
       )}
     </div>
   );
