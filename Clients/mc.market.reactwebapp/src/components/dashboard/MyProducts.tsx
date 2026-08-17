@@ -11,7 +11,8 @@ const CATEGORIES = [
 ];
 
 function MyProducts() {
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
+    useAuth0();
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,21 +34,25 @@ function MyProducts() {
     setSuccess(null);
 
     try {
-      const product = await createProduct({
-        ownerId: user.sub,
-        title: String(formData.get("title") ?? ""),
-        description: String(formData.get("description") ?? ""),
-        categoryId: Number(formData.get("categoryId") ?? 1),
-        price: Number(formData.get("price") ?? 0),
-        stockQuantity: Number(formData.get("stockQuantity") ?? 1),
-        imageLinks: [String(formData.get("imageLink") ?? "")].filter(Boolean),
-        tags: [],
-        parameters: [],
-      });
+      const accessToken = await getAccessTokenSilently();
+      const product = await createProduct(
+        {
+          ownerId: user.sub,
+          title: String(formData.get("title") ?? ""),
+          description: String(formData.get("description") ?? ""),
+          categoryId: Number(formData.get("categoryId") ?? 1),
+          price: Number(formData.get("price") ?? 0),
+          stockQuantity: Number(formData.get("stockQuantity") ?? 1),
+          imageLinks: [String(formData.get("imageLink") ?? "")].filter(Boolean),
+          tags: [],
+          parameters: [],
+        },
+        accessToken,
+      );
       setSuccess(`"${product.title}" was added to the catalog.`);
       event.currentTarget.reset();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create product");
+      setError(err instanceof Error ? "Failed to create product: " + err.message : "Failed to create product");
     } finally {
       setSubmitting(false);
     }

@@ -5,6 +5,4 @@ public record ProductCatalogViewDto(
     string Title,
     string Description,
     decimal Price,
-    string ImageLink,
-    string CategoryName,
-    List<ProductParameterDto> Parameters);
+    string ImageLink);

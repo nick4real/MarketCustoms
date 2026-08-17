@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mapster" />
-	<PackageReference Include="Mapster.DependencyInjection" />
 	<PackageReference Include="FluentValidation" />
 	<PackageReference Include="FluentValidation.AspNetCore" />
 	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" />

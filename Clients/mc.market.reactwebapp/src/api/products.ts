@@ -144,11 +144,15 @@ export async function fetchProductById(id: string): Promise<ProductDetail> {
 
 export async function createProduct(
   payload: CreateProductPayload,
+  accessToken: string,
 ): Promise<ProductDetail> {
   const data = await parseJson<ApiProductDetail>(
     await fetch("/api/products/create", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
       body: JSON.stringify({
         OwnerId: payload.ownerId,
         Title: payload.title,

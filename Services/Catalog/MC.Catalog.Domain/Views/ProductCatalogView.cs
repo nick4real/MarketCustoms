@@ -5,6 +5,4 @@ public record ProductCatalogView(
     string Title,
     string Description,
     decimal Price,
-    string ImageLink,
-    string CategoryName,
-    List<ProductParameterView> Parameters);
+    string ImageLink);

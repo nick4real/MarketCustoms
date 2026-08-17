@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MC.Catalog.Application.Interfaces.Repositories;
+﻿using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Domain.Entities;
 using MC.Catalog.Domain.Views;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Text.RegularExpressions;
@@ -21,7 +21,6 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         // Fetch the category from the relational database using the CategoryId from the product
         // TODO: Add CRUD categories 
         var category = await sqlContext.Categories.FindAsync(productBson.CategoryId, ct);
-        //if (category == null) return null;
 
         return new Product
         {
@@ -30,7 +29,7 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
             Title = productBson.Title,
             Description = productBson.Description,
             CategoryId = productBson.CategoryId,
-            Category = category ?? new Category { Id = 0, Name = "Root"}, // TODO: Add CRUD categories
+            Category = category ?? new Category { Id = 0, Name = "Unknown" }, // TODO: Add CRUD categories
             CreatedAt = productBson.CreatedAt,
             Price = productBson.Price,
             StockQuantity = productBson.StockQuantity,
@@ -44,6 +43,8 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
     {
         var filterBuilder = Builders<Models.ProductBson>.Filter;
         var filter = filterBuilder.Empty;
+
+        Console.WriteLine(filter == filterBuilder.Empty);
 
         if (productParams != null && productParams.CategoryId.HasValue)
         {
@@ -69,32 +70,29 @@ public class ProductRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
             }
         }
 
-        var totalItems = (int)await mongoContext.Products.CountDocumentsAsync(filter, cancellationToken: ct);
-        var products = await mongoContext.Products
+        var totalItemsTask = filter == filterBuilder.Empty
+            ? mongoContext.Products.EstimatedDocumentCountAsync(cancellationToken: ct)
+            : mongoContext.Products.CountDocumentsAsync(filter, cancellationToken: ct);
+
+        var productsTask = mongoContext.Products
             .Find(filter)
             .SortByDescending(p => p.CreatedAt)
             .Skip(skip)
             .Limit(take)
-            .ToListAsync(ct);
-
-        var categoryIds = products.Select(p => p.CategoryId).Distinct().ToArray();
-        var categories = categoryIds.Length == 0
-            ? new Dictionary<uint, string>()
-            : await sqlContext.Categories
-                .Where(category => categoryIds.Contains(category.Id))
-                .ToDictionaryAsync(category => category.Id, category => category.Name, ct);
-
-        return new PagedList<ProductCatalogView>(
-            products.Select(p => new ProductCatalogView(
+            .Project(p => new ProductCatalogView(
                 p.Id,
                 p.Title,
                 p.Description,
                 p.Price,
-                p.ImageLinks?.FirstOrDefault() ?? string.Empty,
-                categories.TryGetValue(p.CategoryId, out var categoryName) ? categoryName : "Root",
-                (p.Parameters ?? []).Select(parameter => new ProductParameterView(parameter.Item1, parameter.Item2)).ToList()
-            )).ToArray(),
-            totalItems
+                p.ImageLinks.FirstOrDefault() ?? string.Empty
+            ))
+            .ToListAsync(ct);
+
+        await Task.WhenAll(productsTask, totalItemsTask);
+
+        return new PagedList<ProductCatalogView>(
+            productsTask.Result.ToArray(),
+            (int)totalItemsTask.Result
         );
     }
 

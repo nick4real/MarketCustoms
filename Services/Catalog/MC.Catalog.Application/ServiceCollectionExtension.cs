@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Services;
@@ -15,8 +14,6 @@ public static class ServiceCollectionExtension
     {
         public IServiceCollection AddApplication()
         {
-            services.AddMapster();
-
             // Services
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();

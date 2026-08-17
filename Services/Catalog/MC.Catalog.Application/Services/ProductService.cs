@@ -1,11 +1,12 @@
-﻿using MC.Shared.Application.Common;
-using MC.Catalog.Application.DTOs;
+﻿using MC.Catalog.Application.DTOs;
 using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Application.Requests;
 using MC.Catalog.Application.Responses;
 using MC.Catalog.Domain.Entities;
+using MC.Catalog.Domain.Views;
+using MC.Shared.Application.Common;
 
 namespace MC.Catalog.Application.Services;
 
@@ -63,9 +64,9 @@ public class ProductService(IProductRepository productRepository) : IProductServ
                 StockQuantity = request.StockQuantity,
                 ImageLinks = request.ImageLinks ?? [],
                 Tags = request.Tags ?? [],
-                Parameters = request.Parameters ?? []
+                Parameters = request.Parameters ?? [],
+                CreatedAt = DateTimeOffset.UtcNow
             };
-            product.CreatedAt = DateTimeOffset.UtcNow;
             await productRepository.AddProductAsync(product, ct);
             return Result<ProductDetailedResponse>.Success(MapProductDetailedResponse(product));
         }
@@ -75,15 +76,13 @@ public class ProductService(IProductRepository productRepository) : IProductServ
         }
     }
 
-    private static ProductCatalogViewDto MapCatalogView(MC.Catalog.Domain.Views.ProductCatalogView view)
+    private static ProductCatalogViewDto MapCatalogView(ProductCatalogView view)
         => new(
             view.Id,
             view.Title,
             view.Description,
             view.Price,
-            view.ImageLink,
-            view.CategoryName,
-            view.Parameters.Select(parameter => new ProductParameterDto(parameter.Name, parameter.Value)).ToList());
+            view.ImageLink);
 
     private static ProductDetailedResponse MapProductDetailedResponse(Product product)
         => new(
@@ -99,4 +98,3 @@ public class ProductService(IProductRepository productRepository) : IProductServ
             product.Tags ?? [],
             product.Parameters.Select(parameter => new ProductParameterDto(parameter.Item1, parameter.Item2)).ToList());
 }
- 
