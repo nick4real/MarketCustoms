@@ -42,6 +42,23 @@
     <Project Path="Shared/MC.Shared.Application/MC.Shared.Application.csproj" Id="b1a2ec45-06ce-4651-8e68-d12234a893b9" />
     <Project Path="Shared/MC.Shared.Infrastructure/MC.Shared.Infrastructure.csproj" Id="1a4f4f8e-4948-4e07-855c-91fd837fb006" />
   </Folder>
+  <Folder Name="/Tests/" />
+  <Folder Name="/Tests/Catalog/">
+    <Project Path="Tests/Catalog/MC.Catalog.UnitTests/MC.Catalog.UnitTests.csproj" />
+    <Project Path="Tests/Catalog/MC.Catalog.IntegrationTests/MC.Catalog.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Profiles/">
+    <Project Path="Tests/Profiles/MC.Profiles.UnitTests/MC.Profiles.UnitTests.csproj" />
+    <Project Path="Tests/Profiles/MC.Profiles.IntegrationTests/MC.Profiles.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Ordering/">
+    <Project Path="Tests/Ordering/MC.Ordering.UnitTests/MC.Ordering.UnitTests.csproj" />
+    <Project Path="Tests/Ordering/MC.Ordering.IntegrationTests/MC.Ordering.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Notifications/">
+    <Project Path="Tests/Notifications/MC.Notifications.UnitTests/MC.Notifications.UnitTests.csproj" />
+    <Project Path="Tests/Notifications/MC.Notifications.IntegrationTests/MC.Notifications.IntegrationTests.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>

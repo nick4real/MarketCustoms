@@ -346,3 +346,7 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
+# OS / editor junk
+Thumbs.db
+*.swp
