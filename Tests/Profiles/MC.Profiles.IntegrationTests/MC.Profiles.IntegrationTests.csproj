@@ -11,7 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Services\Profiles\MC.Profiles.API\MC.Profiles.API.csproj" />
-    <ProjectReference Include="..\..\..\Aspire\AspireApp.AppHost\AspireApp.AppHost.csproj">
+    <ProjectReference Include="..\..\..\Aspire\MC.Aspire.AppHost\MC.Aspire.AppHost.csproj">
       <IsAspireProjectResource>false</IsAspireProjectResource>
     </ProjectReference>
   </ItemGroup>

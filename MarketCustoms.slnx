@@ -1,10 +1,10 @@
 <Solution>
   <Folder Name="/Aspire/">
-    <Project Path="Aspire/AspireApp.AppHost/AspireApp.AppHost.csproj" Id="a3043152-1b5f-41a1-b82f-e9e8e6fad094" />
-    <Project Path="Aspire/AspireApp.ServiceDefaults/AspireApp.ServiceDefaults.csproj" />
+    <Project Path="Aspire/MC.Aspire.AppHost/MC.Aspire.AppHost.csproj" Id="a3043152-1b5f-41a1-b82f-e9e8e6fad094" />
+    <Project Path="Aspire/MC.Aspire.ServiceDefaults/MC.Aspire.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/Clients/">
-    <Project Path="Clients/mc.market.reactwebapp/mc.market.reactwebapp.esproj">
+    <Project Path="Clients/MC.Market.WebApp/MC.Market.WebApp.esproj">
       <Build />
       <Deploy />
     </Project>

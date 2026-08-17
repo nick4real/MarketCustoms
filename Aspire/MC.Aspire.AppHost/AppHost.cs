@@ -45,7 +45,7 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
         .WithReference(catalogMongoDatabase, catalogMongoDatabaseName);
 
     // React Web App
-    var reactwebapp = builder.AddViteApp("reactWebApp", "./../../Clients/mc.market.reactwebapp", "dev");
+    var reactwebapp = builder.AddViteApp("reactWebApp", "./../../Clients/MC.Market.WebApp", "dev");
 
     // Gateway
     var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGateway")

@@ -10,7 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Services\Ordering\MC.Ordering.API\MC.Ordering.API.csproj" />
-    <ProjectReference Include="..\..\..\Aspire\AspireApp.AppHost\AspireApp.AppHost.csproj">
+    <ProjectReference Include="..\..\..\Aspire\MC.Aspire.AppHost\MC.Aspire.AppHost.csproj">
       <IsAspireProjectResource>false</IsAspireProjectResource>
     </ProjectReference>
   </ItemGroup>

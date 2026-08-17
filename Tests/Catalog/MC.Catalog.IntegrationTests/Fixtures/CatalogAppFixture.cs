@@ -20,7 +20,7 @@ public sealed class CatalogAppFixture : IAsyncLifetime
     {
         try
         {
-            var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AspireApp_AppHost>(
+            var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.MC_Aspire_AppHost>(
                 ["MarketCustoms:TestService=catalog"]);
 
             builder.Services.ConfigureHttpClientDefaults(http => http.AddStandardResilienceHandler());
