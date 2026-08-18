@@ -1,10 +1,10 @@
 <Solution>
   <Folder Name="/Aspire/">
-    <Project Path="Aspire/AspireApp.AppHost/AspireApp.AppHost.csproj" Id="a3043152-1b5f-41a1-b82f-e9e8e6fad094" />
-    <Project Path="Aspire/AspireApp.ServiceDefaults/AspireApp.ServiceDefaults.csproj" />
+    <Project Path="Aspire/MC.Aspire.AppHost/MC.Aspire.AppHost.csproj" Id="a3043152-1b5f-41a1-b82f-e9e8e6fad094" />
+    <Project Path="Aspire/MC.Aspire.ServiceDefaults/MC.Aspire.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/Clients/">
-    <Project Path="Clients/mc.market.reactwebapp/mc.market.reactwebapp.esproj">
+    <Project Path="Clients/MC.Market.WebApp/MC.Market.WebApp.esproj">
       <Build />
       <Deploy />
     </Project>
@@ -41,6 +41,23 @@
     <Project Path="Shared/MC.Shared.API/MC.Shared.API.csproj" Id="6705b7b5-0a95-429c-996e-724e526527fd" />
     <Project Path="Shared/MC.Shared.Application/MC.Shared.Application.csproj" Id="b1a2ec45-06ce-4651-8e68-d12234a893b9" />
     <Project Path="Shared/MC.Shared.Infrastructure/MC.Shared.Infrastructure.csproj" Id="1a4f4f8e-4948-4e07-855c-91fd837fb006" />
+  </Folder>
+  <Folder Name="/Tests/" />
+  <Folder Name="/Tests/Catalog/">
+    <Project Path="Tests/Catalog/MC.Catalog.UnitTests/MC.Catalog.UnitTests.csproj" />
+    <Project Path="Tests/Catalog/MC.Catalog.IntegrationTests/MC.Catalog.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Profiles/">
+    <Project Path="Tests/Profiles/MC.Profiles.UnitTests/MC.Profiles.UnitTests.csproj" />
+    <Project Path="Tests/Profiles/MC.Profiles.IntegrationTests/MC.Profiles.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Ordering/">
+    <Project Path="Tests/Ordering/MC.Ordering.UnitTests/MC.Ordering.UnitTests.csproj" />
+    <Project Path="Tests/Ordering/MC.Ordering.IntegrationTests/MC.Ordering.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Notifications/">
+    <Project Path="Tests/Notifications/MC.Notifications.UnitTests/MC.Notifications.UnitTests.csproj" />
+    <Project Path="Tests/Notifications/MC.Notifications.IntegrationTests/MC.Notifications.IntegrationTests.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
