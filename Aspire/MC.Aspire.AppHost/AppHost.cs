@@ -16,13 +16,15 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
 {
     // Servers
     var sqlServer = builder.AddSqlServer("sqlServer")
+        .WithContainerName("MC.SqlServer")
         .WithLifetime(ContainerLifetime.Persistent);
 
     var mongoServer = builder.AddMongoDB("mongoServer")
+        .WithContainerName("MC.MongoDB")
         .WithLifetime(ContainerLifetime.Persistent)
         .WithMongoExpress(o =>
         {
-            o.WithContainerName("MongoExpress");
+            o.WithContainerName("MC.MongoExpress");
             o.WithLifetime(ContainerLifetime.Persistent);
         });
 
