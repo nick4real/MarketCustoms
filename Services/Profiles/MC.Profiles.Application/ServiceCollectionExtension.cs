@@ -1,4 +1,6 @@
-﻿using MC.Profiles.Application.Interfaces.Services;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using MC.Profiles.Application.Interfaces.Services;
 using MC.Profiles.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +14,10 @@ public static class ServiceCollectionExtension
         {
             // Services
             services.AddScoped<IProfileService, ProfileService>();
+
             // Validators
+            services.AddValidatorsFromAssemblyContaining<ProfileService>();
+            services.AddFluentValidationAutoValidation();
 
             return services;
         }

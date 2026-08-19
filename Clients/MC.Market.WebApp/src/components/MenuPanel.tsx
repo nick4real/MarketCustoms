@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useOnboarding } from "../auth/OnboardingGate";
 
 interface Props {
   isMenuOpen: boolean;
@@ -8,6 +9,7 @@ interface Props {
 
 function MenuPanel({ isMenuOpen, toggleMenu }: Props) {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const onboarding = useOnboarding();
 
   if (!isMenuOpen) {
     return null;
@@ -34,6 +36,11 @@ function MenuPanel({ isMenuOpen, toggleMenu }: Props) {
         {isAuthenticated && (
           <Link to="/dashboard" className={linkClass} onClick={toggleMenu}>
             Dashboard
+          </Link>
+        )}
+        {onboarding?.isVerified && (
+          <Link to="/profile/seller" className={linkClass} onClick={toggleMenu}>
+            {onboarding.isSeller ? "Seller profile" : "Become a seller"}
           </Link>
         )}
         <div className="mt-auto flex flex-col gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">

@@ -4,7 +4,7 @@ import type {
   ProductDetail,
   ProductPaginatedResponse,
   ProductSearchCriteria,
-} from "../../models/product";
+} from "../models/product";
 
 /* API Interfaces (camelCase — ASP.NET Core default JSON serialization) */
 interface ApiProduct {

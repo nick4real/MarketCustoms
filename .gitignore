@@ -357,3 +357,4 @@ ASALocalRun/
 # OS / editor junk
 Thumbs.db
 *.swp
+.vscode/

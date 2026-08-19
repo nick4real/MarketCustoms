@@ -1,5 +1,5 @@
 import Grid from "./Grid";
-import type { Product } from "../../models/product";
+import type { Product } from "../models/product";
 
 interface Props {
   title: string;

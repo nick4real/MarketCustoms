@@ -3,7 +3,8 @@ const logoutUri = `${globalThis.location.origin}/`;
 const scope = [
   "openid",
   "profile",
-  "email"
+  "email",
+  "phone"
 ].join(" ");
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN as string | undefined;

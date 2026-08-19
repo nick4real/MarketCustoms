@@ -1,4 +1,4 @@
-import type { ProductParameter } from "../../models/product";
+import type { ProductParameter } from "../models/product";
 
 interface Props {
   filters: ProductParameter[];

@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\..\Shared\MC.Shared.Infrastructure\MC.Shared.Infrastructure.csproj" />
 		<ProjectReference Include="..\MC.Profiles.Application\MC.Profiles.Application.csproj" />
 	</ItemGroup>
@@ -25,8 +29,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Migrations\" />
-	  <Folder Include="Options\" />
-	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>

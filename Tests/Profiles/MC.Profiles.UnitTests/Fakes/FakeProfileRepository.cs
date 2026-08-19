@@ -19,5 +19,15 @@ internal sealed class FakeProfileRepository : IProfileRepository
         return Task.CompletedTask;
     }
 
+    public Task<Profile> AddOrGetByExternalUserIdAsync(Profile profile)
+    {
+        var existing = _profiles.FirstOrDefault(item => item.ExternalUserId == profile.ExternalUserId);
+        if (existing is not null)
+            return Task.FromResult(existing);
+
+        _profiles.Add(profile);
+        return Task.FromResult(profile);
+    }
+
     public Task SaveChangesAsync() => Task.CompletedTask;
 }

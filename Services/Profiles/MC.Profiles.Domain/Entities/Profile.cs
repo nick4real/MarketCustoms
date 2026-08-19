@@ -10,4 +10,9 @@ public class Profile : BaseEntity<Guid>
     public string? Email { get; set; }
     public bool IsPhonePublic { get; set; } = false;
     public bool IsEmailPublic { get; set; } = false;
+    public bool IsVerified { get; set; }
+    public bool EmailAttestedByIdentity { get; set; }
+    public bool PhoneAttestedByIdentity { get; set; }
+    public ICollection<SellerApplication> SellerApplications { get; set; } = [];
+    public SellerProfile? SellerProfile { get; set; }
 }

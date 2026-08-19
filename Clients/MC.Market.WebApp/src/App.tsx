@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Browse from "./pages/Browse";
 import ProductDetail from "./pages/ProductDetail";
 import Dashboard from "./pages/Dashboard";
+import ClarifyProfile from "./pages/ClarifyProfile";
+import SellerApplication from "./pages/SellerApplication";
 
 function App() {
   useEffect(() => {
@@ -65,6 +67,22 @@ function App() {
       element: (
         <MainLayout>
           <Dashboard />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/profile/clarify",
+      element: (
+        <MainLayout>
+          <ClarifyProfile />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/profile/seller",
+      element: (
+        <MainLayout>
+          <SellerApplication />
         </MainLayout>
       ),
     },

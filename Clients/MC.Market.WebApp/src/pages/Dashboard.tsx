@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import General from "../components/dashboard/General";
 import MyProducts from "../components/dashboard/MyProducts";
+import { useOnboarding } from "../auth/OnboardingGate";
 
 const tabs = [
   { id: "general", label: "General" },
@@ -13,6 +15,7 @@ type TabId = (typeof tabs)[number]["id"];
 
 function Dashboard() {
   const [activeTab, setActiveTab] = useState<TabId>("general");
+  const onboarding = useOnboarding();
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 py-8 sm:flex-row sm:px-6">
@@ -20,6 +23,14 @@ function Dashboard() {
         <h1 className="text-xl font-bold text-zinc-900 dark:text-white">
           Dashboard
         </h1>
+        {onboarding?.isVerified && (
+          <Link
+            to="/profile/seller"
+            className="mt-3 block rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-zinc-900"
+          >
+            {onboarding.isSeller ? "View seller profile" : "Become a seller"}
+          </Link>
+        )}
         <ul className="mt-4 flex flex-row gap-2 overflow-x-auto sm:flex-col sm:gap-1">
           {tabs.map((tab) => (
             <li key={tab.id}>

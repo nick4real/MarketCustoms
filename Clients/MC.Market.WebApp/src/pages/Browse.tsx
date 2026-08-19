@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { fetchProducts } from "../api/products";
-import type { Product, ProductParameter } from "../../models/product";
+import type { Product, ProductParameter } from "../models/product";
 import Grid from "../components/Grid";
 import SearchBar from "../components/SearchBar";
 import LoadingSpinner from "../components/LoadingSpinner";

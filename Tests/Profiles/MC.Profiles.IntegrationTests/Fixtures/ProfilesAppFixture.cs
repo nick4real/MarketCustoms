@@ -41,10 +41,18 @@ public sealed class ProfilesAppFixture : IAsyncLifetime
 
     public HttpClient CreateAnonymousClient() => App.CreateHttpClient(ServiceName);
 
-    public HttpClient CreateAuthenticatedClient(string userId = LocalTestUserId)
+    public HttpClient CreateAuthenticatedClient(
+        string userId = LocalTestUserId,
+        IReadOnlyDictionary<string, string>? parameters = null)
     {
         var client = CreateAnonymousClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(LocalTestScheme, userId);
+        var remainder = userId;
+        if (parameters is { Count: > 0 })
+        {
+            remainder = userId + ";" + string.Join(";", parameters.Select(pair => $"{pair.Key}={pair.Value}"));
+        }
+
+        client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{LocalTestScheme} {remainder}");
         return client;
     }
 

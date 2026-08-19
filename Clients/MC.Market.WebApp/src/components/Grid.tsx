@@ -1,6 +1,6 @@
 import GridCard from "./GridCard";
 import EmptyState from "./EmptyState";
-import type { Product } from "../../models/product";
+import type { Product } from "../models/product";
 
 interface Props {
   products: Product[];

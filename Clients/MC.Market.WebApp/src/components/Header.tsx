@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useOnboarding } from "../auth/OnboardingGate";
 
 interface Props {
   isMenuOpen: boolean;
@@ -9,6 +10,7 @@ interface Props {
 function Header({ isMenuOpen, toggleMenu }: Props) {
   const { isLoading, isAuthenticated, loginWithRedirect, logout, user } =
     useAuth0();
+  const onboarding = useOnboarding();
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-zinc-200/80 bg-white/90 backdrop-blur-md dark:border-zinc-800 dark:bg-neutral-950/90">
@@ -39,6 +41,14 @@ function Header({ isMenuOpen, toggleMenu }: Props) {
               className="text-sm font-medium text-zinc-600 transition hover:text-amber-600 dark:text-zinc-300"
             >
               Dashboard
+            </Link>
+          )}
+          {onboarding?.isVerified && (
+            <Link
+              to="/profile/seller"
+              className="text-sm font-medium text-zinc-600 transition hover:text-amber-600 dark:text-zinc-300"
+            >
+              {onboarding.isSeller ? "Seller profile" : "Become a seller"}
             </Link>
           )}
         </nav>

@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { Link, useParams } from "react-router";
 import { fetchProductById } from "../api/products";
-import type { ProductDetail } from "../../models/product";
+import type { ProductDetail } from "../models/product";
 import { formatPrice, productImageSrc } from "../lib/format";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EmptyState from "../components/EmptyState";

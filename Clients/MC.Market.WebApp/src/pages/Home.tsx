@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { fetchProducts } from "../api/products";
-import type { Product } from "../../models/product";
+import type { Product } from "../models/product";
 import Hero from "../components/Hero";
 import ProductSection from "../components/ProductSection";
 import LoadingSpinner from "../components/LoadingSpinner";

@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import type { Product } from "../../models/product";
+import type { Product } from "../models/product";
 import { formatPrice, productImageSrc } from "../lib/format";
 
 interface Props {
