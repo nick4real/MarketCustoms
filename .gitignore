@@ -13,13 +13,6 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Coding agents spetify integration
-.cursor/
-.github/
-
-# SpecKit tasks
-specs/
-
 # Tailwind CSS
 [Tt]ailwind
 [Tt]ailwindcss
