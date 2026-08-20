@@ -4,6 +4,7 @@ using MC.Profiles.Infrastructure.Options;
 using MC.Profiles.Infrastructure.Persistence;
 using MC.Profiles.Infrastructure.Persistence.Repositories;
 using MC.Profiles.Infrastructure.Services;
+using MC.Shared.Application.Interfaces.Repositories;
 using MC.Shared.Application.Interfaces.Services;
 using MC.Shared.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -24,9 +25,10 @@ public static class ServiceCollectionExtension
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
 
+            services.AddHttpClient(Auth0ManagementIdentityService.HttpClientName);
             services.AddHttpContextAccessor();
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
-
+            
+            // Options
             services.Configure<Auth0ManagementOptions>(options =>
             {
                 options.Domain = configuration["Auth0:Domain"] ?? string.Empty;
@@ -34,21 +36,22 @@ public static class ServiceCollectionExtension
                 options.ClientSecret = configuration["Auth0:Management:ClientSecret"] ?? string.Empty;
             });
 
-            services.AddHttpClient(Auth0ManagementSellerIdentityService.HttpClientName);
-
+            // Repositories
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<ISellerApplicationRepository, SellerApplicationRepository>();
             services.AddScoped<ISellerProfileRepository, SellerProfileRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // Services
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             var useLocalTestIdentity = configuration.GetValue("Authentication:UseLocalTestIdentity", false);
             if (useLocalTestIdentity)
             {
-                services.AddScoped<ISellerIdentityService, NoOpSellerIdentityService>();
+                services.AddScoped<IIdentityService, NoOpIdentityService>();
             }
             else
             {
-                services.AddScoped<ISellerIdentityService, Auth0ManagementSellerIdentityService>();
+                services.AddScoped<IIdentityService, Auth0ManagementIdentityService>();
             }
 
             return services;

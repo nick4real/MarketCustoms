@@ -1,4 +1,4 @@
-using MC.Profiles.Application.Interfaces.Repositories;
+using MC.Shared.Application.Interfaces.Repositories;
 
 namespace MC.Profiles.UnitTests.Fakes;
 

@@ -40,6 +40,6 @@ public class AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> opt
             .HasFilter("[IsActive] = 1");
 
         modelBuilder.Entity<SellerApplication>()
-            .HasIndex(application => new { application.ProfileId, application.SubmittedAt });
+            .HasIndex(application => new { application.ProfileId, application.CreatedAt });
     }
 }

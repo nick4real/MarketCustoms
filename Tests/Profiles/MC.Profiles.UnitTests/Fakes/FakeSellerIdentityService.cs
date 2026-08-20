@@ -2,7 +2,7 @@ using MC.Profiles.Application.Interfaces.Services;
 
 namespace MC.Profiles.UnitTests.Fakes;
 
-internal sealed class FakeSellerIdentityService : ISellerIdentityService
+internal sealed class FakeSellerIdentityService : IIdentityService
 {
     public bool ShouldFail { get; set; }
     public int GrantCount { get; private set; }
@@ -14,5 +14,10 @@ internal sealed class FakeSellerIdentityService : ISellerIdentityService
             throw new InvalidOperationException("Auth0 grant failed");
 
         return Task.CompletedTask;
+    }
+
+    public Task SetNameAsync(string externalUserId, string name, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

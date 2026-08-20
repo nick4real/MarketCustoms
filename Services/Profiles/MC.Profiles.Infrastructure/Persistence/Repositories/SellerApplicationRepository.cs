@@ -12,6 +12,6 @@ public class SellerApplicationRepository(AppRelationalDbContext relationalDbCont
     public async Task<SellerApplication?> GetLatestByProfileIdAsync(Guid profileId, CancellationToken cancellationToken) =>
         await relationalDbContext.SellerApplications
             .Where(application => application.ProfileId == profileId)
-            .OrderByDescending(application => application.SubmittedAt)
+            .OrderByDescending(application => application.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);
 }

@@ -7,21 +7,42 @@ using Microsoft.Extensions.Options;
 
 namespace MC.Profiles.Infrastructure.Services;
 
-public sealed class Auth0ManagementSellerIdentityService(
+public sealed class Auth0ManagementIdentityService(
     IHttpClientFactory httpClientFactory,
-    IOptions<Auth0ManagementOptions> options) : ISellerIdentityService
+    IOptions<Auth0ManagementOptions> options) : IIdentityService
 {
     public const string HttpClientName = "Auth0Management";
 
+    public async Task SetNameAsync(string externalUserId, string name, CancellationToken cancellationToken)
+    {
+        ValidateOptions(options.Value);
+        var settings = options.Value;
+
+        var domain = settings.Domain.Trim().TrimEnd('/');
+        var client = httpClientFactory.CreateClient(HttpClientName);
+        var token = await RequestAccessTokenAsync(client, domain, settings, cancellationToken);
+
+        using var request = new HttpRequestMessage(
+            HttpMethod.Patch,
+            $"https://{domain}/api/v2/users/{Uri.EscapeDataString(externalUserId)}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        request.Content = JsonContent.Create(new
+        {
+            name = name
+        });
+
+        using var response = await client.SendAsync(request, cancellationToken);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException(
+                $"Auth0 Management API rejected the name update ({(int)response.StatusCode}).");
+        }
+    }
+
     public async Task GrantSellerAsync(string externalUserId, CancellationToken cancellationToken)
     {
+        ValidateOptions(options.Value);
         var settings = options.Value;
-        if (string.IsNullOrWhiteSpace(settings.Domain)
-            || string.IsNullOrWhiteSpace(settings.ClientId)
-            || string.IsNullOrWhiteSpace(settings.ClientSecret))
-        {
-            throw new InvalidOperationException("Auth0 Management API credentials are not configured.");
-        }
 
         var domain = settings.Domain.Trim().TrimEnd('/');
         var client = httpClientFactory.CreateClient(HttpClientName);
@@ -73,6 +94,16 @@ public sealed class Auth0ManagementSellerIdentityService(
         }
 
         return payload.AccessToken;
+    }
+
+    private static void ValidateOptions(Auth0ManagementOptions op)
+    {
+        if (string.IsNullOrWhiteSpace(op.Domain)
+            || string.IsNullOrWhiteSpace(op.ClientId)
+            || string.IsNullOrWhiteSpace(op.ClientSecret))
+        {
+            throw new InvalidOperationException("Auth0 Management API credentials are not configured.");
+        }
     }
 
     private sealed record TokenResponse([property: JsonPropertyName("access_token")] string AccessToken);

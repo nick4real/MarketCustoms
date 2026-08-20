@@ -4,7 +4,9 @@ using MC.Profiles.Application.Interfaces.Services;
 using MC.Profiles.Application.Requests;
 using MC.Profiles.Application.Responses;
 using MC.Profiles.Domain.Entities;
+using MC.Profiles.Domain.Enums;
 using MC.Shared.Application.Common;
+using MC.Shared.Application.Interfaces.Repositories;
 using MC.Shared.Application.Interfaces.Services;
 
 namespace MC.Profiles.Application.Services;
@@ -14,7 +16,7 @@ public class ProfileService(
     ICurrentUserService currentUserService,
     ISellerApplicationRepository sellerApplicationRepository,
     ISellerProfileRepository sellerProfileRepository,
-    ISellerIdentityService sellerIdentityService,
+    IIdentityService identityService,
     IUnitOfWork unitOfWork) : IProfileService
 {
     public async Task<Result<OwnerProfileResponse>> GetMe(CancellationToken ct)
@@ -62,6 +64,16 @@ public class ProfileService(
             return Result<OwnerProfileResponse>.Failure(new Error(
                 ErrorCode.ValidationFailed,
                 "Provide a display name and at least one of email or phone."));
+        }
+        try
+        {
+            await identityService.SetNameAsync(currentUserService.UserId!, displayName, ct);
+        }
+        catch (Exception)
+        {
+            return Result<OwnerProfileResponse>.Failure(new Error(
+                ErrorCode.InternalServerError,
+                "Unable to update . Please retry."));
         }
 
         var existing = await profileRepository.GetProfileByExternalIdAsync(currentUserService.UserId);
@@ -149,7 +161,8 @@ public class ProfileService(
                     ProfileId = profile.Id,
                     ShopName = shopName,
                     Bio = bio,
-                    SubmittedAt = now,
+                    CreatedAt = now,
+                    UpdatedAt = now,
                     Outcome = SellerApplicationOutcome.Accepted
                 }, innerCt);
 
@@ -177,7 +190,7 @@ public class ProfileService(
                 }
 
                 await unitOfWork.SaveChangesAsync(innerCt);
-                await sellerIdentityService.GrantSellerAsync(currentUserService.UserId!, innerCt);
+                await identityService.GrantSellerAsync(currentUserService.UserId!, innerCt);
             }, ct);
         }
         catch (ShopNameConflictException)
@@ -240,7 +253,8 @@ public class ProfileService(
                 : new OwnerSellerApplicationResponse(
                     ShopName: application.ShopName,
                     Bio: application.Bio,
-                    SubmittedAt: application.SubmittedAt,
+                    CreatedAt: application.CreatedAt,
+                    UpdatedAt: application.UpdatedAt,
                     Outcome: application.Outcome.ToString(),
                     RejectionReason: application.RejectionReason));
     }

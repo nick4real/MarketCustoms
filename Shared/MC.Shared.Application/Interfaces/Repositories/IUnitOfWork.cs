@@ -1,4 +1,4 @@
-namespace MC.Profiles.Application.Interfaces.Repositories;
+﻿namespace MC.Shared.Application.Interfaces.Repositories;
 
 public interface IUnitOfWork
 {

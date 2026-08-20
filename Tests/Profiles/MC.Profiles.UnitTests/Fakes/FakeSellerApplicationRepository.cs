@@ -18,7 +18,7 @@ internal sealed class FakeSellerApplicationRepository : ISellerApplicationReposi
     public Task<SellerApplication?> GetLatestByProfileIdAsync(Guid profileId, CancellationToken cancellationToken) =>
         Task.FromResult(_applications
             .Where(application => application.ProfileId == profileId)
-            .OrderByDescending(application => application.SubmittedAt)
+            .OrderByDescending(application => application.CreatedAt)
             .FirstOrDefault());
 
     public List<SellerApplication> Clone() => [.. _applications];

@@ -1,5 +1,5 @@
 using MC.Profiles.Application.Common;
-using MC.Profiles.Application.Interfaces.Repositories;
+using MC.Shared.Application.Interfaces.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 

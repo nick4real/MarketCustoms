@@ -3,7 +3,8 @@ namespace MC.Profiles.Application.Responses;
 public record OwnerSellerApplicationResponse(
     string ShopName,
     string? Bio,
-    DateTimeOffset SubmittedAt,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt,
     string Outcome,
     string? RejectionReason);
 
