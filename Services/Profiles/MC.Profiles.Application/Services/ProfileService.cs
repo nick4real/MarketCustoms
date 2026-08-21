@@ -65,16 +65,6 @@ public class ProfileService(
                 ErrorCode.ValidationFailed,
                 "Provide a display name and at least one of email or phone."));
         }
-        try
-        {
-            await identityService.SetNameAsync(currentUserService.UserId!, displayName, ct);
-        }
-        catch (Exception)
-        {
-            return Result<OwnerProfileResponse>.Failure(new Error(
-                ErrorCode.InternalServerError,
-                "Unable to update . Please retry."));
-        }
 
         var existing = await profileRepository.GetProfileByExternalIdAsync(currentUserService.UserId);
         if (existing is { IsVerified: true })
