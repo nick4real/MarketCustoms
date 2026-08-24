@@ -1,5 +1,5 @@
-﻿using MC.Catalog.Domain.Entities;
-using MC.Catalog.Application.DTOs;
+﻿using MC.Catalog.Application.DTOs;
+using MC.Catalog.Domain.Entities;
 
 namespace MC.Catalog.Application.Responses;
 

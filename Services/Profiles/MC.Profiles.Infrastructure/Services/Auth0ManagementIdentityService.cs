@@ -1,9 +1,9 @@
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using MC.Profiles.Application.Interfaces.Services;
 using MC.Profiles.Infrastructure.Options;
 using Microsoft.Extensions.Options;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 
 namespace MC.Profiles.Infrastructure.Services;
 

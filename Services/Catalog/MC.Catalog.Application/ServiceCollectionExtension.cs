@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.Extensions.DependencyInjection;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Services;
 using MC.Catalog.Application.Validators;
 using MC.Catalog.Application.Validators.Requests;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MC.Catalog.Application;
 

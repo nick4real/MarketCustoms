@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Aspire.Hosting;
 using Aspire.Hosting.Testing;
 using Microsoft.Extensions.DependencyInjection;

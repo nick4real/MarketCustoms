@@ -38,6 +38,6 @@ public class ProfileRepository(AppRelationalDbContext relationalDbContext) : IPr
     public async Task SaveChangesAsync()
         => await relationalDbContext.SaveChangesAsync();
 
-    private static bool IsUniqueViolation(DbUpdateException exception) 
+    private static bool IsUniqueViolation(DbUpdateException exception)
         => exception.InnerException is SqlException sql && sql.Number is 2601 or 2627;
 }

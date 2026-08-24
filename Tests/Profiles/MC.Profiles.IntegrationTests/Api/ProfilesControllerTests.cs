@@ -1,7 +1,7 @@
+using MC.Profiles.IntegrationTests.Fixtures;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using MC.Profiles.IntegrationTests.Fixtures;
 
 namespace MC.Profiles.IntegrationTests.Api;
 

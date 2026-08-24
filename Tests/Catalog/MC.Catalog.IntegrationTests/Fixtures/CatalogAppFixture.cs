@@ -1,7 +1,7 @@
-using System.Net.Http.Headers;
 using Aspire.Hosting;
 using Aspire.Hosting.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http.Headers;
 
 namespace MC.Catalog.IntegrationTests.Fixtures;
 

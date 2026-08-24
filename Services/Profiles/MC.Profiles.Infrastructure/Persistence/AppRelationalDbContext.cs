@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MC.Profiles.Domain.Entities;
+﻿using MC.Profiles.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MC.Profiles.Infrastructure.Persistence;
 

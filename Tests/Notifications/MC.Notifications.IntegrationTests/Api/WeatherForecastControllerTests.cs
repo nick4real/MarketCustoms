@@ -1,7 +1,7 @@
+using MC.Notifications.IntegrationTests.Fixtures;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using MC.Notifications.IntegrationTests.Fixtures;
 
 namespace MC.Notifications.IntegrationTests.Api;
 

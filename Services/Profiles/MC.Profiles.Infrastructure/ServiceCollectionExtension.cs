@@ -27,7 +27,7 @@ public static class ServiceCollectionExtension
 
             services.AddHttpClient(Auth0ManagementIdentityService.HttpClientName);
             services.AddHttpContextAccessor();
-            
+
             // Options
             services.Configure<Auth0ManagementOptions>(options =>
             {

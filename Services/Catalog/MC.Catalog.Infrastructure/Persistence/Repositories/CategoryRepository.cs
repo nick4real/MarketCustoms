@@ -53,6 +53,6 @@ public class CategoryRepository(AppRelationalDbContext relationalDbContext) : IC
             WHERE Id IN (SELECT Id FROM CategoryTree);
         ");
 
-    public async Task SaveChangesAsync(CancellationToken ct) 
+    public async Task SaveChangesAsync(CancellationToken ct)
         => await relationalDbContext.SaveChangesAsync(ct);
 }
