@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Auth0.AspNetCore.Authentication.Api" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Aspire\MC.Aspire.ServiceDefaults\MC.Aspire.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\..\Shared\MC.Shared.API\MC.Shared.API.csproj" />
+    <ProjectReference Include="..\MC.Promotion.Infrastructure\MC.Promotion.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

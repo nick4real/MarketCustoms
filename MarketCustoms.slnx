@@ -19,6 +19,24 @@
     <Project Path="Services/Catalog/MC.Catalog.Domain/MC.Catalog.Domain.csproj" Id="b10b449f-efca-4b10-af20-086c7b3777e7" />
     <Project Path="Services/Catalog/MC.Catalog.Infrastructure/MC.Catalog.Infrastructure.csproj" Id="5034a131-fa2e-461e-8c9e-6de00c6058a5" />
   </Folder>
+  <Folder Name="/Services/Delivering/">
+    <Project Path="Services/Delivering/MC.Delivering.API/MC.Delivering.API.csproj" />
+    <Project Path="Services/Delivering/MC.Delivering.Application/MC.Delivering.Application.csproj" />
+    <Project Path="Services/Delivering/MC.Delivering.Domain/MC.Delivering.Domain.csproj" />
+    <Project Path="Services/Delivering/MC.Delivering.Infrastructure/MC.Delivering.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Financial/">
+    <Project Path="Services/Financial/MC.Financial.API/MC.Financial.API.csproj" />
+    <Project Path="Services/Financial/MC.Financial.Application/MC.Financial.Application.csproj" />
+    <Project Path="Services/Financial/MC.Financial.Domain/MC.Financial.Domain.csproj" />
+    <Project Path="Services/Financial/MC.Financial.Infrastructure/MC.Financial.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Interaction/">
+    <Project Path="Services/Interaction/MC.Interaction.API/MC.Interaction.API.csproj" />
+    <Project Path="Services/Interaction/MC.Interaction.Application/MC.Interaction.Application.csproj" />
+    <Project Path="Services/Interaction/MC.Interaction.Domain/MC.Interaction.Domain.csproj" />
+    <Project Path="Services/Interaction/MC.Interaction.Infrastructure/MC.Interaction.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/Services/Notifications/">
     <Project Path="Services/Notifications/MC.Notifications.API/MC.Notifications.API.csproj" />
     <Project Path="Services/Notifications/MC.Notifications.Application/MC.Notifications.Application.csproj" Id="35144a3d-9eb6-4bdb-81d3-f1230fd9dc88" />
@@ -36,6 +54,24 @@
     <Project Path="Services/Profiles/MC.Profiles.Application/MC.Profiles.Application.csproj" Id="943424ba-8123-4bae-a5d6-10ab25a31850" />
     <Project Path="Services/Profiles/MC.Profiles.Domain/MC.Profiles.Domain.csproj" Id="82d1c68e-c4c8-44ae-b11d-7264bd549482" />
     <Project Path="Services/Profiles/MC.Profiles.Infrastructure/MC.Profiles.Infrastructure.csproj" Id="d65215b8-cde3-44ef-a1db-787bdbe2470e" />
+  </Folder>
+  <Folder Name="/Services/Promotion/">
+    <Project Path="Services/Promotion/MC.Promotion.API/MC.Promotion.API.csproj" />
+    <Project Path="Services/Promotion/MC.Promotion.Application/MC.Promotion.Application.csproj" />
+    <Project Path="Services/Promotion/MC.Promotion.Domain/MC.Promotion.Domain.csproj" />
+    <Project Path="Services/Promotion/MC.Promotion.Infrastructure/MC.Promotion.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Shopping/">
+    <Project Path="Services/Shopping/MC.Shopping.API/MC.Shopping.API.csproj" />
+    <Project Path="Services/Shopping/MC.Shopping.Application/MC.Shopping.Application.csproj" />
+    <Project Path="Services/Shopping/MC.Shopping.Domain/MC.Shopping.Domain.csproj" />
+    <Project Path="Services/Shopping/MC.Shopping.Infrastructure/MC.Shopping.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Statistics/">
+    <Project Path="Services/Statistics/MC.Statistics.API/MC.Statistics.API.csproj" />
+    <Project Path="Services/Statistics/MC.Statistics.Application/MC.Statistics.Application.csproj" />
+    <Project Path="Services/Statistics/MC.Statistics.Domain/MC.Statistics.Domain.csproj" />
+    <Project Path="Services/Statistics/MC.Statistics.Infrastructure/MC.Statistics.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Shared/">
     <Project Path="Shared/MC.Shared.API/MC.Shared.API.csproj" Id="6705b7b5-0a95-429c-996e-724e526527fd" />
