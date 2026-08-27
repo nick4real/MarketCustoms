@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.5.2">
+﻿<Project Sdk="Aspire.AppHost.Sdk/13.5.2">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -16,10 +16,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Gateway\MC.Gateway\MC.Gateway.csproj" />
+    <ProjectReference Include="..\..\Services\Delivering\MC.Delivering.API\MC.Delivering.API.csproj" />
+    <ProjectReference Include="..\..\Services\Financial\MC.Financial.API\MC.Financial.API.csproj" />
+    <ProjectReference Include="..\..\Services\Interaction\MC.Interaction.API\MC.Interaction.API.csproj" />
     <ProjectReference Include="..\..\Services\Notifications\MC.Notifications.API\MC.Notifications.API.csproj" />
     <ProjectReference Include="..\..\Services\Ordering\MC.Ordering.API\MC.Ordering.API.csproj" />
     <ProjectReference Include="..\..\Services\Catalog\MC.Catalog.API\MC.Catalog.API.csproj" />
     <ProjectReference Include="..\..\Services\Profiles\MC.Profiles.API\MC.Profiles.API.csproj" />
+    <ProjectReference Include="..\..\Services\Promotion\MC.Promotion.API\MC.Promotion.API.csproj" />
+    <ProjectReference Include="..\..\Services\Shopping\MC.Shopping.API\MC.Shopping.API.csproj" />
+    <ProjectReference Include="..\..\Services\Statistics\MC.Statistics.API\MC.Statistics.API.csproj" />
   </ItemGroup>
 
 </Project>
