@@ -225,7 +225,10 @@ export default function Browse() {
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
                 className="bg-[#111] border border-[#1e1e1e] text-[#f0ece3] text-xs md:text-sm px-2 py-1.5 md:px-3 focus:outline-none focus:border-[#e8820c] cursor-pointer"
-                style={{ borderRadius: "2px", fontFamily: "Outfit, sans-serif" }}
+                style={{
+                  borderRadius: "2px",
+                  fontFamily: "Outfit, sans-serif",
+                }}
               >
                 <option>Recent</option>
                 <option>Price: Low to High</option>

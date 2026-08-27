@@ -155,7 +155,10 @@ export default function Layout() {
                       {link.label}
                     </span>
                     {isActive && (
-                      <span className="text-[#e8820c] text-xs" style={{ fontFamily: "DM Mono, monospace" }}>
+                      <span
+                        className="text-[#e8820c] text-xs"
+                        style={{ fontFamily: "DM Mono, monospace" }}
+                      >
                         ●
                       </span>
                     )}

@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import {
-  getListingById,
-  getRelatedListings,
-} from "../api/listings";
+import { getListingById, getRelatedListings } from "../api/listings";
 import ListingCard from "../components/ListingCard";
-import {
-  listingImageUrl,
-  listingSku,
-  sellerInitials,
-} from "../models/listing";
+import { listingImageUrl, listingSku, sellerInitials } from "../models/listing";
 
 function ListingGallery({
   images,
@@ -112,10 +105,7 @@ export default function ListingDetails() {
             Browse
           </Link>
           <span className="text-[#3a3532]">/</span>
-          <Link
-            to="/browse"
-            className="hover:text-[#f0ece3] transition-colors"
-          >
+          <Link to="/browse" className="hover:text-[#f0ece3] transition-colors">
             {listing.category}
           </Link>
           <span className="text-[#3a3532]">/</span>
@@ -209,8 +199,8 @@ export default function ListingDetails() {
                   className="text-[10px] text-[#5a5550]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
-                  {listing.sellerRating.toFixed(1)} rating · {listing.sellerSales}{" "}
-                  sales · {listing.location}
+                  {listing.sellerRating.toFixed(1)} rating ·{" "}
+                  {listing.sellerSales} sales · {listing.location}
                 </div>
               </div>
               <span

@@ -160,14 +160,14 @@ export const listings: Listing[] = [
     ],
     location: "NYC, US",
     description:
-      "1988 501s with a high rise and a straight leg that has worn in, not out. Red tab, care tag, and button fly all present. Fading is even; one coin-pocket repair done with matching thread. Measured flat: 32\" waist, 32\" inseam. Washed once after purchase, hung dry.",
+      '1988 501s with a high rise and a straight leg that has worn in, not out. Red tab, care tag, and button fly all present. Fading is even; one coin-pocket repair done with matching thread. Measured flat: 32" waist, 32" inseam. Washed once after purchase, hung dry.',
     tags: ["denim", "levis", "501", "vintage"],
     parameters: [
       { name: "Brand", value: "Levi's" },
       { name: "Model", value: "501" },
       { name: "Year", value: "1988" },
-      { name: "Waist", value: "32\"" },
-      { name: "Inseam", value: "32\"" },
+      { name: "Waist", value: '32"' },
+      { name: "Inseam", value: '32"' },
       { name: "Rise", value: "High" },
     ],
     listedAt: "Aug 01, 2026",

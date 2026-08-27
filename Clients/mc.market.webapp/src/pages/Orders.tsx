@@ -218,9 +218,7 @@ export default function Orders() {
               </button>
 
               {/* Mobile status bar (only on xs) */}
-              <div
-                className="sm:hidden px-4 pb-3 -mt-2 flex items-center gap-2"
-              >
+              <div className="sm:hidden px-4 pb-3 -mt-2 flex items-center gap-2">
                 <span
                   className="text-[10px] font-bold tracking-widest uppercase px-2 py-0.5"
                   style={{

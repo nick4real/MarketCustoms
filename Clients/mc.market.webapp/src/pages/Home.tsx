@@ -121,7 +121,10 @@ export default function Home() {
           { value: "$2.1M", label: "Traded this month" },
           { value: "4.92", label: "Avg seller rating" },
         ].map((stat) => (
-          <div key={stat.label} className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-3 shrink-0">
+          <div
+            key={stat.label}
+            className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-3 shrink-0"
+          >
             <span
               className="text-[26px] font-bold text-[#f0ece3] leading-none lg:text-[32px]"
               style={{ fontFamily: "Fraunces, Georgia, serif" }}
