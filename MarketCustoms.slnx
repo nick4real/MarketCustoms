@@ -4,7 +4,7 @@
     <Project Path="Aspire/MC.Aspire.ServiceDefaults/MC.Aspire.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/Clients/">
-    <Project Path="Clients/MC.Market.WebApp/MC.Market.WebApp.esproj">
+    <Project Path="Clients/MC.Market.WebApp/mc.market.webapp.esproj">
       <Build />
       <Deploy />
     </Project>
@@ -80,20 +80,20 @@
   </Folder>
   <Folder Name="/Tests/" />
   <Folder Name="/Tests/Catalog/">
-    <Project Path="Tests/Catalog/MC.Catalog.UnitTests/MC.Catalog.UnitTests.csproj" />
     <Project Path="Tests/Catalog/MC.Catalog.IntegrationTests/MC.Catalog.IntegrationTests.csproj" />
+    <Project Path="Tests/Catalog/MC.Catalog.UnitTests/MC.Catalog.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Tests/Profiles/">
-    <Project Path="Tests/Profiles/MC.Profiles.UnitTests/MC.Profiles.UnitTests.csproj" />
     <Project Path="Tests/Profiles/MC.Profiles.IntegrationTests/MC.Profiles.IntegrationTests.csproj" />
+    <Project Path="Tests/Profiles/MC.Profiles.UnitTests/MC.Profiles.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Tests/Ordering/">
-    <Project Path="Tests/Ordering/MC.Ordering.UnitTests/MC.Ordering.UnitTests.csproj" />
     <Project Path="Tests/Ordering/MC.Ordering.IntegrationTests/MC.Ordering.IntegrationTests.csproj" />
+    <Project Path="Tests/Ordering/MC.Ordering.UnitTests/MC.Ordering.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Tests/Notifications/">
-    <Project Path="Tests/Notifications/MC.Notifications.UnitTests/MC.Notifications.UnitTests.csproj" />
     <Project Path="Tests/Notifications/MC.Notifications.IntegrationTests/MC.Notifications.IntegrationTests.csproj" />
+    <Project Path="Tests/Notifications/MC.Notifications.UnitTests/MC.Notifications.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
