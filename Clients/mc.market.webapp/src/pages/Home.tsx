@@ -1,4 +1,6 @@
 import { Link } from "react-router";
+import { getTrendingListings } from "../api/listings";
+import ListingCard from "../components/ListingCard";
 
 const categories = [
   { name: "Photography", count: 1842, glyph: "◎" },
@@ -9,40 +11,7 @@ const categories = [
   { name: "Vintage", count: 4127, glyph: "◉" },
 ];
 
-const trending = [
-  {
-    id: 1,
-    title: "Leica M6 TTL Black",
-    price: 2400,
-    condition: "Excellent",
-    seller: "K. Nakamura",
-    image: "photo-1606983340126-99ab4feaa64a",
-  },
-  {
-    id: 2,
-    title: "Arc'teryx Beta AR",
-    price: 380,
-    condition: "Like New",
-    seller: "T. Berg",
-    image: "photo-1551698618-1dfe5d97d256",
-  },
-  {
-    id: 3,
-    title: "Braun T3 Alarm Clock",
-    price: 180,
-    condition: "Good",
-    seller: "M. Weiss",
-    image: "photo-1563861826100-9cb868fdbe1c",
-  },
-  {
-    id: 4,
-    title: "Technics SL-1200 MK5",
-    price: 1200,
-    condition: "Good",
-    seller: "D. Okafor",
-    image: "photo-1558618666-fcd25c85cd64",
-  },
-];
+const trending = getTrendingListings();
 
 export default function Home() {
   return (
@@ -237,46 +206,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {trending.map((item) => (
-            <div
-              key={item.id}
-              className="group border border-[#1e1e1e] bg-[#111] overflow-hidden hover:border-[#2a2a2a] transition-all duration-200 cursor-pointer"
-              style={{ borderRadius: "2px" }}
-            >
-              <div className="aspect-[4/3] overflow-hidden bg-[#0d0d0d]">
-                <img
-                  src={`https://images.unsplash.com/${item.image}?w=600&h=450&fit=crop&auto=format`}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
-                />
-              </div>
-              <div className="p-4">
-                <div className="flex items-start justify-between mb-1">
-                  <h3 className="text-sm font-medium text-[#f0ece3] leading-snug flex-1 pr-2">
-                    {item.title}
-                  </h3>
-                  <span
-                    className="text-[10px] text-[#5a5550] bg-[#1a1a1a] px-1.5 py-0.5 shrink-0"
-                    style={{ fontFamily: "DM Mono, monospace" }}
-                  >
-                    {item.condition}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between mt-3">
-                  <span
-                    className="text-xl font-bold text-[#f0ece3]"
-                    style={{ fontFamily: "Fraunces, Georgia, serif" }}
-                  >
-                    ${item.price.toLocaleString()}
-                  </span>
-                  <span
-                    className="text-xs text-[#5a5550]"
-                    style={{ fontFamily: "DM Mono, monospace" }}
-                  >
-                    {item.seller}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <ListingCard key={item.id} listing={item} />
           ))}
         </div>
       </section>

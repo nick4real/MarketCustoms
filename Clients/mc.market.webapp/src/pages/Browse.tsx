@@ -1,97 +1,6 @@
 import { useState } from "react";
-
-const products = [
-  {
-    id: 1,
-    title: "Leica M6 TTL Black",
-    price: 2400,
-    category: "Photography",
-    condition: "Excellent",
-    seller: "K. Nakamura",
-    image: "photo-1606983340126-99ab4feaa64a",
-    location: "Tokyo, JP",
-  },
-  {
-    id: 2,
-    title: "Arc'teryx Beta AR Jacket",
-    price: 380,
-    category: "Clothing",
-    condition: "Like New",
-    seller: "T. Berg",
-    image: "photo-1551698618-1dfe5d97d256",
-    location: "Oslo, NO",
-  },
-  {
-    id: 3,
-    title: "Braun T3 Alarm Clock",
-    price: 180,
-    category: "Home",
-    condition: "Good",
-    seller: "M. Weiss",
-    image: "photo-1563861826100-9cb868fdbe1c",
-    location: "Berlin, DE",
-  },
-  {
-    id: 4,
-    title: "Technics SL-1200 MK5",
-    price: 1200,
-    category: "Electronics",
-    condition: "Good",
-    seller: "D. Okafor",
-    image: "photo-1558618666-fcd25c85cd64",
-    location: "Lagos, NG",
-  },
-  {
-    id: 5,
-    title: "Hasselblad 500C/M",
-    price: 1800,
-    category: "Photography",
-    condition: "Good",
-    seller: "L. Chen",
-    image: "photo-1516035069371-29a1b244cc32",
-    location: "Shanghai, CN",
-  },
-  {
-    id: 6,
-    title: "Levi's 501 1988",
-    price: 220,
-    category: "Clothing",
-    condition: "Vintage",
-    seller: "A. Perez",
-    image: "photo-1542272604-787c3835535d",
-    location: "NYC, US",
-  },
-  {
-    id: 7,
-    title: "Sony WH-1000XM5",
-    price: 280,
-    category: "Electronics",
-    condition: "Like New",
-    seller: "J. Smith",
-    image: "photo-1618366712010-f4ae9c647dcb",
-    location: "London, UK",
-  },
-  {
-    id: 8,
-    title: "Aesop Departure Kit",
-    price: 95,
-    category: "Beauty",
-    condition: "New",
-    seller: "S. Kim",
-    image: "photo-1556228453-efd6c1ff04f6",
-    location: "Seoul, KR",
-  },
-  {
-    id: 9,
-    title: "Olympus OM-1 Chrome",
-    price: 320,
-    category: "Photography",
-    condition: "Good",
-    seller: "R. Tanaka",
-    image: "photo-1502920917128-1aa500764b4a",
-    location: "Kyoto, JP",
-  },
-];
+import { listings } from "../api/listings";
+import ListingCard from "../components/ListingCard";
 
 const categories = [
   "All",
@@ -230,7 +139,7 @@ export default function Browse() {
   const [search, setSearch] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const filtered = products.filter((p) => {
+  const filtered = listings.filter((p) => {
     const matchCat =
       selectedCategory === "All" || p.category === selectedCategory;
     const matchCond =
@@ -353,52 +262,7 @@ export default function Browse() {
           {filtered.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map((item) => (
-                <div
-                  key={item.id}
-                  className="group border border-[#1e1e1e] bg-[#111] overflow-hidden hover:border-[#2e2e2e] transition-all duration-200 cursor-pointer"
-                  style={{ borderRadius: "2px" }}
-                >
-                  <div className="aspect-[4/3] overflow-hidden bg-[#0d0d0d]">
-                    <img
-                      src={`https://images.unsplash.com/${item.image}?w=600&h=450&fit=crop&auto=format`}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-1.5">
-                      <h3 className="text-sm font-medium text-[#f0ece3] leading-snug flex-1 pr-2">
-                        {item.title}
-                      </h3>
-                      <span
-                        className="text-[10px] text-[#5a5550] bg-[#1a1a1a] px-1.5 py-0.5 shrink-0"
-                        style={{ fontFamily: "DM Mono, monospace" }}
-                      >
-                        {item.condition}
-                      </span>
-                    </div>
-                    <div
-                      className="text-[10px] text-[#3a3532] mb-3"
-                      style={{ fontFamily: "DM Mono, monospace" }}
-                    >
-                      {item.location}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span
-                        className="text-xl font-bold text-[#f0ece3]"
-                        style={{ fontFamily: "Fraunces, Georgia, serif" }}
-                      >
-                        ${item.price.toLocaleString()}
-                      </span>
-                      <span
-                        className="text-xs text-[#5a5550]"
-                        style={{ fontFamily: "DM Mono, monospace" }}
-                      >
-                        {item.seller}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                <ListingCard key={item.id} listing={item} showLocation />
               ))}
             </div>
           ) : (
