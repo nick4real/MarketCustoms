@@ -4,7 +4,7 @@
     <Project Path="Aspire/MC.Aspire.ServiceDefaults/MC.Aspire.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/Clients/">
-    <Project Path="Clients/MC.Market.WebApp/mc.market.webapp.esproj">
+    <Project Path="Clients/mc.market.reactwebapp/mc.market.reactwebapp.esproj">
       <Build />
       <Deploy />
     </Project>

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router";
+import HeaderAccountControls from "../components/HeaderAccountControls";
+import { showAccountNav } from "../auth/chrome";
+import { useVisitorSession } from "../auth/useVisitorSession";
 
-const navLinks = [
-  { to: "/browse", label: "Browse" },
+const browseLink = { to: "/browse", label: "Browse" };
+const accountLinks = [
   { to: "/orders", label: "Orders" },
   { to: "/profile", label: "Profile" },
   { to: "/settings", label: "Settings" },
@@ -10,11 +13,14 @@ const navLinks = [
 
 export default function MainLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const session = useVisitorSession();
+  const navLinks = showAccountNav(session)
+    ? [browseLink, ...accountLinks]
+    : [browseLink];
 
   return (
     <div className="min-h-screen bg-[#080808]">
       <nav className="fixed top-0 right-0 left-0 z-50 flex h-14 items-center border-b border-[#1e1e1e] bg-[#080808]/95 px-5 backdrop-blur-sm md:px-10">
-        {/* Logo */}
         <NavLink
           to="/"
           className="flex flex-1 items-center md:mr-14 md:flex-none"
@@ -28,7 +34,6 @@ export default function MainLayout() {
           </span>
         </NavLink>
 
-        {/* Desktop nav links */}
         <div className="hidden flex-1 items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <NavLink
@@ -47,7 +52,6 @@ export default function MainLayout() {
           ))}
         </div>
 
-        {/* Right actions */}
         <div className="flex items-center gap-4">
           <button className="hidden text-[#5a5550] transition-colors hover:text-[#f0ece3] md:block">
             <svg
@@ -84,18 +88,8 @@ export default function MainLayout() {
             </span>
           </button>
 
-          {/* Avatar — desktop only */}
-          <NavLink to="/profile" className="hidden md:block">
-            <div className="h-7 w-7 overflow-hidden rounded-full border border-[#2a2a2a] transition-colors hover:border-[#e8820c]">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&auto=format"
-                alt="Profile"
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </NavLink>
+          <HeaderAccountControls />
 
-          {/* Hamburger — mobile only */}
           <button
             className="p-1 text-[#5a5550] transition-colors hover:text-[#f0ece3] md:hidden"
             onClick={() => setMenuOpen((v) => !v)}
@@ -131,7 +125,6 @@ export default function MainLayout() {
         </div>
       </nav>
 
-      {/* Mobile full-screen menu */}
       {menuOpen && (
         <div className="fixed inset-0 z-40 overflow-y-auto bg-[#080808] pt-14 md:hidden">
           <div className="flex flex-col px-6 pt-6 pb-10">
@@ -167,30 +160,10 @@ export default function MainLayout() {
               </NavLink>
             ))}
 
-            <NavLink
-              to="/profile"
-              onClick={() => setMenuOpen(false)}
-              className="mt-8 flex items-center gap-4 pt-2"
-            >
-              <div className="h-11 w-11 overflow-hidden rounded-full border border-[#2a2a2a]">
-                <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=88&h=88&fit=crop&auto=format"
-                  alt="Profile"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-[#f0ece3]">
-                  Jordan Nakamura
-                </div>
-                <div
-                  className="text-xs text-[#5a5550]"
-                  style={{ fontFamily: "DM Mono, monospace" }}
-                >
-                  @j.nakamura
-                </div>
-              </div>
-            </NavLink>
+            <HeaderAccountControls
+              variant="mobile"
+              onNavigate={() => setMenuOpen(false)}
+            />
           </div>
         </div>
       )}

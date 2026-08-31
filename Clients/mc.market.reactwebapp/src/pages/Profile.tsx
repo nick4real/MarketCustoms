@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useVisitorSession } from "../auth/useVisitorSession";
 
 const listings = [
   {
@@ -68,8 +69,29 @@ const reviews = [
 
 type Tab = "listings" | "reviews" | "about";
 
+function profileInitials(displayName: string, email: string | null | undefined): string {
+  const parts = displayName.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    const first = parts[0]?.[0] ?? "";
+    const last = parts[parts.length - 1]?.[0] ?? "";
+    return `${first}${last}`.toUpperCase();
+  }
+  if (displayName.trim().length >= 2 && !displayName.includes("@")) {
+    return displayName.trim().slice(0, 2).toUpperCase();
+  }
+  const local = email?.split("@")[0];
+  if (local) {
+    return local.slice(0, 2).toUpperCase();
+  }
+  return "MC";
+}
+
 export default function Profile() {
   const [tab, setTab] = useState<Tab>("listings");
+  const { account } = useVisitorSession();
+  const displayName = account?.displayName ?? account?.email ?? "Your profile";
+  const handle = account?.email ?? "Signed in";
+  const initials = profileInitials(displayName, account?.email);
 
   return (
     <div className="min-h-screen bg-[#080808]">
@@ -86,12 +108,16 @@ export default function Profile() {
       <div className="px-4 md:px-12 lg:px-16">
         {/* Profile header */}
         <div className="relative z-10 -mt-10 mb-6 flex flex-col gap-4 sm:flex-row sm:items-end md:-mt-14">
-          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-[#080808] bg-[#111] md:h-24 md:w-24">
-            <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&auto=format"
-              alt="Jordan Nakamura"
-              className="h-full w-full object-cover"
-            />
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-[#080808] bg-[#111] text-lg font-semibold text-[#a09890] md:h-24 md:w-24">
+            {account?.photoUrl ? (
+              <img
+                src={account.photoUrl}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span style={{ fontFamily: "DM Mono, monospace" }}>{initials}</span>
+            )}
           </div>
 
           <div className="flex-1 sm:pb-1">
@@ -100,7 +126,7 @@ export default function Profile() {
                 className="text-[24px] leading-none font-bold text-[#f0ece3] md:text-[28px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
-                Jordan Nakamura
+                {displayName}
               </h1>
               <span
                 className="bg-[#e8820c] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#080808]"
@@ -116,7 +142,7 @@ export default function Profile() {
               className="text-xs text-[#5a5550]"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
-              @j.nakamura · Since March 2024 · Tokyo, JP
+              {handle}
             </p>
           </div>
 

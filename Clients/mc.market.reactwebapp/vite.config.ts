@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, loadEnv } from "vite";
 import plugin from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -18,6 +19,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [plugin(), tailwindcss()],
+    test: {
+      include: ["src/auth/**/*.test.ts"],
+      environment: "node",
+    },
     server: {
       port: Number(env.PORT) || 55577,
       proxy: {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useVisitorSession } from "../auth/useVisitorSession";
 
 type Section = "account" | "notifications" | "payment" | "privacy" | "security";
 
@@ -79,6 +80,14 @@ function Toggle({
 
 export default function Settings() {
   const [section, setSection] = useState<Section>("account");
+  const { account } = useVisitorSession();
+  const displayName = account?.displayName ?? "";
+  const nameParts = displayName.trim().split(/\s+/).filter(Boolean);
+  const firstName = nameParts[0] ?? "";
+  const lastName = nameParts.slice(1).join(" ");
+  const username = account?.email?.split("@")[0] ?? "";
+  const email = account?.email ?? "";
+  const initials = (firstName[0] ?? username[0] ?? "M").toUpperCase();
 
   return (
     <div className="min-h-screen bg-[#080808]">
@@ -141,12 +150,18 @@ export default function Settings() {
               </h3>
 
               <div className="mb-8 flex flex-col gap-4 border-b border-[#1e1e1e] pb-8 sm:flex-row sm:items-center">
-                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full border border-[#1e1e1e]">
-                  <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=128&fit=crop&auto=format"
-                    alt="Avatar"
-                    className="h-full w-full object-cover"
-                  />
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#1e1e1e] bg-[#1a1a1a] text-sm font-semibold text-[#a09890]">
+                  {account?.photoUrl ? (
+                    <img
+                      src={account.photoUrl}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span style={{ fontFamily: "DM Mono, monospace" }}>
+                      {initials}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <button
@@ -166,16 +181,16 @@ export default function Settings() {
 
               <div className="space-y-5">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <Field label="First name" defaultValue="Jordan" />
-                  <Field label="Last name" defaultValue="Nakamura" />
+                  <Field label="First name" defaultValue={firstName} />
+                  <Field label="Last name" defaultValue={lastName} />
                 </div>
-                <Field label="Username" defaultValue="j.nakamura" />
+                <Field label="Username" defaultValue={username} />
                 <Field
                   label="Email address"
-                  defaultValue="jordan@nakamura.co"
+                  defaultValue={email}
                   type="email"
                 />
-                <Field label="Location" defaultValue="Tokyo, Japan" />
+                <Field label="Location" defaultValue="" />
                 <div>
                   <label
                     className="mb-2 block text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"

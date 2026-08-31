@@ -11,7 +11,7 @@ Governance lives in `.specify/memory/constitution.md`. Follow it. Spec-driven wo
 | `Services/<Context>/MC.<Context>.{Domain,Application,Infrastructure,API}` | Bounded context (Catalog, Ordering, Notifications, Profiles) |
 | `Shared/` | Cross-cutting contracts only (`MC.Shared.{API,Application,Infrastructure}`) |
 | `Gateway/MC.Gateway` | YARP reverse proxy; browser talks here, not to services |
-| `Clients/MC.Market.WebApp` | Vite + React 19 + TypeScript + Tailwind 4 + Auth0 |
+| `Clients/mc.market.reactwebapp` | Vite + React 19 + TypeScript + Tailwind 4 + Auth0 |
 | `Aspire/` | App host and service defaults |
 | `Tests/<Context>/MC.<Context>.{Unit,Integration}Tests` | xUnit v3 |
 | `specs/` | Feature specs, plans, tasks, contracts |
@@ -63,14 +63,14 @@ The client is not a source of identity, roles, or prices. Call the gateway; do n
 - New application logic: focused unit tests in `Tests/<Context>/MC.<Context>.UnitTests`.
 - Persistence or HTTP composition: integration tests where that harness already exists.
 - Backend tests use xUnit v3 (`xunit.v3.mtp-off`).
-- Frontend: `npm run lint` and `npm run build` (`tsc -b && vite build`) in `Clients/MC.Market.WebApp`.
+- Frontend: `npm run lint` and `npm run build` (`tsc -b && vite build`) in `Clients/mc.market.reactwebapp`.
 - Zero lint/type/test failures on the affected scope. Treat new warnings as defects.
 - List/search APIs must bound results (paginate or filter). Avoid N+1 and unbounded collections.
 
 ## How to run
 
 - Local stack: Aspire AppHost (`Aspire/MC.Aspire.AppHost`). SQL Server and MongoDB run as persistent containers.
-- Web app alone: `npm run dev` in `Clients/MC.Market.WebApp` (still needs the gateway for API calls).
+- Web app alone: `npm run dev` in `Clients/mc.market.reactwebapp` (still needs the gateway for API calls).
 - Isolated service tests can set `MarketCustoms:TestService` on the AppHost (see `IsolatedTestComposition`).
 
 ## Change discipline
