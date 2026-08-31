@@ -8,7 +8,11 @@ import { isPublicStorefrontPath, sanitizeReturnTo } from "../auth/returnTo";
 import { mapSessionError } from "../auth/sessionError";
 import { useVisitorSession } from "../auth/useVisitorSession";
 
-function modeCopy(mode: AuthPageMode): { title: string; body: string; action: string } {
+function modeCopy(mode: AuthPageMode): {
+  title: string;
+  body: string;
+  action: string;
+} {
   if (mode === "sign-up") {
     return {
       title: "Create an account",
@@ -113,7 +117,9 @@ function LoginPanel({
   onRecoverPassword?: () => void;
 }) {
   const copy = modeCopy(mode);
-  const missingConfigMessage = mapSessionError({ missingConfig: true })?.message;
+  const missingConfigMessage = mapSessionError({
+    missingConfig: true,
+  })?.message;
   const message = configured ? errorMessage : missingConfigMessage;
 
   return (

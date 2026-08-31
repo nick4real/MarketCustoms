@@ -69,7 +69,10 @@ const reviews = [
 
 type Tab = "listings" | "reviews" | "about";
 
-function profileInitials(displayName: string, email: string | null | undefined): string {
+function profileInitials(
+  displayName: string,
+  email: string | null | undefined,
+): string {
   const parts = displayName.trim().split(/\s+/).filter(Boolean);
   if (parts.length >= 2) {
     const first = parts[0]?.[0] ?? "";
@@ -116,7 +119,9 @@ export default function Profile() {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <span style={{ fontFamily: "DM Mono, monospace" }}>{initials}</span>
+              <span style={{ fontFamily: "DM Mono, monospace" }}>
+                {initials}
+              </span>
             )}
           </div>
 

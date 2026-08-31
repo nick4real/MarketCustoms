@@ -2,12 +2,16 @@ import { describe, expect, it } from "vitest";
 import { isPublicStorefrontPath, sanitizeReturnTo } from "./returnTo";
 
 describe("sanitizeReturnTo", () => {
-  it.each(["/", "/browse", "/profile", "/orders", "/settings", "/listings/abc"])(
-    "allows %s",
-    (path) => {
-      expect(sanitizeReturnTo(path)).toBe(path);
-    },
-  );
+  it.each([
+    "/",
+    "/browse",
+    "/profile",
+    "/orders",
+    "/settings",
+    "/listings/abc",
+  ])("allows %s", (path) => {
+    expect(sanitizeReturnTo(path)).toBe(path);
+  });
 
   it("allows a listing id with a query string", () => {
     expect(sanitizeReturnTo("/listings/leica-m6?from=browse")).toBe(

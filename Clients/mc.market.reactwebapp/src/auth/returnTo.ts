@@ -1,4 +1,10 @@
-const EXACT_PATHS = new Set(["/", "/browse", "/profile", "/orders", "/settings"]);
+const EXACT_PATHS = new Set([
+  "/",
+  "/browse",
+  "/profile",
+  "/orders",
+  "/settings",
+]);
 
 function pathAndQuery(value: string): { path: string; query: string } {
   const queryIndex = value.indexOf("?");
@@ -52,7 +58,12 @@ export function sanitizeReturnTo(value: string | null | undefined): string {
     return "/";
   }
 
-  if (path === "/login" || path === "/callback" || path.startsWith("/login/") || path.startsWith("/callback/")) {
+  if (
+    path === "/login" ||
+    path === "/callback" ||
+    path.startsWith("/login/") ||
+    path.startsWith("/callback/")
+  ) {
     return "/";
   }
 
