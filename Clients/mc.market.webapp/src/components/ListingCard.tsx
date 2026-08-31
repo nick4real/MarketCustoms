@@ -17,23 +17,23 @@ export default function ListingCard({
   return (
     <Link
       to={`/listings/${listing.id}`}
-      className="group border border-[#1e1e1e] bg-[#111] overflow-hidden hover:border-[#2e2e2e] transition-all duration-200"
+      className="group overflow-hidden border border-[#1e1e1e] bg-[#111] transition-all duration-200 hover:border-[#2e2e2e]"
       style={{ borderRadius: "2px" }}
     >
       <div className="aspect-[4/3] overflow-hidden bg-[#0d0d0d]">
         <img
           src={listingImageUrl(coverImage, 600, 450)}
           alt={listing.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
+          className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
         />
       </div>
       <div className="p-4">
-        <div className="flex items-start justify-between mb-1.5">
-          <h3 className="text-sm font-medium text-[#f0ece3] leading-snug flex-1 pr-2">
+        <div className="mb-1.5 flex items-start justify-between">
+          <h3 className="flex-1 pr-2 text-sm leading-snug font-medium text-[#f0ece3]">
             {listing.title}
           </h3>
           <span
-            className="text-[10px] text-[#5a5550] bg-[#1a1a1a] px-1.5 py-0.5 shrink-0"
+            className="shrink-0 bg-[#1a1a1a] px-1.5 py-0.5 text-[10px] text-[#5a5550]"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             {listing.condition}
@@ -41,7 +41,7 @@ export default function ListingCard({
         </div>
         {showLocation && (
           <div
-            className="text-[10px] text-[#3a3532] mb-3"
+            className="mb-3 text-[10px] text-[#3a3532]"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             {listing.location}

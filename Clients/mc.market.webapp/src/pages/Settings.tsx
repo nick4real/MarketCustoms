@@ -23,7 +23,7 @@ function Field({
   return (
     <div>
       <label
-        className="block text-[10px] text-[#5a5550] tracking-[0.15em] uppercase mb-2"
+        className="mb-2 block text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
         style={{ fontFamily: "DM Mono, monospace" }}
       >
         {label}
@@ -32,7 +32,7 @@ function Field({
         type={type}
         value={val}
         onChange={(e) => setVal(e.target.value)}
-        className="w-full bg-[#111] border border-[#1e1e1e] text-[#f0ece3] text-sm px-4 py-2.5 focus:outline-none focus:border-[#e8820c] transition-colors"
+        className="w-full border border-[#1e1e1e] bg-[#111] px-4 py-2.5 text-sm text-[#f0ece3] transition-colors focus:border-[#e8820c] focus:outline-none"
         style={{ borderRadius: "2px", fontFamily: "Outfit, sans-serif" }}
       />
     </div>
@@ -50,11 +50,11 @@ function Toggle({
 }) {
   const [on, setOn] = useState(defaultOn);
   return (
-    <div className="flex items-center justify-between py-4 border-b border-[#1e1e1e] last:border-0">
+    <div className="flex items-center justify-between border-b border-[#1e1e1e] py-4 last:border-0">
       <div className="pr-6">
         <div className="text-sm font-medium text-[#f0ece3]">{label}</div>
         <div
-          className="text-xs text-[#5a5550] mt-0.5"
+          className="mt-0.5 text-xs text-[#5a5550]"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           {description}
@@ -62,14 +62,14 @@ function Toggle({
       </div>
       <button
         onClick={() => setOn(!on)}
-        className="relative w-10 h-5 shrink-0 transition-colors duration-200"
+        className="relative h-5 w-10 shrink-0 transition-colors duration-200"
         style={{
           borderRadius: "10px",
           backgroundColor: on ? "#e8820c" : "#1e1e1e",
         }}
       >
         <div
-          className="absolute top-0.5 w-4 h-4 bg-[#f0ece3] transition-all duration-200"
+          className="absolute top-0.5 h-4 w-4 bg-[#f0ece3] transition-all duration-200"
           style={{ borderRadius: "8px", left: on ? "22px" : "2px" }}
         />
       </button>
@@ -81,18 +81,18 @@ export default function Settings() {
   const [section, setSection] = useState<Section>("account");
 
   return (
-    <div className="bg-[#080808] min-h-screen">
+    <div className="min-h-screen bg-[#080808]">
       {/* Mobile: horizontal scrollable tabs */}
-      <div className="md:hidden border-b border-[#1e1e1e] px-4 overflow-x-auto">
-        <div className="flex gap-1 py-3 w-max">
+      <div className="overflow-x-auto border-b border-[#1e1e1e] px-4 md:hidden">
+        <div className="flex w-max gap-1 py-3">
           {sections.map((s) => (
             <button
               key={s.id}
               onClick={() => setSection(s.id)}
-              className={`px-4 py-1.5 text-sm transition-colors whitespace-nowrap ${
+              className={`px-4 py-1.5 text-sm whitespace-nowrap transition-colors ${
                 section === s.id
-                  ? "bg-[#e8820c] text-[#080808] font-semibold"
-                  : "text-[#5a5550] border border-[#1e1e1e] hover:text-[#a09890]"
+                  ? "bg-[#e8820c] font-semibold text-[#080808]"
+                  : "border border-[#1e1e1e] text-[#5a5550] hover:text-[#a09890]"
               }`}
               style={{ borderRadius: "2px" }}
             >
@@ -104,9 +104,9 @@ export default function Settings() {
 
       <div className="flex">
         {/* Desktop sidebar */}
-        <aside className="hidden md:block w-52 shrink-0 border-r border-[#1e1e1e] p-7 sticky top-14 self-start h-[calc(100vh-56px)]">
+        <aside className="sticky top-14 hidden h-[calc(100vh-56px)] w-52 shrink-0 self-start border-r border-[#1e1e1e] p-7 md:block">
           <h2
-            className="text-xl font-bold text-[#f0ece3] mb-8"
+            className="mb-8 text-xl font-bold text-[#f0ece3]"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
             Settings
@@ -116,7 +116,7 @@ export default function Settings() {
               <button
                 key={s.id}
                 onClick={() => setSection(s.id)}
-                className={`text-left px-3 py-2 text-sm transition-colors ${
+                className={`px-3 py-2 text-left text-sm transition-colors ${
                   section === s.id
                     ? "text-[#e8820c]"
                     : "text-[#5a5550] hover:text-[#a09890]"
@@ -130,33 +130,33 @@ export default function Settings() {
         </aside>
 
         {/* Content */}
-        <main className="flex-1 px-4 py-8 md:px-12 md:py-10 max-w-2xl">
+        <main className="max-w-2xl flex-1 px-4 py-8 md:px-12 md:py-10">
           {section === "account" && (
             <div>
               <h3
-                className="text-[22px] font-bold text-[#f0ece3] mb-7 md:text-[26px] md:mb-8"
+                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Account
               </h3>
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 pb-8 border-b border-[#1e1e1e]">
-                <div className="w-16 h-16 rounded-full overflow-hidden border border-[#1e1e1e] shrink-0">
+              <div className="mb-8 flex flex-col gap-4 border-b border-[#1e1e1e] pb-8 sm:flex-row sm:items-center">
+                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full border border-[#1e1e1e]">
                   <img
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=128&fit=crop&auto=format"
                     alt="Avatar"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
                 <div>
                   <button
-                    className="text-sm font-medium text-[#f0ece3] border border-[#2a2a2a] px-4 py-1.5 hover:border-[#4a4540] transition-colors"
+                    className="border border-[#2a2a2a] px-4 py-1.5 text-sm font-medium text-[#f0ece3] transition-colors hover:border-[#4a4540]"
                     style={{ borderRadius: "2px" }}
                   >
                     Change photo
                   </button>
                   <p
-                    className="text-xs text-[#5a5550] mt-2"
+                    className="mt-2 text-xs text-[#5a5550]"
                     style={{ fontFamily: "DM Mono, monospace" }}
                   >
                     PNG or JPG, max 5MB
@@ -165,7 +165,7 @@ export default function Settings() {
               </div>
 
               <div className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field label="First name" defaultValue="Jordan" />
                   <Field label="Last name" defaultValue="Nakamura" />
                 </div>
@@ -178,7 +178,7 @@ export default function Settings() {
                 <Field label="Location" defaultValue="Tokyo, Japan" />
                 <div>
                   <label
-                    className="block text-[10px] text-[#5a5550] tracking-[0.15em] uppercase mb-2"
+                    className="mb-2 block text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
                     style={{ fontFamily: "DM Mono, monospace" }}
                   >
                     Bio
@@ -186,7 +186,7 @@ export default function Settings() {
                   <textarea
                     rows={3}
                     defaultValue="Based in Tokyo. I collect and sell considered objects."
-                    className="w-full bg-[#111] border border-[#1e1e1e] text-[#f0ece3] text-sm px-4 py-2.5 focus:outline-none focus:border-[#e8820c] transition-colors resize-none"
+                    className="w-full resize-none border border-[#1e1e1e] bg-[#111] px-4 py-2.5 text-sm text-[#f0ece3] transition-colors focus:border-[#e8820c] focus:outline-none"
                     style={{
                       borderRadius: "2px",
                       fontFamily: "Outfit, sans-serif",
@@ -194,7 +194,7 @@ export default function Settings() {
                   />
                 </div>
                 <button
-                  className="w-full sm:w-auto px-6 py-2.5 bg-[#e8820c] text-[#080808] text-sm font-semibold hover:bg-[#cf7108] transition-colors"
+                  className="w-full bg-[#e8820c] px-6 py-2.5 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108] sm:w-auto"
                   style={{ borderRadius: "2px" }}
                 >
                   Save changes
@@ -206,7 +206,7 @@ export default function Settings() {
           {section === "notifications" && (
             <div>
               <h3
-                className="text-[22px] font-bold text-[#f0ece3] mb-7 md:text-[26px] md:mb-8"
+                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Notifications
@@ -247,53 +247,53 @@ export default function Settings() {
           {section === "payment" && (
             <div>
               <h3
-                className="text-[22px] font-bold text-[#f0ece3] mb-7 md:text-[26px] md:mb-8"
+                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Payment
               </h3>
-              <div className="mb-8 pb-8 border-b border-[#1e1e1e]">
+              <div className="mb-8 border-b border-[#1e1e1e] pb-8">
                 <h4
-                  className="text-[10px] text-[#5a5550] tracking-[0.15em] uppercase mb-4"
+                  className="mb-4 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   Payment methods
                 </h4>
                 <div
-                  className="border border-[#1e1e1e] bg-[#111] p-4 flex items-center justify-between mb-3"
+                  className="mb-3 flex items-center justify-between border border-[#1e1e1e] bg-[#111] p-4"
                   style={{ borderRadius: "2px" }}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex min-w-0 items-center gap-3">
                     <div
-                      className="w-10 h-6 bg-[#1a1a1a] flex items-center justify-center shrink-0"
+                      className="flex h-6 w-10 shrink-0 items-center justify-center bg-[#1a1a1a]"
                       style={{ borderRadius: "2px" }}
                     >
                       <span
-                        className="text-[9px] text-[#f0ece3] font-bold tracking-wider"
+                        className="text-[9px] font-bold tracking-wider text-[#f0ece3]"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         VISA
                       </span>
                     </div>
-                    <span className="text-sm text-[#f0ece3] truncate">
+                    <span className="truncate text-sm text-[#f0ece3]">
                       •••• 4829
                     </span>
                     <span
-                      className="text-xs text-[#5a5550] hidden sm:block"
+                      className="hidden text-xs text-[#5a5550] sm:block"
                       style={{ fontFamily: "DM Mono, monospace" }}
                     >
                       09/28
                     </span>
                   </div>
                   <span
-                    className="text-xs text-[#e8820c] shrink-0 ml-2"
+                    className="ml-2 shrink-0 text-xs text-[#e8820c]"
                     style={{ fontFamily: "DM Mono, monospace" }}
                   >
                     Primary
                   </span>
                 </div>
                 <button
-                  className="text-sm text-[#5a5550] hover:text-[#f0ece3] transition-colors"
+                  className="text-sm text-[#5a5550] transition-colors hover:text-[#f0ece3]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   + Add payment method
@@ -309,7 +309,7 @@ export default function Settings() {
           {section === "privacy" && (
             <div>
               <h3
-                className="text-[22px] font-bold text-[#f0ece3] mb-7 md:text-[26px] md:mb-8"
+                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Privacy
@@ -334,18 +334,18 @@ export default function Settings() {
                 description="Allow your profile to appear in web search"
                 defaultOn={false}
               />
-              <div className="mt-8 pt-8 border-t border-[#1e1e1e]">
-                <div className="text-sm font-medium text-[#f0ece3] mb-1">
+              <div className="mt-8 border-t border-[#1e1e1e] pt-8">
+                <div className="mb-1 text-sm font-medium text-[#f0ece3]">
                   Data export
                 </div>
                 <p
-                  className="text-xs text-[#5a5550] mb-4"
+                  className="mb-4 text-xs text-[#5a5550]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   Download a copy of all your MKT. data.
                 </p>
                 <button
-                  className="text-sm border border-[#2a2a2a] text-[#f0ece3] px-4 py-2 hover:border-[#4a4540] transition-colors"
+                  className="border border-[#2a2a2a] px-4 py-2 text-sm text-[#f0ece3] transition-colors hover:border-[#4a4540]"
                   style={{ borderRadius: "2px" }}
                 >
                   Request export
@@ -357,12 +357,12 @@ export default function Settings() {
           {section === "security" && (
             <div>
               <h3
-                className="text-[22px] font-bold text-[#f0ece3] mb-7 md:text-[26px] md:mb-8"
+                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Security
               </h3>
-              <div className="space-y-5 mb-10 pb-10 border-b border-[#1e1e1e]">
+              <div className="mb-10 space-y-5 border-b border-[#1e1e1e] pb-10">
                 <Field
                   label="Current password"
                   defaultValue=""
@@ -375,7 +375,7 @@ export default function Settings() {
                   type="password"
                 />
                 <button
-                  className="w-full sm:w-auto px-6 py-2.5 bg-[#e8820c] text-[#080808] text-sm font-semibold hover:bg-[#cf7108] transition-colors"
+                  className="w-full bg-[#e8820c] px-6 py-2.5 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108] sm:w-auto"
                   style={{ borderRadius: "2px" }}
                 >
                   Update password
@@ -386,18 +386,18 @@ export default function Settings() {
                 description="Require a code when signing in from a new device"
                 defaultOn={false}
               />
-              <div className="mt-8 pt-8 border-t border-[#1e1e1e]">
-                <div className="text-sm font-medium text-[#dc4040] mb-1">
+              <div className="mt-8 border-t border-[#1e1e1e] pt-8">
+                <div className="mb-1 text-sm font-medium text-[#dc4040]">
                   Danger zone
                 </div>
                 <p
-                  className="text-xs text-[#5a5550] mb-4"
+                  className="mb-4 text-xs text-[#5a5550]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   Permanently delete your account and all associated data.
                 </p>
                 <button
-                  className="text-sm border border-[#dc4040]/30 text-[#dc4040] px-4 py-2 hover:border-[#dc4040]/70 transition-colors"
+                  className="border border-[#dc4040]/30 px-4 py-2 text-sm text-[#dc4040] transition-colors hover:border-[#dc4040]/70"
                   style={{ borderRadius: "2px" }}
                 >
                   Delete account

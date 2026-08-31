@@ -8,20 +8,20 @@ const navLinks = [
   { to: "/settings", label: "Settings" },
 ];
 
-export default function Layout() {
+export default function MainLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#080808]">
-      <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#080808]/95 backdrop-blur-sm border-b border-[#1e1e1e] flex items-center px-5 md:px-10">
+      <nav className="fixed top-0 right-0 left-0 z-50 flex h-14 items-center border-b border-[#1e1e1e] bg-[#080808]/95 px-5 backdrop-blur-sm md:px-10">
         {/* Logo */}
         <NavLink
           to="/"
-          className="flex items-center flex-1 md:flex-none md:mr-14"
+          className="flex flex-1 items-center md:mr-14 md:flex-none"
           onClick={() => setMenuOpen(false)}
         >
           <span
-            className="text-[22px] font-black text-[#f0ece3] tracking-tighter leading-none"
+            className="text-[22px] leading-none font-black tracking-tighter text-[#f0ece3]"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
             MKT<span className="text-[#e8820c]">.</span>
@@ -29,7 +29,7 @@ export default function Layout() {
         </NavLink>
 
         {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-8 flex-1">
+        <div className="hidden flex-1 items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
@@ -49,7 +49,7 @@ export default function Layout() {
 
         {/* Right actions */}
         <div className="flex items-center gap-4">
-          <button className="hidden md:block text-[#5a5550] hover:text-[#f0ece3] transition-colors">
+          <button className="hidden text-[#5a5550] transition-colors hover:text-[#f0ece3] md:block">
             <svg
               width="17"
               height="17"
@@ -63,7 +63,7 @@ export default function Layout() {
             </svg>
           </button>
 
-          <button className="relative text-[#5a5550] hover:text-[#f0ece3] transition-colors">
+          <button className="relative text-[#5a5550] transition-colors hover:text-[#f0ece3]">
             <svg
               width="17"
               height="17"
@@ -77,7 +77,7 @@ export default function Layout() {
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
             <span
-              className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#e8820c] text-[#080808] text-[9px] font-bold rounded-full flex items-center justify-center"
+              className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#e8820c] text-[9px] font-bold text-[#080808]"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               3
@@ -86,18 +86,18 @@ export default function Layout() {
 
           {/* Avatar — desktop only */}
           <NavLink to="/profile" className="hidden md:block">
-            <div className="w-7 h-7 rounded-full overflow-hidden border border-[#2a2a2a] hover:border-[#e8820c] transition-colors">
+            <div className="h-7 w-7 overflow-hidden rounded-full border border-[#2a2a2a] transition-colors hover:border-[#e8820c]">
               <img
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&auto=format"
                 alt="Profile"
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
           </NavLink>
 
           {/* Hamburger — mobile only */}
           <button
-            className="md:hidden text-[#5a5550] hover:text-[#f0ece3] transition-colors p-1"
+            className="p-1 text-[#5a5550] transition-colors hover:text-[#f0ece3] md:hidden"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -133,7 +133,7 @@ export default function Layout() {
 
       {/* Mobile full-screen menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#080808] pt-14 md:hidden overflow-y-auto">
+        <div className="fixed inset-0 z-40 overflow-y-auto bg-[#080808] pt-14 md:hidden">
           <div className="flex flex-col px-6 pt-6 pb-10">
             {navLinks.map((link) => (
               <NavLink
@@ -141,7 +141,7 @@ export default function Layout() {
                 to={link.to}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
-                  `py-4 border-b border-[#1e1e1e] transition-colors flex items-center justify-between ${
+                  `flex items-center justify-between border-b border-[#1e1e1e] py-4 transition-colors ${
                     isActive ? "text-[#e8820c]" : "text-[#f0ece3]"
                   }`
                 }
@@ -156,7 +156,7 @@ export default function Layout() {
                     </span>
                     {isActive && (
                       <span
-                        className="text-[#e8820c] text-xs"
+                        className="text-xs text-[#e8820c]"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         ●
@@ -170,13 +170,13 @@ export default function Layout() {
             <NavLink
               to="/profile"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-4 mt-8 pt-2"
+              className="mt-8 flex items-center gap-4 pt-2"
             >
-              <div className="w-11 h-11 rounded-full overflow-hidden border border-[#2a2a2a]">
+              <div className="h-11 w-11 overflow-hidden rounded-full border border-[#2a2a2a]">
                 <img
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=88&h=88&fit=crop&auto=format"
                   alt="Profile"
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <div>
