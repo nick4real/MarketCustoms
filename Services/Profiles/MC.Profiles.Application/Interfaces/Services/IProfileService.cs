@@ -8,8 +8,5 @@ public interface IProfileService
 {
     Task<Result<OwnerProfileResponse>> GetMe(CancellationToken ct);
     Task<Result<PublicProfileResponse>> GetProfileInfo(CancellationToken ct, Guid id);
-    Task<Result<OwnerProfileResponse>> CompleteClarification(CompleteClarificationRequest request, CancellationToken ct);
-    Task<Result> RequireVerifiedProfile(CancellationToken ct);
-    Task<Result<OwnerSellerResponse>> SubmitSellerApplication(SubmitSellerApplicationRequest request, CancellationToken ct);
-    Task<Result<OwnerSellerResponse>> GetMySellerStatus(CancellationToken ct);
+    Task<Result<OwnerProfileResponse>> ClarifyAccountType(ClarifyAccountTypeRequest request, CancellationToken ct);
 }

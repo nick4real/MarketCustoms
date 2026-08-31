@@ -18,28 +18,13 @@ public class ProfilesController(IProfileService profileService) : CustomControll
         return HandleResult(result);
     }
 
+    // TODO
     [HttpPost("me")]
-    public async Task<IActionResult> CompleteClarification(
-        [FromBody] CompleteClarificationRequest request,
+    public async Task<IActionResult> ClarifyAccountTypeRequest(
+        [FromBody] ClarifyAccountTypeRequest request,
         CancellationToken ct)
     {
-        var result = await profileService.CompleteClarification(request, ct);
-        return HandleResult(result);
-    }
-
-    [HttpPost("me/seller-applications")]
-    public async Task<IActionResult> SubmitSellerApplication(
-        [FromBody] SubmitSellerApplicationRequest request,
-        CancellationToken ct)
-    {
-        var result = await profileService.SubmitSellerApplication(request, ct);
-        return HandleResult(result);
-    }
-
-    [HttpGet("me/seller")]
-    public async Task<IActionResult> GetMySellerStatus(CancellationToken ct)
-    {
-        var result = await profileService.GetMySellerStatus(ct);
+        var result = await profileService.ClarifyAccountType(request, ct);
         return HandleResult(result);
     }
 

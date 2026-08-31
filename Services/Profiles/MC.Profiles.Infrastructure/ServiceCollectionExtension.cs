@@ -38,8 +38,6 @@ public static class ServiceCollectionExtension
 
             // Repositories
             services.AddScoped<IProfileRepository, ProfileRepository>();
-            services.AddScoped<ISellerApplicationRepository, SellerApplicationRepository>();
-            services.AddScoped<ISellerProfileRepository, SellerProfileRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Services
