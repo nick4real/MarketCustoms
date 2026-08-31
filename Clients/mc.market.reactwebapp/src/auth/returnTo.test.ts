@@ -8,6 +8,7 @@ describe("sanitizeReturnTo", () => {
     "/profile",
     "/orders",
     "/settings",
+    "/verify-email",
     "/listings/abc",
   ])("allows %s", (path) => {
     expect(sanitizeReturnTo(path)).toBe(path);
@@ -62,5 +63,6 @@ describe("isPublicStorefrontPath", () => {
     expect(isPublicStorefrontPath("/profile")).toBe(false);
     expect(isPublicStorefrontPath("/orders")).toBe(false);
     expect(isPublicStorefrontPath("/settings")).toBe(false);
+    expect(isPublicStorefrontPath("/verify-email")).toBe(false);
   });
 });

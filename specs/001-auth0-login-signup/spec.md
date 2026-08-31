@@ -48,7 +48,8 @@ A new visitor opens the same dedicated login/signup page and chooses to create a
 1. **Given** a visitor is not signed in, **When** they choose sign up on the dedicated page, **Then** they can create an account without using the shopping layout.
 2. **Given** they complete Auth0’s hosted sign-up successfully, **When** Auth0 accepts the new account, **Then** they land in the storefront signed in.
 3. **Given** the identifier they use is already registered, **When** they try to sign up on Auth0’s hosted login, **Then** they are told an account already exists and can switch to sign-in there or return to the dedicated page to choose sign-in.
-4. **Given** Auth0 requires email verification and the new account is not yet verified, **When** they try to open Profile, Orders, or Settings, **Then** they do not see account data, they stay signed in for public browsing, and they are told what to do next (they are not treated as signed out or sent to the dedicated authentication page).
+4. **Given** Auth0 requires email verification and the new account is not yet verified, **When** they finish sign-up or sign-in, **Then** they are told to check their inbox immediately, stay signed in for public browsing, and can continue from that guidance without being sent back to the dedicated authentication page.
+5. **Given** Auth0 requires email verification and the new account is not yet verified, **When** they try to open Profile, Orders, or Settings, **Then** they do not see account data, they stay signed in for public browsing, and they are told what to do next (they are not treated as signed out or sent to the dedicated authentication page).
 
 ---
 
@@ -124,7 +125,7 @@ A signed-in shopper stays signed in across refresh and later visits in the same 
 - **FR-018**: Visitors MUST be able to recover access to an existing account (forgotten password) via Auth0’s hosted login, reachable from the dedicated page.
 - **FR-019**: The storefront MUST NOT be treated as the source of roles, prices, or identity for privileged actions; Auth0 and marketplace services remain the authority after sign-in.
 - **FR-020**: The dedicated page MUST send the visitor to Auth0’s hosted login to enter credentials, then receive them back into the storefront after Auth0 completes or cancels the attempt.
-- **FR-021**: When Auth0 requires email verification before an account is fully usable, a visitor who has signed up but not yet verified MUST remain signed in for Home, Browse, and listing details, MUST NOT see Profile, Orders, or Settings content, MUST be told what to do next, and MUST NOT be treated as signed out or sent to the dedicated authentication page solely because verification is pending.
+- **FR-021**: When Auth0 requires email verification before an account is fully usable, a visitor who has signed up but not yet verified MUST remain signed in for Home, Browse, and listing details, MUST NOT see Profile, Orders, or Settings content, MUST be told what to do next immediately after sign-in or sign-up (not only when they open a blocked account page), and MUST NOT be treated as signed out or sent to the dedicated authentication page solely because verification is pending.
 
 ### Key Entities
 

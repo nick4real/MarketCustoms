@@ -10,6 +10,7 @@ import Settings from "./pages/Settings";
 import Orders from "./pages/Orders";
 import Login from "./pages/Login";
 import Callback from "./pages/Callback";
+import VerifyEmail from "./pages/VerifyEmail";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
           { path: "profile", Component: Profile },
           { path: "settings", Component: Settings },
           { path: "orders", Component: Orders },
+          { path: "verify-email", Component: VerifyEmail },
         ],
       },
     ],

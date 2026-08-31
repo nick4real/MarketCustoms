@@ -48,7 +48,7 @@ Do not copy `updated_at`, identities, or access tokens into the view model.
 | --- | --- | --- |
 | guest | Sign in, Sign up | redirect to `/login` |
 | authenticating | no account data, no fake identity | no account data |
-| signed-in, not fully usable | identity + sign out; no Profile/Orders/Settings nav | verification guidance |
+| signed-in, not fully usable | identity + sign out; no Profile/Orders/Settings nav | verification guidance (`/verify-email` after login, and on Profile/Orders/Settings) |
 | signed-in, fully usable | identity + account nav + sign out | existing page content |
 
 ## Forbidden

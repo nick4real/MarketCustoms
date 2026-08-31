@@ -1,9 +1,12 @@
+export const emailVerificationPath = "/verify-email";
+
 const EXACT_PATHS = new Set([
   "/",
   "/browse",
   "/profile",
   "/orders",
   "/settings",
+  emailVerificationPath,
 ]);
 
 function pathAndQuery(value: string): { path: string; query: string } {

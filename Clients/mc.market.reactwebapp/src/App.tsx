@@ -2,16 +2,22 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import { RouterProvider } from "react-router";
 import { router } from "./routes";
 import { getAuth0ProviderOptions, isAuth0Configured } from "./auth/auth0";
-import { sanitizeReturnTo } from "./auth/returnTo";
+import { destinationAfterSignIn } from "./auth/afterSignIn";
+import { mapAccount, type Auth0UserLike } from "./auth/mapAccount";
 import {
   Auth0VisitorSessionProvider,
   ProvideVisitorSession,
   missingConfigSession,
 } from "./auth/useVisitorSession";
 
-function onRedirectCallback(appState?: { returnTo?: string }) {
-  const returnTo = sanitizeReturnTo(appState?.returnTo);
-  void router.navigate(returnTo, { replace: true });
+function onRedirectCallback(
+  appState?: { returnTo?: string },
+  user?: Auth0UserLike,
+) {
+  void router.navigate(
+    destinationAfterSignIn(appState?.returnTo, mapAccount(user)),
+    { replace: true },
+  );
 }
 
 export default function App() {

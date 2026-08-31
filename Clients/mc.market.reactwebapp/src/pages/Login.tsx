@@ -4,7 +4,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { isAuth0Configured } from "../auth/auth0";
 import { parseAuthPageMode, type AuthPageMode } from "../auth/authPageMode";
 import { startHostedLogin } from "../auth/hostedLogin";
-import { isPublicStorefrontPath, sanitizeReturnTo } from "../auth/returnTo";
+import {
+  emailVerificationPath,
+  isPublicStorefrontPath,
+  sanitizeReturnTo,
+} from "../auth/returnTo";
 import { mapSessionError } from "../auth/sessionError";
 import { useVisitorSession } from "../auth/useVisitorSession";
 
@@ -65,6 +69,9 @@ function ConfiguredLogin() {
   }
 
   if (session.status === "signed-in") {
+    if (session.account && !session.account.isFullyUsable) {
+      return <Navigate to={emailVerificationPath} replace />;
+    }
     const sanitized = sanitizeReturnTo(returnTo);
     const destination = isPublicStorefrontPath(sanitized) ? sanitized : "/";
     return <Navigate to={destination} replace />;

@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 import { isAuth0Configured } from "../auth/auth0";
+import { destinationAfterSignIn } from "../auth/afterSignIn";
 import { mapSessionError } from "../auth/sessionError";
+import { useVisitorSession } from "../auth/useVisitorSession";
 
 export default function Callback() {
   if (!isAuth0Configured) {
@@ -12,7 +14,8 @@ export default function Callback() {
 }
 
 function CallbackHandler() {
-  const { isLoading, error, isAuthenticated } = useAuth0();
+  const { isLoading, error } = useAuth0();
+  const session = useVisitorSession();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const hasCallbackParams =
@@ -21,7 +24,7 @@ function CallbackHandler() {
     searchParams.has("error");
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || session.status === "authenticating") {
       return;
     }
 
@@ -35,9 +38,20 @@ function CallbackHandler() {
     }
 
     if (!hasCallbackParams) {
-      void navigate(isAuthenticated ? "/" : "/login", { replace: true });
+      const destination =
+        session.status === "signed-in"
+          ? destinationAfterSignIn("/", session.account)
+          : "/login";
+      void navigate(destination, { replace: true });
     }
-  }, [error, hasCallbackParams, isAuthenticated, isLoading, navigate]);
+  }, [
+    error,
+    hasCallbackParams,
+    isLoading,
+    navigate,
+    session.account,
+    session.status,
+  ]);
 
   return (
     <div className="w-full max-w-md text-center">
