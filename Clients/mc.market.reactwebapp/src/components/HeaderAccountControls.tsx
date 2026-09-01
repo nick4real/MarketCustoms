@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import type { AccountView } from "../models/session";
-import { logoutReturnTo } from "../auth/auth0";
+import { isAuth0Configured, logoutReturnTo } from "../auth/auth0";
+import type { AuthPageMode } from "../auth/authPageMode";
 import {
   showAccountNav,
   showGuestAuthActions,
   showIdentityControl,
 } from "../auth/chrome";
+import { startHostedLogin } from "../auth/hostedLogin";
 import { sanitizeReturnTo } from "../auth/returnTo";
 import { useVisitorSession } from "../auth/useVisitorSession";
 
@@ -39,12 +42,19 @@ export default function HeaderAccountControls({
   return null;
 }
 
-function loginHref(mode: "sign-in" | "sign-up", pathname: string): string {
+function loginHref(mode: AuthPageMode, pathname: string): string {
   const params = new URLSearchParams({ mode });
   if (protectedPaths.has(pathname)) {
     params.set("returnTo", sanitizeReturnTo(pathname));
   }
   return `/login?${params.toString()}`;
+}
+
+function guestReturnTo(pathname: string): string | undefined {
+  if (!protectedPaths.has(pathname)) {
+    return undefined;
+  }
+  return sanitizeReturnTo(pathname);
 }
 
 function GuestActions({
@@ -54,48 +64,130 @@ function GuestActions({
   variant: "desktop" | "mobile";
   onNavigate?: () => void;
 }) {
-  const { pathname } = useLocation();
-  const signIn = loginHref("sign-in", pathname);
-  const signUp = loginHref("sign-up", pathname);
+  if (!isAuth0Configured) {
+    return (
+      <UnconfiguredGuestActions variant={variant} onNavigate={onNavigate} />
+    );
+  }
 
+  return <Auth0GuestActions variant={variant} onNavigate={onNavigate} />;
+}
+
+function UnconfiguredGuestActions({
+  variant,
+  onNavigate,
+}: {
+  variant: "desktop" | "mobile";
+  onNavigate?: () => void;
+}) {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  return (
+    <GuestAuthButtons
+      variant={variant}
+      busy={false}
+      onSignIn={() => {
+        onNavigate?.();
+        void navigate(loginHref("sign-in", pathname));
+      }}
+      onSignUp={() => {
+        onNavigate?.();
+        void navigate(loginHref("sign-up", pathname));
+      }}
+    />
+  );
+}
+
+function Auth0GuestActions({
+  variant,
+  onNavigate,
+}: {
+  variant: "desktop" | "mobile";
+  onNavigate?: () => void;
+}) {
+  const { loginWithRedirect } = useAuth0();
+  const { pathname } = useLocation();
+  const [starting, setStarting] = useState<AuthPageMode | null>(null);
+
+  async function startAuth(mode: AuthPageMode) {
+    if (starting) {
+      return;
+    }
+    setStarting(mode);
+    onNavigate?.();
+    try {
+      await startHostedLogin(loginWithRedirect, mode, guestReturnTo(pathname));
+    } catch {
+      setStarting(null);
+    }
+  }
+
+  return (
+    <GuestAuthButtons
+      variant={variant}
+      busy={starting != null}
+      onSignIn={() => void startAuth("sign-in")}
+      onSignUp={() => void startAuth("sign-up")}
+    />
+  );
+}
+
+function GuestAuthButtons({
+  variant,
+  busy,
+  onSignIn,
+  onSignUp,
+}: {
+  variant: "desktop" | "mobile";
+  busy: boolean;
+  onSignIn: () => void;
+  onSignUp: () => void;
+}) {
   if (variant === "mobile") {
     return (
       <div className="mt-8 flex flex-col gap-3 pt-2">
-        <Link
-          to={signIn}
-          onClick={onNavigate}
-          className="border border-[#2a2a2a] px-4 py-3 text-center text-sm font-medium text-[#f0ece3]"
+        <button
+          type="button"
+          onClick={onSignIn}
+          disabled={busy}
+          className="w-full border border-[#2a2a2a] px-4 py-3 text-center text-sm font-medium text-[#f0ece3] disabled:cursor-not-allowed disabled:opacity-40"
           style={{ borderRadius: "2px" }}
         >
           Sign in
-        </Link>
-        <Link
-          to={signUp}
-          onClick={onNavigate}
-          className="bg-[#e8820c] px-4 py-3 text-center text-sm font-semibold text-[#080808]"
+        </button>
+        <button
+          type="button"
+          onClick={onSignUp}
+          disabled={busy}
+          className="w-full bg-[#e8820c] px-4 py-3 text-center text-sm font-semibold text-[#080808] disabled:cursor-not-allowed disabled:opacity-40"
           style={{ borderRadius: "2px" }}
         >
           Sign up
-        </Link>
+        </button>
       </div>
     );
   }
 
   return (
     <div className="flex items-center gap-3">
-      <Link
-        to={signIn}
-        className="text-sm font-medium text-[#5a5550] transition-colors hover:text-[#f0ece3]"
+      <button
+        type="button"
+        onClick={onSignIn}
+        disabled={busy}
+        className="text-sm font-medium text-[#5a5550] transition-colors hover:text-[#f0ece3] disabled:cursor-not-allowed disabled:opacity-40"
       >
         Sign in
-      </Link>
-      <Link
-        to={signUp}
-        className="bg-[#e8820c] px-3 py-1.5 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108]"
+      </button>
+      <button
+        type="button"
+        onClick={onSignUp}
+        disabled={busy}
+        className="bg-[#e8820c] px-3 py-1.5 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108] disabled:cursor-not-allowed disabled:opacity-40"
         style={{ borderRadius: "2px" }}
       >
         Sign up
-      </Link>
+      </button>
     </div>
   );
 }
