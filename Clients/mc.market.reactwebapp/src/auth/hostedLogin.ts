@@ -23,6 +23,7 @@ export function buildHostedLoginOptions(
   return { appState: { returnTo: sanitized } };
 }
 
+// Delegated function to start the hosted login flow
 export async function startHostedLogin(
   loginWithRedirect: HostedLoginRedirect,
   mode: AuthPageMode,

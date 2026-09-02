@@ -21,7 +21,7 @@ function ListingGallery({
   return (
     <div>
       <div
-        className="aspect-[4/3] overflow-hidden border border-[#1e1e1e] bg-[#0d0d0d]"
+        className="border-border bg-surface aspect-4/3 overflow-hidden border"
         style={{ borderRadius: "2px" }}
       >
         <img
@@ -36,10 +36,10 @@ function ListingGallery({
             key={image}
             type="button"
             onClick={() => setActiveImage(index)}
-            className={`aspect-[4/3] overflow-hidden border bg-[#0d0d0d] transition-colors ${
+            className={`bg-surface aspect-4/3 overflow-hidden border transition-colors ${
               activeImage === index
-                ? "border-[#e8820c]"
-                : "border-[#1e1e1e] hover:border-[#2e2e2e]"
+                ? "border-primary"
+                : "border-border hover:border-border-hover"
             }`}
             style={{ borderRadius: "2px" }}
             aria-label={`View photo ${index + 1}`}
@@ -66,22 +66,22 @@ export default function ListingDetails() {
 
   if (!listing) {
     return (
-      <div className="flex min-h-[calc(100vh-56px)] flex-col items-center justify-center bg-[#080808] px-6 text-center">
+      <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
         <div
-          className="mb-4 text-5xl text-[#2a2a2a]"
+          className="text-border-subtle mb-4 text-5xl"
           style={{ fontFamily: "Fraunces, Georgia, serif" }}
         >
           ∅
         </div>
         <p
-          className="mb-8 text-xs tracking-widest text-[#3a3532]"
+          className="text-foreground-subtle mb-8 text-xs tracking-widest"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           Listing not found
         </p>
         <Link
           to="/browse"
-          className="bg-[#e8820c] px-6 py-3 text-sm font-semibold tracking-wide text-[#080808] transition-colors hover:bg-[#cf7108]"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 text-sm font-semibold tracking-wide transition-colors"
           style={{ borderRadius: "2px" }}
         >
           Back to Browse
@@ -95,21 +95,27 @@ export default function ListingDetails() {
     listing.stock === 1 ? "1 available" : `${listing.stock} available`;
 
   return (
-    <div className="min-h-[calc(100vh-56px)] bg-[#080808]">
+    <div className="bg-background min-h-[calc(100vh-56px)]">
       <div className="px-6 pt-8 pb-4 md:px-12 lg:px-16">
         <nav
-          className="flex flex-wrap items-center gap-2 text-[11px] text-[#5a5550]"
+          className="text-muted-foreground flex flex-wrap items-center gap-2 text-[11px]"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
-          <Link to="/browse" className="transition-colors hover:text-[#f0ece3]">
+          <Link
+            to="/browse"
+            className="hover:text-foreground transition-colors"
+          >
             Browse
           </Link>
-          <span className="text-[#3a3532]">/</span>
-          <Link to="/browse" className="transition-colors hover:text-[#f0ece3]">
+          <span className="text-foreground-subtle">/</span>
+          <Link
+            to="/browse"
+            className="hover:text-foreground transition-colors"
+          >
             {listing.category}
           </Link>
-          <span className="text-[#3a3532]">/</span>
-          <span className="text-[#a09890]">{listing.title}</span>
+          <span className="text-foreground-subtle">/</span>
+          <span className="text-foreground-muted">{listing.title}</span>
         </nav>
       </div>
 
@@ -124,20 +130,20 @@ export default function ListingDetails() {
           <div>
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <span
-                className="bg-[#1a1a1a] px-1.5 py-0.5 text-[10px] text-[#5a5550]"
+                className="bg-secondary text-muted-foreground px-1.5 py-0.5 text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 {listing.condition}
               </span>
               <span
-                className="text-[10px] text-[#5a5550]"
+                className="text-muted-foreground text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 {listing.category}
               </span>
-              <span className="text-[#3a3532]">·</span>
+              <span className="text-foreground-subtle">·</span>
               <span
-                className="text-[10px] text-[#5a5550]"
+                className="text-muted-foreground text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 {listing.location}
@@ -145,7 +151,7 @@ export default function ListingDetails() {
             </div>
 
             <h1
-              className="mb-4 text-[32px] leading-tight font-bold text-[#f0ece3] md:text-[40px]"
+              className="text-foreground mb-4 text-[32px] leading-tight font-bold md:text-[40px]"
               style={{ fontFamily: "Fraunces, Georgia, serif" }}
             >
               {listing.title}
@@ -153,13 +159,13 @@ export default function ListingDetails() {
 
             <div className="mb-8 flex items-baseline gap-3">
               <span
-                className="text-[36px] leading-none font-bold text-[#f0ece3]"
+                className="text-foreground text-[36px] leading-none font-bold"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 ${listing.price.toLocaleString()}
               </span>
               <span
-                className="text-xs text-[#5a5550]"
+                className="text-muted-foreground text-xs"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 {stockLabel}
@@ -169,14 +175,14 @@ export default function ListingDetails() {
             <div className="mb-8 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
-                className="bg-[#e8820c] px-6 py-3 text-sm font-semibold tracking-wide text-[#080808] transition-colors hover:bg-[#cf7108]"
+                className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 text-sm font-semibold tracking-wide transition-colors"
                 style={{ borderRadius: "2px" }}
               >
                 Buy Now
               </button>
               <button
                 type="button"
-                className="border border-[#2a2a2a] px-6 py-3 text-sm font-medium tracking-wide text-[#f0ece3] transition-colors hover:border-[#4a4540]"
+                className="border-border-subtle text-foreground hover:border-border-emphasis border px-6 py-3 text-sm font-medium tracking-wide transition-colors"
                 style={{ borderRadius: "2px" }}
               >
                 Make an Offer
@@ -185,18 +191,18 @@ export default function ListingDetails() {
 
             <Link
               to="/profile"
-              className="mb-8 flex items-center gap-3 border border-[#1e1e1e] bg-[#111] p-4 transition-colors hover:border-[#2e2e2e]"
+              className="border-border bg-card hover:border-border-hover mb-8 flex items-center gap-3 border p-4 transition-colors"
               style={{ borderRadius: "2px" }}
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1a1a1a] text-xs font-semibold text-[#a09890]">
+              <div className="bg-secondary text-foreground-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
                 {sellerInitials(listing.seller)}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium text-[#f0ece3]">
+                <div className="text-foreground text-sm font-medium">
                   {listing.seller}
                 </div>
                 <div
-                  className="text-[10px] text-[#5a5550]"
+                  className="text-muted-foreground text-[10px]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   {listing.sellerRating.toFixed(1)} rating ·{" "}
@@ -204,7 +210,7 @@ export default function ListingDetails() {
                 </div>
               </div>
               <span
-                className="shrink-0 text-xs text-[#5a5550]"
+                className="text-muted-foreground shrink-0 text-xs"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 Profile →
@@ -213,24 +219,24 @@ export default function ListingDetails() {
 
             <section className="mb-8">
               <h2
-                className="mb-3 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+                className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 Description
               </h2>
-              <p className="text-sm leading-relaxed font-light text-[#a09890]">
+              <p className="text-foreground-muted text-sm leading-relaxed font-light">
                 {listing.description}
               </p>
             </section>
 
             <section className="mb-8">
               <h2
-                className="mb-3 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+                className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 Details
               </h2>
-              <dl className="border-t border-[#1e1e1e]">
+              <dl className="border-border border-t">
                 {[
                   { name: "Item ID", value: listingSku(listing.id) },
                   { name: "Listed", value: listing.listedAt },
@@ -241,15 +247,15 @@ export default function ListingDetails() {
                 ].map((row) => (
                   <div
                     key={row.name}
-                    className="grid grid-cols-2 gap-4 border-b border-[#1e1e1e] py-3"
+                    className="border-border grid grid-cols-2 gap-4 border-b py-3"
                   >
                     <dt
-                      className="text-xs text-[#5a5550]"
+                      className="text-muted-foreground text-xs"
                       style={{ fontFamily: "DM Mono, monospace" }}
                     >
                       {row.name}
                     </dt>
-                    <dd className="text-right text-sm text-[#f0ece3]">
+                    <dd className="text-foreground text-right text-sm">
                       {row.value}
                     </dd>
                   </div>
@@ -259,7 +265,7 @@ export default function ListingDetails() {
 
             <section>
               <h2
-                className="mb-3 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+                className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 Tags
@@ -268,7 +274,7 @@ export default function ListingDetails() {
                 {listing.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="border border-[#1e1e1e] bg-[#111] px-2.5 py-1 text-[11px] text-[#a09890]"
+                    className="border-border bg-card text-foreground-muted border px-2.5 py-1 text-[11px]"
                     style={{
                       borderRadius: "2px",
                       fontFamily: "DM Mono, monospace",
@@ -283,17 +289,17 @@ export default function ListingDetails() {
         </div>
 
         {related.length > 0 && (
-          <section className="mt-16 border-t border-[#1e1e1e] pt-12 lg:mt-20">
+          <section className="border-border mt-16 border-t pt-12 lg:mt-20">
             <div className="mb-8 flex items-end justify-between">
               <h2
-                className="text-[28px] font-bold text-[#f0ece3] sm:text-[32px]"
+                className="text-foreground text-[28px] font-bold sm:text-[32px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 More like this
               </h2>
               <Link
                 to="/browse"
-                className="ml-4 shrink-0 text-xs tracking-wide text-[#5a5550] transition-colors hover:text-[#f0ece3]"
+                className="text-muted-foreground hover:text-foreground ml-4 shrink-0 text-xs tracking-wide transition-colors"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 See all →

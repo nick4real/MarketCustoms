@@ -97,21 +97,21 @@ export default function Profile() {
   const initials = profileInitials(displayName, account?.email);
 
   return (
-    <div className="min-h-screen bg-[#080808]">
+    <div className="bg-background min-h-screen">
       {/* Cover */}
-      <div className="relative h-36 overflow-hidden bg-[#0d0d0d] md:h-52">
+      <div className="bg-surface relative h-36 overflow-hidden md:h-52">
         <img
           src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&h=500&fit=crop&auto=format"
           alt="Cover"
           className="h-full w-full object-cover opacity-25"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/40 to-transparent" />
+        <div className="from-background via-background/40 absolute inset-0 bg-linear-to-t to-transparent" />
       </div>
 
       <div className="px-4 md:px-12 lg:px-16">
         {/* Profile header */}
         <div className="relative z-10 -mt-10 mb-6 flex flex-col gap-4 sm:flex-row sm:items-end md:-mt-14">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-[#080808] bg-[#111] text-lg font-semibold text-[#a09890] md:h-24 md:w-24">
+          <div className="border-background bg-card text-foreground-muted flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 text-lg font-semibold md:h-24 md:w-24">
             {account?.photoUrl ? (
               <img
                 src={account.photoUrl}
@@ -128,13 +128,13 @@ export default function Profile() {
           <div className="flex-1 sm:pb-1">
             <div className="mb-1 flex flex-wrap items-center gap-2">
               <h1
-                className="text-[24px] leading-none font-bold text-[#f0ece3] md:text-[28px]"
+                className="text-foreground text-[24px] leading-none font-bold md:text-[28px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 {displayName}
               </h1>
               <span
-                className="bg-[#e8820c] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#080808]"
+                className="bg-primary text-primary-foreground px-2 py-0.5 text-[10px] font-bold tracking-wider"
                 style={{
                   fontFamily: "DM Mono, monospace",
                   borderRadius: "2px",
@@ -144,7 +144,7 @@ export default function Profile() {
               </span>
             </div>
             <p
-              className="text-xs text-[#5a5550]"
+              className="text-muted-foreground text-xs"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               {handle}
@@ -153,13 +153,13 @@ export default function Profile() {
 
           <div className="flex gap-2 self-start sm:gap-3 sm:self-auto sm:pb-1">
             <button
-              className="border border-[#2a2a2a] px-4 py-2 text-sm font-medium text-[#f0ece3] transition-colors hover:border-[#4a4540]"
+              className="border-border-subtle text-foreground hover:border-border-emphasis border px-4 py-2 text-sm font-medium transition-colors"
               style={{ borderRadius: "2px" }}
             >
               Message
             </button>
             <button
-              className="bg-[#e8820c] px-4 py-2 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108]"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover px-4 py-2 text-sm font-semibold transition-colors"
               style={{ borderRadius: "2px" }}
             >
               Follow
@@ -168,7 +168,7 @@ export default function Profile() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-5 border-b border-[#1e1e1e] pb-6 sm:flex sm:items-center sm:gap-10 lg:gap-12">
+        <div className="border-border grid grid-cols-2 gap-5 border-b pb-6 sm:flex sm:items-center sm:gap-10 lg:gap-12">
           {[
             { value: "4.97", label: "Rating", sub: "89 reviews" },
             { value: "142", label: "Sales", sub: "all time" },
@@ -178,20 +178,20 @@ export default function Profile() {
             <div key={stat.label}>
               <div className="flex items-baseline gap-2">
                 <span
-                  className="text-[22px] leading-none font-bold text-[#f0ece3] md:text-[26px]"
+                  className="text-foreground text-[22px] leading-none font-bold md:text-[26px]"
                   style={{ fontFamily: "Fraunces, Georgia, serif" }}
                 >
                   {stat.value}
                 </span>
                 <span
-                  className="text-xs text-[#5a5550]"
+                  className="text-muted-foreground text-xs"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   {stat.label}
                 </span>
               </div>
               <div
-                className="mt-0.5 text-[10px] text-[#3a3532]"
+                className="text-foreground-subtle mt-0.5 text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 {stat.sub}
@@ -206,10 +206,10 @@ export default function Profile() {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`shrink-0 border-b-2 pb-4 text-xs tracking-[0.15em] capitalize uppercase transition-colors ${
+              className={`shrink-0 border-b-2 pb-4 text-xs tracking-[0.15em] uppercase transition-colors ${
                 tab === t
-                  ? "border-[#e8820c] text-[#f0ece3]"
-                  : "border-transparent text-[#5a5550] hover:text-[#a09890]"
+                  ? "border-primary text-foreground"
+                  : "text-muted-foreground hover:text-foreground-muted border-transparent"
               }`}
               style={{ fontFamily: "DM Mono, monospace" }}
             >
@@ -224,10 +224,10 @@ export default function Profile() {
             {listings.map((item) => (
               <div
                 key={item.id}
-                className="group cursor-pointer overflow-hidden border border-[#1e1e1e] bg-[#111] transition-all hover:border-[#2e2e2e]"
+                className="group border-border bg-card hover:border-border-hover cursor-pointer overflow-hidden border transition-all"
                 style={{ borderRadius: "2px" }}
               >
-                <div className="aspect-[4/3] overflow-hidden bg-[#0d0d0d]">
+                <div className="bg-surface aspect-4/3 overflow-hidden">
                   <img
                     src={`https://images.unsplash.com/${item.image}?w=600&h=450&fit=crop&auto=format`}
                     alt={item.title}
@@ -236,18 +236,18 @@ export default function Profile() {
                 </div>
                 <div className="p-4">
                   <div className="mb-3 flex items-start justify-between">
-                    <h3 className="text-sm font-medium text-[#f0ece3]">
+                    <h3 className="text-foreground text-sm font-medium">
                       {item.title}
                     </h3>
                     <span
-                      className="ml-2 shrink-0 bg-[#1a1a1a] px-1.5 py-0.5 text-[10px] text-[#5a5550]"
+                      className="bg-secondary text-muted-foreground ml-2 shrink-0 px-1.5 py-0.5 text-[10px]"
                       style={{ fontFamily: "DM Mono, monospace" }}
                     >
                       {item.condition}
                     </span>
                   </div>
                   <span
-                    className="text-xl font-bold text-[#f0ece3]"
+                    className="text-foreground text-xl font-bold"
                     style={{ fontFamily: "Fraunces, Georgia, serif" }}
                   >
                     ${item.price.toLocaleString()}
@@ -264,15 +264,15 @@ export default function Profile() {
             {reviews.map((r, i) => (
               <div
                 key={i}
-                className="border border-[#1e1e1e] bg-[#111] p-5 md:p-6"
+                className="border-border bg-card border p-5 md:p-6"
                 style={{ borderRadius: "2px" }}
               >
                 <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1a1a1a] text-xs font-semibold text-[#a09890]">
+                    <div className="bg-secondary text-foreground-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
                       {r.author[0]}
                     </div>
-                    <span className="text-sm font-medium text-[#f0ece3]">
+                    <span className="text-foreground text-sm font-medium">
                       {r.author}
                     </span>
                   </div>
@@ -281,21 +281,21 @@ export default function Profile() {
                       {Array.from({ length: 5 }).map((_, j) => (
                         <span
                           key={j}
-                          className={`text-sm ${j < r.rating ? "text-[#e8820c]" : "text-[#2a2a2a]"}`}
+                          className={`text-sm ${j < r.rating ? "text-primary" : "text-border-subtle"}`}
                         >
                           ★
                         </span>
                       ))}
                     </div>
                     <span
-                      className="text-xs text-[#5a5550]"
+                      className="text-muted-foreground text-xs"
                       style={{ fontFamily: "DM Mono, monospace" }}
                     >
                       {r.date}
                     </span>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed font-light text-[#7a7570]">
+                <p className="text-foreground-dim text-sm leading-relaxed font-light">
                   {r.text}
                 </p>
               </div>
@@ -306,13 +306,13 @@ export default function Profile() {
         {/* About */}
         {tab === "about" && (
           <div className="max-w-lg pb-16">
-            <p className="mb-5 text-[15px] leading-relaxed font-light text-[#7a7570]">
+            <p className="text-foreground-dim mb-5 text-[15px] leading-relaxed font-light">
               Based in Tokyo. I collect and sell considered objects — cameras,
               audio equipment, well-made clothing. Everything I list has been
               part of my own collection. I sell when something has found a
               better home.
             </p>
-            <p className="text-[15px] leading-relaxed font-light text-[#7a7570]">
+            <p className="text-foreground-dim text-[15px] leading-relaxed font-light">
               Specialties: vintage photography (Leica, Hasselblad, Nikon),
               Japanese audio, classic outerwear.
             </p>

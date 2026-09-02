@@ -10,6 +10,7 @@ import {
   missingConfigSession,
 } from "./auth/useVisitorSession";
 
+// Callback function to handle the redirect after sign in
 function onRedirectCallback(
   appState?: { returnTo?: string },
   user?: Auth0UserLike,
@@ -20,6 +21,7 @@ function onRedirectCallback(
   );
 }
 
+// Main App component
 export default function App() {
   if (!isAuth0Configured) {
     return (

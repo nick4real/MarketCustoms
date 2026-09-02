@@ -38,11 +38,11 @@ function FilterPanel({
           placeholder="Search listings..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full border border-[#1e1e1e] bg-[#0d0d0d] px-3 py-2 pl-8 text-sm text-[#f0ece3] placeholder-[#3a3532] transition-colors focus:border-[#e8820c] focus:outline-none"
+          className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-3 py-2 pl-8 text-sm transition-colors focus:outline-none"
           style={{ borderRadius: "2px", fontFamily: "Outfit, sans-serif" }}
         />
         <svg
-          className="absolute top-2.5 left-2.5 text-[#3a3532]"
+          className="text-foreground-subtle absolute top-2.5 left-2.5"
           width="13"
           height="13"
           viewBox="0 0 24 24"
@@ -58,7 +58,7 @@ function FilterPanel({
       {/* Categories */}
       <div className="mb-7">
         <h3
-          className="mb-3 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+          className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           Category
@@ -70,8 +70,8 @@ function FilterPanel({
               onClick={() => setSelectedCategory(cat)}
               className={`px-2 py-1.5 text-left text-sm transition-colors ${
                 selectedCategory === cat
-                  ? "text-[#e8820c]"
-                  : "text-[#5a5550] hover:text-[#a09890]"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground-muted"
               }`}
               style={{ borderRadius: "2px" }}
             >
@@ -84,7 +84,7 @@ function FilterPanel({
       {/* Condition */}
       <div className="mb-7">
         <h3
-          className="mb-3 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+          className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           Condition
@@ -96,8 +96,8 @@ function FilterPanel({
               onClick={() => setSelectedCondition(cond)}
               className={`px-2 py-1.5 text-left text-sm transition-colors ${
                 selectedCondition === cond
-                  ? "text-[#e8820c]"
-                  : "text-[#5a5550] hover:text-[#a09890]"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground-muted"
               }`}
               style={{ borderRadius: "2px" }}
             >
@@ -110,7 +110,7 @@ function FilterPanel({
       {/* Price */}
       <div>
         <h3
-          className="mb-3 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+          className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           Price Range
@@ -118,12 +118,12 @@ function FilterPanel({
         <div className="flex gap-2">
           <input
             placeholder="Min"
-            className="w-full border border-[#1e1e1e] bg-[#0d0d0d] px-2 py-1.5 text-xs text-[#f0ece3] placeholder-[#3a3532] transition-colors focus:border-[#e8820c] focus:outline-none"
+            className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-2 py-1.5 text-xs transition-colors focus:outline-none"
             style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
           />
           <input
             placeholder="Max"
-            className="w-full border border-[#1e1e1e] bg-[#0d0d0d] px-2 py-1.5 text-xs text-[#f0ece3] placeholder-[#3a3532] transition-colors focus:border-[#e8820c] focus:outline-none"
+            className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-2 py-1.5 text-xs transition-colors focus:outline-none"
             style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
           />
         </div>
@@ -155,9 +155,9 @@ export default function Browse() {
     (search ? 1 : 0);
 
   return (
-    <div className="flex min-h-screen bg-[#080808]">
+    <div className="bg-background flex min-h-screen">
       {/* Desktop sidebar */}
-      <aside className="sticky top-14 hidden h-[calc(100vh-56px)] w-56 shrink-0 self-start overflow-y-auto border-r border-[#1e1e1e] p-6 md:block">
+      <aside className="border-border sticky top-14 hidden h-[calc(100vh-56px)] w-56 shrink-0 self-start overflow-y-auto border-r p-6 md:block">
         <FilterPanel
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
@@ -171,16 +171,16 @@ export default function Browse() {
       {/* Main */}
       <main className="min-w-0 flex-1">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#1e1e1e] px-4 py-5 md:border-0 md:px-8 md:py-8">
+        <div className="border-border flex items-center justify-between border-b px-4 py-5 md:border-0 md:px-8 md:py-8">
           <div>
             <h1
-              className="text-[26px] leading-none font-bold text-[#f0ece3] md:text-[32px]"
+              className="text-foreground text-[26px] leading-none font-bold md:text-[32px]"
               style={{ fontFamily: "Fraunces, Georgia, serif" }}
             >
               {selectedCategory === "All" ? "All Listings" : selectedCategory}
             </h1>
             <p
-              className="mt-1.5 text-xs text-[#5a5550]"
+              className="text-muted-foreground mt-1.5 text-xs"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               {filtered.length} results
@@ -190,7 +190,7 @@ export default function Browse() {
           <div className="flex items-center gap-2">
             {/* Mobile filter toggle */}
             <button
-              className="relative flex items-center gap-2 border border-[#1e1e1e] px-3 py-1.5 text-sm text-[#f0ece3] md:hidden"
+              className="border-border text-foreground relative flex items-center gap-2 border px-3 py-1.5 text-sm md:hidden"
               style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
               onClick={() => setFiltersOpen((v) => !v)}
             >
@@ -208,7 +208,7 @@ export default function Browse() {
               </svg>
               Filters
               {activeFilters > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#e8820c] text-[9px] font-bold text-[#080808]">
+                <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold">
                   {activeFilters}
                 </span>
               )}
@@ -216,7 +216,7 @@ export default function Browse() {
 
             <div className="flex items-center gap-2">
               <span
-                className="hidden text-xs text-[#5a5550] md:block"
+                className="text-muted-foreground hidden text-xs md:block"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 Sort
@@ -224,7 +224,7 @@ export default function Browse() {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="cursor-pointer border border-[#1e1e1e] bg-[#111] px-2 py-1.5 text-xs text-[#f0ece3] focus:border-[#e8820c] focus:outline-none md:px-3 md:text-sm"
+                className="border-border bg-card text-foreground focus:border-primary cursor-pointer border px-2 py-1.5 text-xs focus:outline-none md:px-3 md:text-sm"
                 style={{
                   borderRadius: "2px",
                   fontFamily: "Outfit, sans-serif",
@@ -241,7 +241,7 @@ export default function Browse() {
 
         {/* Mobile filter panel (collapsible) */}
         {filtersOpen && (
-          <div className="border-b border-[#1e1e1e] bg-[#0a0a0a] px-4 py-6 md:hidden">
+          <div className="border-border bg-surface-inset border-b px-4 py-6 md:hidden">
             <FilterPanel
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
@@ -251,7 +251,7 @@ export default function Browse() {
               setSearch={setSearch}
             />
             <button
-              className="mt-4 w-full bg-[#e8820c] py-2.5 text-sm font-semibold text-[#080808]"
+              className="bg-primary text-primary-foreground mt-4 w-full py-2.5 text-sm font-semibold"
               style={{ borderRadius: "2px" }}
               onClick={() => setFiltersOpen(false)}
             >
@@ -271,13 +271,13 @@ export default function Browse() {
           ) : (
             <div className="flex flex-col items-center justify-center py-24 text-center">
               <div
-                className="mb-4 text-5xl text-[#2a2a2a]"
+                className="text-border-subtle mb-4 text-5xl"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 ∅
               </div>
               <p
-                className="text-xs tracking-widest text-[#3a3532]"
+                className="text-foreground-subtle text-xs tracking-widest"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
                 No listings match your filters

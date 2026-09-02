@@ -15,6 +15,7 @@ import { useVisitorSession } from "../auth/useVisitorSession";
 
 const protectedPaths = new Set(["/profile", "/orders", "/settings"]);
 
+// Parent component router to display the account controls in the header based on the visitor session
 export default function HeaderAccountControls({
   variant = "desktop",
   onNavigate,
@@ -24,10 +25,12 @@ export default function HeaderAccountControls({
 }) {
   const session = useVisitorSession();
 
+  // Show guest actions if the visitor is a guest
   if (showGuestAuthActions(session)) {
     return <GuestActions variant={variant} onNavigate={onNavigate} />;
   }
 
+  // Show signed in actions if the visitor is authenticated and has an account
   if (showIdentityControl(session) && session.account) {
     return (
       <SignedInActions
@@ -57,6 +60,7 @@ function guestReturnTo(pathname: string): string | undefined {
   return sanitizeReturnTo(pathname);
 }
 
+// Guest actions depending on the Identity Provider configuration
 function GuestActions({
   variant,
   onNavigate,
@@ -65,14 +69,17 @@ function GuestActions({
   onNavigate?: () => void;
 }) {
   if (!isAuth0Configured) {
+    // Show guest actions if the Identity Provider configuration is missing
     return (
       <UnconfiguredGuestActions variant={variant} onNavigate={onNavigate} />
     );
   }
 
+  // Show guest actions if the Identity Provider is configured with Auth0
   return <Auth0GuestActions variant={variant} onNavigate={onNavigate} />;
 }
 
+// Guest actions component router when the Identity Provider is not configured
 function UnconfiguredGuestActions({
   variant,
   onNavigate,
@@ -99,6 +106,7 @@ function UnconfiguredGuestActions({
   );
 }
 
+// Guest actions component router when the Identity Provider is configured with Auth0
 function Auth0GuestActions({
   variant,
   onNavigate,
@@ -133,6 +141,7 @@ function Auth0GuestActions({
   );
 }
 
+//  UI component to display the guest authentication buttons
 function GuestAuthButtons({
   variant,
   busy,
@@ -151,7 +160,7 @@ function GuestAuthButtons({
           type="button"
           onClick={onSignIn}
           disabled={busy}
-          className="w-full border border-[#2a2a2a] px-4 py-3 text-center text-sm font-medium text-[#f0ece3] disabled:cursor-not-allowed disabled:opacity-40"
+          className="border-border-subtle text-foreground w-full border px-4 py-3 text-center text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
           style={{ borderRadius: "2px" }}
         >
           Sign in
@@ -160,7 +169,7 @@ function GuestAuthButtons({
           type="button"
           onClick={onSignUp}
           disabled={busy}
-          className="w-full bg-[#e8820c] px-4 py-3 text-center text-sm font-semibold text-[#080808] disabled:cursor-not-allowed disabled:opacity-40"
+          className="bg-primary text-primary-foreground w-full px-4 py-3 text-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40"
           style={{ borderRadius: "2px" }}
         >
           Sign up
@@ -175,7 +184,7 @@ function GuestAuthButtons({
         type="button"
         onClick={onSignIn}
         disabled={busy}
-        className="text-sm font-medium text-[#5a5550] transition-colors hover:text-[#f0ece3] disabled:cursor-not-allowed disabled:opacity-40"
+        className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40"
       >
         Sign in
       </button>
@@ -183,7 +192,7 @@ function GuestAuthButtons({
         type="button"
         onClick={onSignUp}
         disabled={busy}
-        className="bg-[#e8820c] px-3 py-1.5 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108] disabled:cursor-not-allowed disabled:opacity-40"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover px-3 py-1.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40"
         style={{ borderRadius: "2px" }}
       >
         Sign up
@@ -192,6 +201,7 @@ function GuestAuthButtons({
   );
 }
 
+// Signed in actions component router
 function SignedInActions({
   account,
   showAccountLinks,
@@ -213,6 +223,7 @@ function SignedInActions({
   );
 }
 
+// UI component to display the sign out button when the Identity Provider is configured with Auth0
 function Auth0SignOut({
   account,
   showAccountLinks,
@@ -242,14 +253,14 @@ function Auth0SignOut({
     >
       <IdentityMark account={account} initials={initials} />
       {variant === "mobile" && (
-        <span className="text-sm font-semibold text-[#f0ece3]">{label}</span>
+        <span className="text-foreground text-sm font-semibold">{label}</span>
       )}
     </Link>
   ) : (
     <div className="flex items-center gap-3" aria-label={label}>
       <IdentityMark account={account} initials={initials} />
       {variant === "mobile" && (
-        <span className="text-sm font-semibold text-[#f0ece3]">{label}</span>
+        <span className="text-foreground text-sm font-semibold">{label}</span>
       )}
     </div>
   );
@@ -261,7 +272,7 @@ function Auth0SignOut({
         <button
           type="button"
           onClick={signOut}
-          className="self-start text-sm font-medium text-[#5a5550] transition-colors hover:text-[#f0ece3]"
+          className="text-muted-foreground hover:text-foreground self-start text-sm font-medium transition-colors"
         >
           Sign out
         </button>
@@ -275,7 +286,7 @@ function Auth0SignOut({
       <button
         type="button"
         onClick={signOut}
-        className="text-sm font-medium text-[#5a5550] transition-colors hover:text-[#f0ece3]"
+        className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
       >
         Sign out
       </button>
@@ -283,6 +294,7 @@ function Auth0SignOut({
   );
 }
 
+// UI component to display the identity mark
 function IdentityMark({
   account,
   initials,
@@ -291,7 +303,7 @@ function IdentityMark({
   initials: string;
 }) {
   return (
-    <div className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border border-[#2a2a2a] bg-[#1a1a1a] text-[10px] font-semibold tracking-wide text-[#a09890]">
+    <div className="border-border-subtle bg-secondary text-foreground-muted flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border text-[10px] font-semibold tracking-wide">
       {account.photoUrl ? (
         <img
           src={account.photoUrl}
@@ -305,6 +317,7 @@ function IdentityMark({
   );
 }
 
+// Function to extract the initials from the account
 function accountInitials(account: AccountView): string {
   if (account.displayName) {
     const parts = account.displayName.trim().split(/\s+/).filter(Boolean);

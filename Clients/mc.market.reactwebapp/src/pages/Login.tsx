@@ -16,18 +16,21 @@ function modeCopy(mode: AuthPageMode): {
   title: string;
   body: string;
   action: string;
+  actionBusy: string;
 } {
   if (mode === "sign-up") {
     return {
       title: "Create an account",
       body: "Continue to Auth0 to choose an email and password. MarketCustoms never asks for your password here.",
       action: "Create account",
+      actionBusy: "Creating account…",
     };
   }
   return {
     title: "Sign in",
     body: "Continue to Auth0 to enter your credentials. MarketCustoms never asks for your password here.",
     action: "Continue",
+    actionBusy: "Continuing…",
   };
 }
 
@@ -35,10 +38,11 @@ export default function Login() {
   if (!isAuth0Configured) {
     return <LoginPanel configured={false} />;
   }
-  return <ConfiguredLogin />;
+  return <Auth0LoginPanel />;
 }
 
-function ConfiguredLogin() {
+// Configure the login panel when the Identity Provider is configured with Auth0
+function Auth0LoginPanel() {
   const { loginWithRedirect } = useAuth0();
   const session = useVisitorSession();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -53,13 +57,13 @@ function ConfiguredLogin() {
     return (
       <div className="w-full max-w-md">
         <p
-          className="text-[10px] tracking-[0.2em] text-[#e8820c] uppercase"
+          className="text-primary text-[10px] tracking-[0.2em] uppercase"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           Session
         </p>
         <h1
-          className="mt-4 text-[32px] leading-none font-black tracking-tight text-[#f0ece3]"
+          className="text-foreground mt-4 text-[32px] leading-none font-black tracking-tight"
           style={{ fontFamily: "Fraunces, Georgia, serif" }}
         >
           Checking your account.
@@ -106,6 +110,7 @@ function ConfiguredLogin() {
   );
 }
 
+// UI component to display the login panel
 function LoginPanel({
   configured,
   mode = "sign-in",
@@ -132,16 +137,16 @@ function LoginPanel({
   return (
     <div className="w-full max-w-md">
       <div className="mb-8 flex items-center gap-3">
-        <span className="h-px w-6 shrink-0 bg-[#e8820c]" />
+        <span className="bg-primary h-px w-6 shrink-0" />
         <span
-          className="text-[10px] tracking-[0.2em] text-[#e8820c] uppercase"
+          className="text-primary text-[10px] tracking-[0.2em] uppercase"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           Account
         </span>
       </div>
 
-      <div className="mb-8 flex gap-6 border-b border-[#1e1e1e]">
+      <div className="border-border mb-8 flex gap-6 border-b">
         {(
           [
             { id: "sign-in", label: "Sign in" },
@@ -155,8 +160,8 @@ function LoginPanel({
             disabled={!configured || busy}
             className={`border-b-2 pb-3 text-xs tracking-[0.15em] uppercase transition-colors ${
               mode === tab.id
-                ? "border-[#e8820c] text-[#f0ece3]"
-                : "border-transparent text-[#5a5550] hover:text-[#a09890]"
+                ? "border-primary text-foreground"
+                : "text-muted-foreground hover:text-foreground-muted border-transparent"
             }`}
             style={{ fontFamily: "DM Mono, monospace" }}
           >
@@ -166,18 +171,18 @@ function LoginPanel({
       </div>
 
       <h1
-        className="mb-4 text-[36px] leading-[0.95] font-black tracking-tight text-[#f0ece3] md:text-[44px]"
+        className="text-foreground mb-4 text-[36px] leading-[0.95] font-black tracking-tight md:text-[44px]"
         style={{ fontFamily: "Fraunces, Georgia, serif" }}
       >
         {copy.title}
       </h1>
-      <p className="mb-8 text-[15px] leading-relaxed font-light text-[#5a5550]">
+      <p className="text-muted-foreground mb-8 text-[15px] leading-relaxed font-light">
         {copy.body}
       </p>
 
       {message && (
         <div
-          className="mb-6 border border-[#2a2a2a] bg-[#111] px-4 py-3 text-sm font-light text-[#f0ece3]"
+          className="border-border-subtle bg-card text-foreground mb-6 border px-4 py-3 text-sm font-light"
           style={{ borderRadius: "2px" }}
           role="alert"
         >
@@ -189,20 +194,20 @@ function LoginPanel({
         type="button"
         onClick={onContinue}
         disabled={!configured || busy || !onContinue}
-        className="w-full bg-[#e8820c] px-6 py-3 text-sm font-semibold tracking-wide text-[#080808] transition-colors hover:bg-[#cf7108] disabled:cursor-not-allowed disabled:opacity-40"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover w-full px-6 py-3 text-sm font-semibold tracking-wide transition-colors disabled:cursor-not-allowed disabled:opacity-40"
         style={{ borderRadius: "2px" }}
       >
-        {busy ? "Continuing…" : copy.action}
+        {busy ? copy.actionBusy : copy.action}
       </button>
 
       {mode === "sign-in" && (
-        <p className="mt-5 text-sm font-light text-[#5a5550]">
+        <p className="text-muted-foreground mt-5 text-sm font-light">
           Forgot your password?{" "}
           <button
             type="button"
             onClick={onRecoverPassword}
             disabled={!configured || busy || !onRecoverPassword}
-            className="text-[#f0ece3] underline decoration-[#2a2a2a] underline-offset-4 transition-colors hover:decoration-[#e8820c] disabled:cursor-not-allowed disabled:opacity-40"
+            className="text-foreground decoration-border-subtle hover:decoration-primary underline underline-offset-4 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
           >
             Continue to reset it
           </button>{" "}
@@ -210,11 +215,11 @@ function LoginPanel({
         </p>
       )}
 
-      <p className="mt-8 text-sm font-light text-[#5a5550]">
+      <p className="text-muted-foreground mt-8 text-sm font-light">
         Prefer to keep browsing?{" "}
         <Link
           to="/"
-          className="text-[#f0ece3] underline decoration-[#2a2a2a] underline-offset-4 transition-colors hover:decoration-[#e8820c]"
+          className="text-foreground decoration-border-subtle hover:decoration-primary underline underline-offset-4 transition-colors"
         >
           Return to the market
         </Link>

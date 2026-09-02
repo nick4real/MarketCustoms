@@ -19,18 +19,18 @@ export default function MainLayout() {
     : [browseLink];
 
   return (
-    <div className="min-h-screen bg-[#080808]">
-      <nav className="fixed top-0 right-0 left-0 z-50 flex h-14 items-center border-b border-[#1e1e1e] bg-[#080808]/95 px-5 backdrop-blur-sm md:px-10">
+    <div className="bg-background min-h-screen">
+      <nav className="border-border bg-background/95 fixed top-0 right-0 left-0 z-50 flex h-14 items-center border-b px-5 backdrop-blur-sm md:px-10">
         <NavLink
           to="/"
           className="flex flex-1 items-center md:mr-14 md:flex-none"
           onClick={() => setMenuOpen(false)}
         >
           <span
-            className="text-[22px] leading-none font-black tracking-tighter text-[#f0ece3]"
+            className="text-foreground text-[22px] leading-none font-black tracking-tighter"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
-            MKT<span className="text-[#e8820c]">.</span>
+            MKT<span className="text-primary">.</span>
           </span>
         </NavLink>
 
@@ -42,8 +42,8 @@ export default function MainLayout() {
               className={({ isActive }) =>
                 `text-sm font-medium tracking-wide transition-colors duration-150 ${
                   isActive
-                    ? "text-[#f0ece3]"
-                    : "text-[#5a5550] hover:text-[#a09890]"
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground-muted"
                 }`
               }
             >
@@ -53,7 +53,7 @@ export default function MainLayout() {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="hidden text-[#5a5550] transition-colors hover:text-[#f0ece3] md:block">
+          <button className="text-muted-foreground hover:text-foreground hidden transition-colors md:block">
             <svg
               width="17"
               height="17"
@@ -67,7 +67,7 @@ export default function MainLayout() {
             </svg>
           </button>
 
-          <button className="relative text-[#5a5550] transition-colors hover:text-[#f0ece3]">
+          <button className="text-muted-foreground hover:text-foreground relative transition-colors">
             <svg
               width="17"
               height="17"
@@ -81,7 +81,7 @@ export default function MainLayout() {
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
             <span
-              className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#e8820c] text-[9px] font-bold text-[#080808]"
+              className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               3
@@ -91,7 +91,7 @@ export default function MainLayout() {
           <HeaderAccountControls />
 
           <button
-            className="p-1 text-[#5a5550] transition-colors hover:text-[#f0ece3] md:hidden"
+            className="text-muted-foreground hover:text-foreground p-1 transition-colors md:hidden"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -126,7 +126,7 @@ export default function MainLayout() {
       </nav>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 overflow-y-auto bg-[#080808] pt-14 md:hidden">
+        <div className="bg-background fixed inset-0 z-40 overflow-y-auto pt-14 md:hidden">
           <div className="flex flex-col px-6 pt-6 pb-10">
             {navLinks.map((link) => (
               <NavLink
@@ -134,8 +134,8 @@ export default function MainLayout() {
                 to={link.to}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center justify-between border-b border-[#1e1e1e] py-4 transition-colors ${
-                    isActive ? "text-[#e8820c]" : "text-[#f0ece3]"
+                  `border-border flex items-center justify-between border-b py-4 transition-colors ${
+                    isActive ? "text-primary" : "text-foreground"
                   }`
                 }
               >
@@ -149,7 +149,7 @@ export default function MainLayout() {
                     </span>
                     {isActive && (
                       <span
-                        className="text-xs text-[#e8820c]"
+                        className="text-primary text-xs"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         ●

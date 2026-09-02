@@ -2,19 +2,19 @@ import { Link, Outlet } from "react-router";
 
 export default function AuthLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#080808]">
+    <div className="bg-background flex min-h-screen flex-col">
       <header className="flex h-14 items-center justify-between px-5 md:px-10">
         <Link to="/" className="flex items-center">
           <span
-            className="text-[22px] leading-none font-black tracking-tighter text-[#f0ece3]"
+            className="text-foreground text-[22px] leading-none font-black tracking-tighter"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
-            MKT<span className="text-[#e8820c]">.</span>
+            MKT<span className="text-primary">.</span>
           </span>
         </Link>
         <Link
           to="/"
-          className="text-xs tracking-[0.15em] text-[#5a5550] uppercase transition-colors hover:text-[#a09890]"
+          className="text-muted-foreground hover:text-foreground-muted text-xs tracking-[0.15em] uppercase transition-colors"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           Back to market

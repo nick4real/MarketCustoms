@@ -11,12 +11,14 @@ import { isAuth0Configured } from "./auth0";
 import { mapAccount, type Auth0UserLike } from "./mapAccount";
 import { mapSessionError } from "./sessionError";
 
+// Fallback Session for when the Identity Provider (Auth0) configuration is missing
 export const missingConfigSession: VisitorSessionView = {
   status: "guest",
   account: null,
   error: mapSessionError({ missingConfig: true }),
 };
 
+// Function to convert the Auth0 status to the application's custom Visitor Session
 export function toVisitorSession(input: {
   isConfigured: boolean;
   isLoading: boolean;
@@ -57,6 +59,7 @@ export function toVisitorSession(input: {
 
 const VisitorSessionContext = createContext<VisitorSessionView | null>(null);
 
+// Boilerplate function to provide the Visitor Session
 export function ProvideVisitorSession({
   session,
   children,
@@ -71,6 +74,7 @@ export function ProvideVisitorSession({
   );
 }
 
+// Provider for the Auth0 Visitor Session
 export function Auth0VisitorSessionProvider({
   children,
 }: {
@@ -92,6 +96,7 @@ export function Auth0VisitorSessionProvider({
   return createElement(ProvideVisitorSession, { session, children });
 }
 
+// Hook to extract the visitor session
 export function useVisitorSession(): VisitorSessionView {
   const session = useContext(VisitorSessionContext);
   if (!session) {

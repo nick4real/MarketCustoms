@@ -15,7 +15,22 @@
   --color-accent: #f0c842;
   --color-accent-foreground: #080808;
   --color-border: #1e1e1e;
+  --color-border-subtle: #2a2a2a;
+  --color-border-hover: #2e2e2e;
+  --color-border-emphasis: #4a4540;
   --color-ring: #e8820c;
+
+  --color-surface: #0d0d0d;
+  --color-surface-inset: #0a0a0a;
+
+  --color-primary-hover: #cf7108;
+  --color-primary-subtle: #130e09;
+
+  --color-foreground-muted: #a09890;
+  --color-foreground-subtle: #3a3532;
+  --color-foreground-dim: #7a7570;
+
+  --color-destructive: #dc4040;
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Outfit", system-ui, sans-serif;

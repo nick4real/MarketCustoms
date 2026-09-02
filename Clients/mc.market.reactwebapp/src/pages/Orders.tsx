@@ -82,18 +82,18 @@ export default function Orders() {
     filter === "All" ? orders : orders.filter((o) => o.status === filter);
 
   return (
-    <div className="min-h-screen bg-[#080808] px-4 py-8 md:px-12 lg:px-16 lg:py-12">
+    <div className="bg-background min-h-screen px-4 py-8 md:px-12 lg:px-16 lg:py-12">
       {/* Header */}
       <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between lg:mb-10">
         <div>
           <h1
-            className="text-[32px] leading-none font-bold text-[#f0ece3] lg:text-[38px]"
+            className="text-foreground text-[32px] leading-none font-bold lg:text-[38px]"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
             Orders
           </h1>
           <p
-            className="mt-2 text-xs text-[#5a5550]"
+            className="text-muted-foreground mt-2 text-xs"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             {orders.length} total orders
@@ -102,7 +102,7 @@ export default function Orders() {
 
         {/* Filter tabs */}
         <div
-          className="flex gap-0.5 self-start overflow-x-auto border border-[#1e1e1e] bg-[#111] p-1 sm:self-auto"
+          className="border-border bg-card flex gap-0.5 self-start overflow-x-auto border p-1 sm:self-auto"
           style={{ borderRadius: "2px" }}
         >
           {filters.map((f) => (
@@ -111,8 +111,8 @@ export default function Orders() {
               onClick={() => setFilter(f)}
               className={`px-3 py-1.5 text-[10px] tracking-wide whitespace-nowrap transition-colors md:px-4 md:text-xs ${
                 filter === f
-                  ? "bg-[#f0ece3] font-bold text-[#080808]"
-                  : "text-[#5a5550] hover:text-[#a09890]"
+                  ? "bg-foreground text-primary-foreground font-bold"
+                  : "text-muted-foreground hover:text-foreground-muted"
               }`}
               style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
             >
@@ -130,7 +130,7 @@ export default function Orders() {
           return (
             <div
               key={order.id}
-              className="overflow-hidden border border-[#1e1e1e] bg-[#111] transition-colors hover:border-[#2a2a2a]"
+              className="border-border bg-card hover:border-border-subtle overflow-hidden border transition-colors"
               style={{ borderRadius: "2px" }}
             >
               {/* Row */}
@@ -140,7 +140,7 @@ export default function Orders() {
               >
                 {/* Image */}
                 <div
-                  className="h-12 w-12 shrink-0 overflow-hidden bg-[#0d0d0d] md:h-14 md:w-14"
+                  className="bg-surface h-12 w-12 shrink-0 overflow-hidden md:h-14 md:w-14"
                   style={{ borderRadius: "2px" }}
                 >
                   <img
@@ -154,24 +154,26 @@ export default function Orders() {
                 <div className="min-w-0 flex-1 text-left">
                   <div className="mb-0.5 flex items-center gap-2">
                     <span
-                      className="text-[10px] text-[#5a5550]"
+                      className="text-muted-foreground text-[10px]"
                       style={{ fontFamily: "DM Mono, monospace" }}
                     >
                       {order.id}
                     </span>
-                    <span className="hidden text-[#2a2a2a] sm:block">·</span>
+                    <span className="text-border-subtle hidden sm:block">
+                      ·
+                    </span>
                     <span
-                      className="hidden text-[10px] text-[#5a5550] sm:block"
+                      className="text-muted-foreground hidden text-[10px] sm:block"
                       style={{ fontFamily: "DM Mono, monospace" }}
                     >
                       {order.date}
                     </span>
                   </div>
-                  <div className="truncate text-sm font-medium text-[#f0ece3]">
+                  <div className="text-foreground truncate text-sm font-medium">
                     {order.item}
                   </div>
                   <div
-                    className="mt-0.5 hidden text-[10px] text-[#3a3532] sm:block"
+                    className="text-foreground-subtle mt-0.5 hidden text-[10px] sm:block"
                     style={{ fontFamily: "DM Mono, monospace" }}
                   >
                     from {order.seller} · {order.location}
@@ -194,13 +196,13 @@ export default function Orders() {
                 {/* Total + chevron */}
                 <div className="flex shrink-0 items-center gap-2">
                   <div
-                    className="text-lg font-bold text-[#f0ece3] md:text-xl"
+                    className="text-foreground text-lg font-bold md:text-xl"
                     style={{ fontFamily: "Fraunces, Georgia, serif" }}
                   >
                     ${order.total.toLocaleString()}
                   </div>
                   <div
-                    className="text-[#3a3532] transition-transform duration-200"
+                    className="text-foreground-subtle transition-transform duration-200"
                     style={{ transform: isOpen ? "rotate(180deg)" : "none" }}
                   >
                     <svg
@@ -231,7 +233,7 @@ export default function Orders() {
                   {order.status}
                 </span>
                 <span
-                  className="text-[10px] text-[#3a3532]"
+                  className="text-foreground-subtle text-[10px]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   {order.date}
@@ -240,17 +242,17 @@ export default function Orders() {
 
               {/* Expanded details */}
               {isOpen && (
-                <div className="border-t border-[#1e1e1e] px-4 pb-5 md:px-5">
+                <div className="border-border border-t px-4 pb-5 md:px-5">
                   <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-3 sm:gap-8">
                     <div>
                       <div
-                        className="mb-1.5 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+                        className="text-muted-foreground mb-1.5 text-[10px] tracking-[0.15em] uppercase"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         Tracking number
                       </div>
                       <div
-                        className="text-sm text-[#f0ece3]"
+                        className="text-foreground text-sm"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         {order.tracking}
@@ -258,13 +260,13 @@ export default function Orders() {
                     </div>
                     <div>
                       <div
-                        className="mb-1.5 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+                        className="text-muted-foreground mb-1.5 text-[10px] tracking-[0.15em] uppercase"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         Delivery
                       </div>
                       <div
-                        className="text-sm text-[#f0ece3]"
+                        className="text-foreground text-sm"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         {order.eta}
@@ -272,7 +274,7 @@ export default function Orders() {
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                       <button
-                        className="border border-[#2a2a2a] px-3 py-2 text-xs text-[#f0ece3] transition-colors hover:border-[#4a4540]"
+                        className="border-border-subtle text-foreground hover:border-border-emphasis border px-3 py-2 text-xs transition-colors"
                         style={{
                           borderRadius: "2px",
                           fontFamily: "DM Mono, monospace",
@@ -282,7 +284,7 @@ export default function Orders() {
                       </button>
                       {order.status === "Delivered" && (
                         <button
-                          className="bg-[#e8820c] px-3 py-2 text-xs font-bold text-[#080808] transition-colors hover:bg-[#cf7108]"
+                          className="bg-primary text-primary-foreground hover:bg-primary-hover px-3 py-2 text-xs font-bold transition-colors"
                           style={{
                             borderRadius: "2px",
                             fontFamily: "DM Mono, monospace",
@@ -303,13 +305,13 @@ export default function Orders() {
       {visible.length === 0 && (
         <div className="flex flex-col items-center justify-center py-24">
           <div
-            className="mb-4 text-5xl text-[#2a2a2a]"
+            className="text-border-subtle mb-4 text-5xl"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
             ∅
           </div>
           <p
-            className="text-xs tracking-widest text-[#3a3532]"
+            className="text-foreground-subtle text-xs tracking-widest"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             No orders with this status

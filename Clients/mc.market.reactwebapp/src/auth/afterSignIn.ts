@@ -5,6 +5,7 @@ import {
   sanitizeReturnTo,
 } from "./returnTo";
 
+// Function to normalize the destination path after sign in
 export function destinationAfterSignIn(
   returnTo: string | null | undefined,
   account: Pick<AccountView, "isFullyUsable"> | null,

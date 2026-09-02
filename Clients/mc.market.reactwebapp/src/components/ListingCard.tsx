@@ -17,10 +17,10 @@ export default function ListingCard({
   return (
     <Link
       to={`/listings/${listing.id}`}
-      className="group overflow-hidden border border-[#1e1e1e] bg-[#111] transition-all duration-200 hover:border-[#2e2e2e]"
+      className="group border-border bg-card hover:border-border-hover overflow-hidden border transition-all duration-200"
       style={{ borderRadius: "2px" }}
     >
-      <div className="aspect-[4/3] overflow-hidden bg-[#0d0d0d]">
+      <div className="bg-surface aspect-4/3 overflow-hidden">
         <img
           src={listingImageUrl(coverImage, 600, 450)}
           alt={listing.title}
@@ -29,11 +29,11 @@ export default function ListingCard({
       </div>
       <div className="p-4">
         <div className="mb-1.5 flex items-start justify-between">
-          <h3 className="flex-1 pr-2 text-sm leading-snug font-medium text-[#f0ece3]">
+          <h3 className="text-foreground flex-1 pr-2 text-sm leading-snug font-medium">
             {listing.title}
           </h3>
           <span
-            className="shrink-0 bg-[#1a1a1a] px-1.5 py-0.5 text-[10px] text-[#5a5550]"
+            className="bg-secondary text-muted-foreground shrink-0 px-1.5 py-0.5 text-[10px]"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             {listing.condition}
@@ -41,7 +41,7 @@ export default function ListingCard({
         </div>
         {showLocation && (
           <div
-            className="mb-3 text-[10px] text-[#3a3532]"
+            className="text-foreground-subtle mb-3 text-[10px]"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             {listing.location}
@@ -51,13 +51,13 @@ export default function ListingCard({
           className={`flex items-center justify-between ${showLocation ? "" : "mt-3"}`}
         >
           <span
-            className="text-xl font-bold text-[#f0ece3]"
+            className="text-foreground text-xl font-bold"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
             ${listing.price.toLocaleString()}
           </span>
           <span
-            className="text-xs text-[#5a5550]"
+            className="text-muted-foreground text-xs"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             {listing.seller}

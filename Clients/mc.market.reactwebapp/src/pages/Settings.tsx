@@ -24,7 +24,7 @@ function Field({
   return (
     <div>
       <label
-        className="mb-2 block text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+        className="text-muted-foreground mb-2 block text-[10px] tracking-[0.15em] uppercase"
         style={{ fontFamily: "DM Mono, monospace" }}
       >
         {label}
@@ -33,7 +33,7 @@ function Field({
         type={type}
         value={val}
         onChange={(e) => setVal(e.target.value)}
-        className="w-full border border-[#1e1e1e] bg-[#111] px-4 py-2.5 text-sm text-[#f0ece3] transition-colors focus:border-[#e8820c] focus:outline-none"
+        className="border-border bg-card text-foreground focus:border-primary w-full border px-4 py-2.5 text-sm transition-colors focus:outline-none"
         style={{ borderRadius: "2px", fontFamily: "Outfit, sans-serif" }}
       />
     </div>
@@ -51,11 +51,11 @@ function Toggle({
 }) {
   const [on, setOn] = useState(defaultOn);
   return (
-    <div className="flex items-center justify-between border-b border-[#1e1e1e] py-4 last:border-0">
+    <div className="border-border flex items-center justify-between border-b py-4 last:border-0">
       <div className="pr-6">
-        <div className="text-sm font-medium text-[#f0ece3]">{label}</div>
+        <div className="text-foreground text-sm font-medium">{label}</div>
         <div
-          className="mt-0.5 text-xs text-[#5a5550]"
+          className="text-muted-foreground mt-0.5 text-xs"
           style={{ fontFamily: "DM Mono, monospace" }}
         >
           {description}
@@ -70,7 +70,7 @@ function Toggle({
         }}
       >
         <div
-          className="absolute top-0.5 h-4 w-4 bg-[#f0ece3] transition-all duration-200"
+          className="bg-foreground absolute top-0.5 h-4 w-4 transition-all duration-200"
           style={{ borderRadius: "8px", left: on ? "22px" : "2px" }}
         />
       </button>
@@ -90,9 +90,9 @@ export default function Settings() {
   const initials = (firstName[0] ?? username[0] ?? "M").toUpperCase();
 
   return (
-    <div className="min-h-screen bg-[#080808]">
+    <div className="bg-background min-h-screen">
       {/* Mobile: horizontal scrollable tabs */}
-      <div className="overflow-x-auto border-b border-[#1e1e1e] px-4 md:hidden">
+      <div className="border-border overflow-x-auto border-b px-4 md:hidden">
         <div className="flex w-max gap-1 py-3">
           {sections.map((s) => (
             <button
@@ -100,8 +100,8 @@ export default function Settings() {
               onClick={() => setSection(s.id)}
               className={`px-4 py-1.5 text-sm whitespace-nowrap transition-colors ${
                 section === s.id
-                  ? "bg-[#e8820c] font-semibold text-[#080808]"
-                  : "border border-[#1e1e1e] text-[#5a5550] hover:text-[#a09890]"
+                  ? "bg-primary text-primary-foreground font-semibold"
+                  : "border-border text-muted-foreground hover:text-foreground-muted border"
               }`}
               style={{ borderRadius: "2px" }}
             >
@@ -113,9 +113,9 @@ export default function Settings() {
 
       <div className="flex">
         {/* Desktop sidebar */}
-        <aside className="sticky top-14 hidden h-[calc(100vh-56px)] w-52 shrink-0 self-start border-r border-[#1e1e1e] p-7 md:block">
+        <aside className="border-border sticky top-14 hidden h-[calc(100vh-56px)] w-52 shrink-0 self-start border-r p-7 md:block">
           <h2
-            className="mb-8 text-xl font-bold text-[#f0ece3]"
+            className="text-foreground mb-8 text-xl font-bold"
             style={{ fontFamily: "Fraunces, Georgia, serif" }}
           >
             Settings
@@ -127,8 +127,8 @@ export default function Settings() {
                 onClick={() => setSection(s.id)}
                 className={`px-3 py-2 text-left text-sm transition-colors ${
                   section === s.id
-                    ? "text-[#e8820c]"
-                    : "text-[#5a5550] hover:text-[#a09890]"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground-muted"
                 }`}
                 style={{ borderRadius: "2px" }}
               >
@@ -143,14 +143,14 @@ export default function Settings() {
           {section === "account" && (
             <div>
               <h3
-                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
+                className="text-foreground mb-7 text-[22px] font-bold md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Account
               </h3>
 
-              <div className="mb-8 flex flex-col gap-4 border-b border-[#1e1e1e] pb-8 sm:flex-row sm:items-center">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#1e1e1e] bg-[#1a1a1a] text-sm font-semibold text-[#a09890]">
+              <div className="border-border mb-8 flex flex-col gap-4 border-b pb-8 sm:flex-row sm:items-center">
+                <div className="border-border bg-secondary text-foreground-muted flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border text-sm font-semibold">
                   {account?.photoUrl ? (
                     <img
                       src={account.photoUrl}
@@ -165,13 +165,13 @@ export default function Settings() {
                 </div>
                 <div>
                   <button
-                    className="border border-[#2a2a2a] px-4 py-1.5 text-sm font-medium text-[#f0ece3] transition-colors hover:border-[#4a4540]"
+                    className="border-border-subtle text-foreground hover:border-border-emphasis border px-4 py-1.5 text-sm font-medium transition-colors"
                     style={{ borderRadius: "2px" }}
                   >
                     Change photo
                   </button>
                   <p
-                    className="mt-2 text-xs text-[#5a5550]"
+                    className="text-muted-foreground mt-2 text-xs"
                     style={{ fontFamily: "DM Mono, monospace" }}
                   >
                     PNG or JPG, max 5MB
@@ -193,7 +193,7 @@ export default function Settings() {
                 <Field label="Location" defaultValue="" />
                 <div>
                   <label
-                    className="mb-2 block text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+                    className="text-muted-foreground mb-2 block text-[10px] tracking-[0.15em] uppercase"
                     style={{ fontFamily: "DM Mono, monospace" }}
                   >
                     Bio
@@ -201,7 +201,7 @@ export default function Settings() {
                   <textarea
                     rows={3}
                     defaultValue="Based in Tokyo. I collect and sell considered objects."
-                    className="w-full resize-none border border-[#1e1e1e] bg-[#111] px-4 py-2.5 text-sm text-[#f0ece3] transition-colors focus:border-[#e8820c] focus:outline-none"
+                    className="border-border bg-card text-foreground focus:border-primary w-full resize-none border px-4 py-2.5 text-sm transition-colors focus:outline-none"
                     style={{
                       borderRadius: "2px",
                       fontFamily: "Outfit, sans-serif",
@@ -209,7 +209,7 @@ export default function Settings() {
                   />
                 </div>
                 <button
-                  className="w-full bg-[#e8820c] px-6 py-2.5 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108] sm:w-auto"
+                  className="bg-primary text-primary-foreground hover:bg-primary-hover w-full px-6 py-2.5 text-sm font-semibold transition-colors sm:w-auto"
                   style={{ borderRadius: "2px" }}
                 >
                   Save changes
@@ -221,7 +221,7 @@ export default function Settings() {
           {section === "notifications" && (
             <div>
               <h3
-                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
+                className="text-foreground mb-7 text-[22px] font-bold md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Notifications
@@ -262,53 +262,53 @@ export default function Settings() {
           {section === "payment" && (
             <div>
               <h3
-                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
+                className="text-foreground mb-7 text-[22px] font-bold md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Payment
               </h3>
-              <div className="mb-8 border-b border-[#1e1e1e] pb-8">
+              <div className="border-border mb-8 border-b pb-8">
                 <h4
-                  className="mb-4 text-[10px] tracking-[0.15em] text-[#5a5550] uppercase"
+                  className="text-muted-foreground mb-4 text-[10px] tracking-[0.15em] uppercase"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   Payment methods
                 </h4>
                 <div
-                  className="mb-3 flex items-center justify-between border border-[#1e1e1e] bg-[#111] p-4"
+                  className="border-border bg-card mb-3 flex items-center justify-between border p-4"
                   style={{ borderRadius: "2px" }}
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <div
-                      className="flex h-6 w-10 shrink-0 items-center justify-center bg-[#1a1a1a]"
+                      className="bg-secondary flex h-6 w-10 shrink-0 items-center justify-center"
                       style={{ borderRadius: "2px" }}
                     >
                       <span
-                        className="text-[9px] font-bold tracking-wider text-[#f0ece3]"
+                        className="text-foreground text-[9px] font-bold tracking-wider"
                         style={{ fontFamily: "DM Mono, monospace" }}
                       >
                         VISA
                       </span>
                     </div>
-                    <span className="truncate text-sm text-[#f0ece3]">
+                    <span className="text-foreground truncate text-sm">
                       •••• 4829
                     </span>
                     <span
-                      className="hidden text-xs text-[#5a5550] sm:block"
+                      className="text-muted-foreground hidden text-xs sm:block"
                       style={{ fontFamily: "DM Mono, monospace" }}
                     >
                       09/28
                     </span>
                   </div>
                   <span
-                    className="ml-2 shrink-0 text-xs text-[#e8820c]"
+                    className="text-primary ml-2 shrink-0 text-xs"
                     style={{ fontFamily: "DM Mono, monospace" }}
                   >
                     Primary
                   </span>
                 </div>
                 <button
-                  className="text-sm text-[#5a5550] transition-colors hover:text-[#f0ece3]"
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   + Add payment method
@@ -324,7 +324,7 @@ export default function Settings() {
           {section === "privacy" && (
             <div>
               <h3
-                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
+                className="text-foreground mb-7 text-[22px] font-bold md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Privacy
@@ -349,18 +349,18 @@ export default function Settings() {
                 description="Allow your profile to appear in web search"
                 defaultOn={false}
               />
-              <div className="mt-8 border-t border-[#1e1e1e] pt-8">
-                <div className="mb-1 text-sm font-medium text-[#f0ece3]">
+              <div className="border-border mt-8 border-t pt-8">
+                <div className="text-foreground mb-1 text-sm font-medium">
                   Data export
                 </div>
                 <p
-                  className="mb-4 text-xs text-[#5a5550]"
+                  className="text-muted-foreground mb-4 text-xs"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   Download a copy of all your MKT. data.
                 </p>
                 <button
-                  className="border border-[#2a2a2a] px-4 py-2 text-sm text-[#f0ece3] transition-colors hover:border-[#4a4540]"
+                  className="border-border-subtle text-foreground hover:border-border-emphasis border px-4 py-2 text-sm transition-colors"
                   style={{ borderRadius: "2px" }}
                 >
                   Request export
@@ -372,12 +372,12 @@ export default function Settings() {
           {section === "security" && (
             <div>
               <h3
-                className="mb-7 text-[22px] font-bold text-[#f0ece3] md:mb-8 md:text-[26px]"
+                className="text-foreground mb-7 text-[22px] font-bold md:mb-8 md:text-[26px]"
                 style={{ fontFamily: "Fraunces, Georgia, serif" }}
               >
                 Security
               </h3>
-              <div className="mb-10 space-y-5 border-b border-[#1e1e1e] pb-10">
+              <div className="border-border mb-10 space-y-5 border-b pb-10">
                 <Field
                   label="Current password"
                   defaultValue=""
@@ -390,7 +390,7 @@ export default function Settings() {
                   type="password"
                 />
                 <button
-                  className="w-full bg-[#e8820c] px-6 py-2.5 text-sm font-semibold text-[#080808] transition-colors hover:bg-[#cf7108] sm:w-auto"
+                  className="bg-primary text-primary-foreground hover:bg-primary-hover w-full px-6 py-2.5 text-sm font-semibold transition-colors sm:w-auto"
                   style={{ borderRadius: "2px" }}
                 >
                   Update password
@@ -401,18 +401,18 @@ export default function Settings() {
                 description="Require a code when signing in from a new device"
                 defaultOn={false}
               />
-              <div className="mt-8 border-t border-[#1e1e1e] pt-8">
-                <div className="mb-1 text-sm font-medium text-[#dc4040]">
+              <div className="border-border mt-8 border-t pt-8">
+                <div className="text-destructive mb-1 text-sm font-medium">
                   Danger zone
                 </div>
                 <p
-                  className="mb-4 text-xs text-[#5a5550]"
+                  className="text-muted-foreground mb-4 text-xs"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
                   Permanently delete your account and all associated data.
                 </p>
                 <button
-                  className="border border-[#dc4040]/30 px-4 py-2 text-sm text-[#dc4040] transition-colors hover:border-[#dc4040]/70"
+                  className="border-destructive/30 text-destructive hover:border-destructive/70 border px-4 py-2 text-sm transition-colors"
                   style={{ borderRadius: "2px" }}
                 >
                   Delete account
