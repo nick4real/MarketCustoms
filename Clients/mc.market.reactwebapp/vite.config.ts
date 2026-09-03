@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [plugin(), tailwindcss()],
     test: {
-      include: ["src/auth/**/*.test.ts"],
+      include: ["src/**/*.test.ts"],
       environment: "node",
     },
     server: {

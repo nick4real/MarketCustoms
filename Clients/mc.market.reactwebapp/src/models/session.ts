@@ -7,6 +7,8 @@ export interface AccountView {
   photoUrl: string | null;
   emailVerified: boolean;
   isFullyUsable: boolean;
+  profileId: string | null;
+  accountType: string | null;
 }
 
 export interface SessionErrorView {

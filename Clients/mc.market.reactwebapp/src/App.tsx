@@ -2,23 +2,17 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import { RouterProvider } from "react-router";
 import { router } from "./routes";
 import { getAuth0ProviderOptions, isAuth0Configured } from "./auth/auth0";
-import { destinationAfterSignIn } from "./auth/afterSignIn";
-import { mapAccount, type Auth0UserLike } from "./auth/mapAccount";
+import { savePostSignInReturnTo } from "./auth/postSignInReturnTo";
 import {
   Auth0VisitorSessionProvider,
   ProvideVisitorSession,
   missingConfigSession,
 } from "./auth/useVisitorSession";
 
-// Callback function to handle the redirect after sign in
-function onRedirectCallback(
-  appState?: { returnTo?: string },
-  user?: Auth0UserLike,
-) {
-  void router.navigate(
-    destinationAfterSignIn(appState?.returnTo, mapAccount(user)),
-    { replace: true },
-  );
+// Stay on /callback until the session provider has profile metadata.
+function onRedirectCallback(appState?: { returnTo?: string }) {
+  savePostSignInReturnTo(appState?.returnTo);
+  void router.navigate("/callback", { replace: true });
 }
 
 // Main App component

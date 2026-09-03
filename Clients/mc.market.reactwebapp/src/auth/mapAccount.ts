@@ -1,3 +1,4 @@
+import type { CurrentUserMetadata } from "../models/profile";
 import type { AccountView } from "../models/session";
 
 export type Auth0UserLike = {
@@ -9,7 +10,7 @@ export type Auth0UserLike = {
   email_verified?: boolean;
 };
 
-function nonEmpty(value: string | undefined): string | null {
+function nonEmpty(value: string | null | undefined): string | null {
   const trimmed = value?.trim();
   return trimmed ? trimmed : null;
 }
@@ -30,5 +31,24 @@ export function mapAccount(
     photoUrl: nonEmpty(user.picture),
     emailVerified,
     isFullyUsable: emailVerified,
+    profileId: null,
+    accountType: null,
+  };
+}
+
+export function displayNameForProfileEnsure(account: AccountView): string {
+  return account.displayName ?? "New member";
+}
+
+export function applyProfileMetadata(
+  account: AccountView,
+  metadata: CurrentUserMetadata,
+): AccountView {
+  return {
+    ...account,
+    displayName: nonEmpty(metadata.displayName) ?? account.displayName,
+    photoUrl: nonEmpty(metadata.pictureUrl),
+    profileId: nonEmpty(metadata.id),
+    accountType: nonEmpty(metadata.accountType),
   };
 }

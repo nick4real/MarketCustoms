@@ -13,6 +13,12 @@ const CALLBACK_FAILED: SessionErrorView = {
   canRetry: true,
 };
 
+const PROFILE_FAILED: SessionErrorView = {
+  code: "profile_failed",
+  message: "We couldn't load your account. You can try again.",
+  canRetry: true,
+};
+
 const GENERIC_RETRY: SessionErrorView = {
   code: "callback_failed",
   message: "Sign-in didn't complete. You can try again from this page.",
@@ -33,6 +39,9 @@ function visitorSafeAuth0Code(code: string): SessionErrorView {
   }
   if (code === "callback_failed") {
     return CALLBACK_FAILED;
+  }
+  if (code === "profile_failed") {
+    return PROFILE_FAILED;
   }
   return {
     code,
@@ -58,6 +67,7 @@ export function mapSessionError(input: {
   missingConfig?: boolean;
   auth0Error?: unknown;
   callbackFailed?: boolean;
+  profileFailed?: boolean;
   queryCode?: string | null;
 }): SessionErrorView | null {
   if (input.missingConfig) {
@@ -65,6 +75,9 @@ export function mapSessionError(input: {
   }
   if (input.callbackFailed) {
     return CALLBACK_FAILED;
+  }
+  if (input.profileFailed) {
+    return PROFILE_FAILED;
   }
   if (input.queryCode?.trim()) {
     return visitorSafeAuth0Code(input.queryCode.trim());

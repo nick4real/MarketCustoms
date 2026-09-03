@@ -3,6 +3,7 @@ import { Navigate, useNavigate, useSearchParams } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 import { isAuth0Configured } from "../auth/auth0";
 import { destinationAfterSignIn } from "../auth/afterSignIn";
+import { takePostSignInReturnTo } from "../auth/postSignInReturnTo";
 import { mapSessionError } from "../auth/sessionError";
 import { useVisitorSession } from "../auth/useVisitorSession";
 
@@ -28,8 +29,8 @@ function CallbackHandler() {
       return;
     }
 
-    if (error) {
-      const mapped = mapSessionError({ auth0Error: error });
+    if (error || session.error) {
+      const mapped = mapSessionError({ auth0Error: error }) ?? session.error;
       const code = mapped?.code ?? "callback_failed";
       void navigate(`/login?error=${encodeURIComponent(code)}`, {
         replace: true,
@@ -40,7 +41,7 @@ function CallbackHandler() {
     if (!hasCallbackParams) {
       const destination =
         session.status === "signed-in"
-          ? destinationAfterSignIn("/", session.account)
+          ? destinationAfterSignIn(takePostSignInReturnTo(), session.account)
           : "/login";
       void navigate(destination, { replace: true });
     }
@@ -50,6 +51,7 @@ function CallbackHandler() {
     isLoading,
     navigate,
     session.account,
+    session.error,
     session.status,
   ]);
 
@@ -59,16 +61,16 @@ function CallbackHandler() {
         className="text-primary text-[10px] tracking-[0.2em] uppercase"
         style={{ fontFamily: "DM Mono, monospace" }}
       >
-        {error ? "Returning you to sign in" : "Signing you in"}
+        {error || session.error ? "Returning you to sign in" : "Signing you in"}
       </p>
       <h1
         className="text-foreground mt-4 text-[32px] leading-none font-black tracking-tight"
         style={{ fontFamily: "Fraunces, Georgia, serif" }}
       >
-        {error ? "Almost back." : "One moment."}
+        {error || session.error ? "Almost back." : "One moment."}
       </h1>
       <p className="text-muted-foreground mt-4 text-sm font-light">
-        {error
+        {error || session.error
           ? "Sign-in didn't finish. You'll be able to try again."
           : "Finishing your session. You won't stay on this page."}
       </p>

@@ -13,6 +13,8 @@ const usableAccount: AccountView = {
   photoUrl: null,
   emailVerified: true,
   isFullyUsable: true,
+  profileId: "11111111-1111-1111-1111-111111111111",
+  accountType: "Basic",
 };
 
 const unverifiedAccount: AccountView = {
