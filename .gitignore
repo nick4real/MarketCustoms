@@ -276,7 +276,6 @@ node_modules/
 dist/
 build/
 coverage/
-.env*
 
 # Visual Studio 6 build log
 *.plg
