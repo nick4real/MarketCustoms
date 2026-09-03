@@ -19,12 +19,19 @@ public class ProfilesController(IProfileService profileService) : CustomControll
     }
 
     // TODO
-    [HttpPost("me")]
-    public async Task<IActionResult> ClarifyAccountTypeRequest(
+    [HttpPost("me/clarify-account-type")]
+    public async Task<IActionResult> ClarifyAccountType(
         [FromBody] ClarifyAccountTypeRequest request,
         CancellationToken ct)
     {
         var result = await profileService.ClarifyAccountType(request, ct);
+        return HandleResult(result);
+    }
+
+    [HttpPost("me/current-user-metadata")]
+    public async Task<IActionResult> GetAndEnsureCurrentUserMetadata(CurrentUserMetadataRequest request, CancellationToken ct)
+    {
+        var result = await profileService.GetAndEnsureCurrentUserProfile(request, ct);
         return HandleResult(result);
     }
 

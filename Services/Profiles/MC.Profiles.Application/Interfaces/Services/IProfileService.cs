@@ -8,5 +8,6 @@ public interface IProfileService
 {
     Task<Result<OwnerProfileResponse>> GetMe(CancellationToken ct);
     Task<Result<PublicProfileResponse>> GetProfileInfo(CancellationToken ct, Guid id);
+    Task<Result<CurrentUserMetadataResponse>> GetAndEnsureCurrentUserProfile(CurrentUserMetadataRequest request, CancellationToken ct);
     Task<Result<OwnerProfileResponse>> ClarifyAccountType(ClarifyAccountTypeRequest request, CancellationToken ct);
 }

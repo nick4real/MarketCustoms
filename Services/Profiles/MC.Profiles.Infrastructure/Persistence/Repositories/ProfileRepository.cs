@@ -7,16 +7,16 @@ namespace MC.Profiles.Infrastructure.Persistence.Repositories;
 
 public class ProfileRepository(AppRelationalDbContext relationalDbContext) : IProfileRepository
 {
-    public async Task<Profile?> GetProfileByExternalIdAsync(string externalId)
-        => await relationalDbContext.Profiles.FirstOrDefaultAsync(p => p.ExternalUserId == externalId);
+    public async Task<Profile?> GetProfileByExternalIdAsync(string externalId, CancellationToken ct)
+        => await relationalDbContext.Profiles.FirstOrDefaultAsync(p => p.ExternalUserId == externalId, ct);
 
-    public async Task<Profile?> GetProfileByIdAsync(Guid id)
-        => await relationalDbContext.Profiles.FirstOrDefaultAsync(p => p.Id == id);
+    public async Task<Profile?> GetProfileByIdAsync(Guid id, CancellationToken ct)
+        => await relationalDbContext.Profiles.FirstOrDefaultAsync(p => p.Id == id, ct);
 
-    public async Task CreateProfileAsync(Profile profile)
-        => await relationalDbContext.Profiles.AddAsync(profile);
+    public async Task CreateProfileAsync(Profile profile, CancellationToken ct)
+        => await relationalDbContext.Profiles.AddAsync(profile, ct);
 
-    public async Task<Profile> AddOrGetByExternalUserIdAsync(Profile profile)
+    public async Task<Profile> AddOrGetByExternalUserIdAsync(Profile profile, CancellationToken ct)
     {
         try
         {
@@ -27,7 +27,7 @@ public class ProfileRepository(AppRelationalDbContext relationalDbContext) : IPr
         catch (DbUpdateException exception) when (IsUniqueViolation(exception))
         {
             relationalDbContext.Entry(profile).State = EntityState.Detached;
-            var existing = await GetProfileByExternalIdAsync(profile.ExternalUserId);
+            var existing = await GetProfileByExternalIdAsync(profile.ExternalUserId, ct);
             if (existing is null)
                 throw;
 
@@ -35,8 +35,8 @@ public class ProfileRepository(AppRelationalDbContext relationalDbContext) : IPr
         }
     }
 
-    public async Task SaveChangesAsync()
-        => await relationalDbContext.SaveChangesAsync();
+    public async Task SaveChangesAsync(CancellationToken ct)
+        => await relationalDbContext.SaveChangesAsync(ct);
 
     private static bool IsUniqueViolation(DbUpdateException exception)
         => exception.InnerException is SqlException sql && sql.Number is 2601 or 2627;
