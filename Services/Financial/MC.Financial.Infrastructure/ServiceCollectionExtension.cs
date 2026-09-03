@@ -20,7 +20,7 @@ public static class ServiceCollectionExtension
                 }));
 
             services.AddHttpContextAccessor();
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
 
             return services;
         }

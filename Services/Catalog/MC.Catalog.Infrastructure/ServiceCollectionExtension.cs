@@ -25,7 +25,7 @@ public static class ServiceCollectionExtension
             services.AddSingleton<AppMongoDbContext>();
 
             services.AddHttpContextAccessor();
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
 
             // Options
             services.Configure<MongoDbOptions>(configuration);

@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace MC.Shared.Infrastructure.Services;
 
-public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
+public class Auth0CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {
     private ClaimsPrincipal? User => httpContextAccessor?.HttpContext?.User;
     public string? UserId => User?.FindFirstValue(ClaimTypes.NameIdentifier)
@@ -13,8 +13,5 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
     public string? Email => User?.FindFirstValue(ClaimTypes.Email)
         ?? User?.FindFirstValue("email");
 
-    public string? PhoneNumber => User?.FindFirstValue("phone_number");
-
     public bool IsAuthenticated => User?.Identity?.IsAuthenticated ?? false;
-    public bool IsSeller => User?.FindFirstValue("is_seller") == "true";
 }

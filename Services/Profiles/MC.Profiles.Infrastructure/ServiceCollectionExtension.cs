@@ -41,7 +41,7 @@ public static class ServiceCollectionExtension
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Services
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
             var useLocalTestIdentity = configuration.GetValue("Authentication:UseLocalTestIdentity", false);
             if (useLocalTestIdentity)
             {
