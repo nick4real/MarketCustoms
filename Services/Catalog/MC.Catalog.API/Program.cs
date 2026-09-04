@@ -2,6 +2,7 @@ using MC.Catalog.Application;
 using MC.Catalog.Infrastructure;
 using MC.Catalog.Infrastructure.Persistence;
 using MC.Shared.API;
+using MC.Shared.Infrastructure.Interfaces.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -35,17 +36,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 
-    await using (var serviceScope = app.Services.CreateAsyncScope())
-    await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppRelationalDbContext>())
-    {
-        var executionStrategy = dbContext.Database.CreateExecutionStrategy();
-
-        await executionStrategy.ExecuteAsync(async () =>
-        {
-            await dbContext.Database.EnsureDeletedAsync();
-            await dbContext.Database.EnsureCreatedAsync();
-        });
-    }
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<IDatabaseSeeder>();
+    await seeder.SeedAsync();
 }
 
 app.Run();
+

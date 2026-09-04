@@ -1,0 +1,9 @@
+{
+  "name": "microservices-root",
+  "private": true,
+  "scripts": {
+    "ef:add": "node ./scripts/ef.js add",
+    "ef:remove": "node ./scripts/ef.js remove",
+    "ef:list": "node ./scripts/ef.js list"
+  }
+}
