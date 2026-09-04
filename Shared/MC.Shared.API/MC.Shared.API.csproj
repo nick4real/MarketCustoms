@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+	<PackageReference Include="Auth0.AspNetCore.Authentication.Api" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MC.Shared.Application\MC.Shared.Application.csproj" />
     <ProjectReference Include="..\MC.Shared.Infrastructure\MC.Shared.Infrastructure.csproj" />
   </ItemGroup>
