@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useVisitorSession } from "../auth/useVisitorSession";
+import { useVisitorSession } from "@/features/auth";
 
 const listings = [
   {

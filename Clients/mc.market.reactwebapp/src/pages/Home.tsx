@@ -1,6 +1,5 @@
 ﻿import { Link } from "react-router";
-import { getTrendingListings } from "../api/listings";
-import ListingCard from "../components/ListingCard";
+import { getTrendingListings, ListingCard } from "@/features/listings";
 
 const categories = [
   { name: "Photography", count: 1842, glyph: "◎" },

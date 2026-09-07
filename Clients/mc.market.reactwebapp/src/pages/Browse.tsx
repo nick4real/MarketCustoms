@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { listings } from "../api/listings";
-import ListingCard from "../components/ListingCard";
+import { listings, ListingCard } from "@/features/listings";
 
 const categories = [
   "All",

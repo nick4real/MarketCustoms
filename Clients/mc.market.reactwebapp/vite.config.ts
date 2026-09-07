@@ -1,7 +1,11 @@
 /// <reference types="vitest/config" />
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig, loadEnv } from "vite";
 import plugin from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 // VITE_AUTH0_DOMAIN
 // VITE_AUTH0_CLIENT_ID
@@ -19,8 +23,13 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [plugin(), tailwindcss()],
+    resolve: {
+      alias: {
+        "@": path.resolve(projectRoot, "src"),
+      },
+    },
     test: {
-      include: ["src/**/*.test.ts"],
+      include: ["src/**/__tests__/**/*.test.ts"],
       environment: "node",
     },
     server: {

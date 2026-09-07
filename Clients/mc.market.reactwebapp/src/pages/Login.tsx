@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
-import { isAuth0Configured } from "../auth/auth0";
-import { parseAuthPageMode, type AuthPageMode } from "../auth/authPageMode";
-import { startHostedLogin } from "../auth/hostedLogin";
 import {
   emailVerificationPath,
+  isAuth0Configured,
   isPublicStorefrontPath,
+  mapSessionError,
+  parseAuthPageMode,
   sanitizeReturnTo,
-} from "../auth/returnTo";
-import { mapSessionError } from "../auth/sessionError";
-import { useVisitorSession } from "../auth/useVisitorSession";
+  startHostedLogin,
+  type AuthPageMode,
+  useVisitorSession,
+} from "@/features/auth";
 
 function modeCopy(mode: AuthPageMode): {
   title: string;

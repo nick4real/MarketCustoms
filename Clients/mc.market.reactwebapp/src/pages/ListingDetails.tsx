@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import { getListingById, getRelatedListings } from "../api/listings";
-import ListingCard from "../components/ListingCard";
-import { listingImageUrl, listingSku, sellerInitials } from "../models/listing";
+import {
+  getListingById,
+  getRelatedListings,
+  ListingCard,
+  listingImageUrl,
+  listingSku,
+  sellerInitials,
+} from "@/features/listings";
 
 function ListingGallery({
   images,

@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
-import { isAuth0Configured } from "../auth/auth0";
-import { destinationAfterSignIn } from "../auth/afterSignIn";
-import { takePostSignInReturnTo } from "../auth/postSignInReturnTo";
-import { mapSessionError } from "../auth/sessionError";
-import { useVisitorSession } from "../auth/useVisitorSession";
+import {
+  destinationAfterSignIn,
+  isAuth0Configured,
+  mapSessionError,
+  takePostSignInReturnTo,
+  useVisitorSession,
+} from "@/features/auth";
 
 export default function Callback() {
   if (!isAuth0Configured) {
