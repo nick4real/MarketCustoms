@@ -11,7 +11,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { ensureCurrentUserMetadata } from "@/features/auth/api/profiles";
 import type { CurrentUserMetadata } from "@/features/auth/types/profile";
 import type { VisitorSessionView } from "@/features/auth/types/session";
-import { isAuth0Configured } from "./auth0";
+import { isAuth0Configured } from "../config/auth0";
 import {
   applyProfileMetadata,
   displayNameForProfileEnsure,

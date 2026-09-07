@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseAuthPageMode } from "@/features/auth/lib/authPageMode";
+import { parseAuthPageMode } from "@/features/auth/lib/login/hostedLogin";
 
 describe("parseAuthPageMode", () => {
   it("parses sign-in", () => {
