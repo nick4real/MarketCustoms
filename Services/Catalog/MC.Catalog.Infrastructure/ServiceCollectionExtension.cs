@@ -33,7 +33,7 @@ public static class ServiceCollectionExtension
             services.Configure<MongoDbOptions>(configuration);
 
             // Repositories
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IListingRepository, ListingRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             return services;

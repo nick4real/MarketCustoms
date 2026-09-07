@@ -1,9 +1,9 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace MC.Catalog.Infrastructure.Models;
 
-public class ProductBson
+public class ListingBson
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

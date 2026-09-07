@@ -1,11 +1,11 @@
-﻿using FluentValidation;
+using FluentValidation;
 using MC.Catalog.Application.Models;
 
 namespace MC.Catalog.Application.Validators;
 
-public class ProductParamsValidator : AbstractValidator<ProductParams>
+public class ListingParamsValidator : AbstractValidator<ListingParams>
 {
-    public ProductParamsValidator()
+    public ListingParamsValidator()
     {
         RuleFor(p => p.CategoryId)
             .GreaterThan((uint)0)

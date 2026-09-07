@@ -15,12 +15,12 @@ public static class ServiceCollectionExtension
         public IServiceCollection AddApplication()
         {
             // Services
-            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IListingService, ListingService>();
             services.AddScoped<ICategoryService, CategoryService>();
 
             // Validators
-            services.AddValidatorsFromAssemblyContaining<ProductParamsValidator>();
-            services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
+            services.AddValidatorsFromAssemblyContaining<ListingParamsValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateListingValidator>();
             services.AddFluentValidationAutoValidation();
 
             return services;

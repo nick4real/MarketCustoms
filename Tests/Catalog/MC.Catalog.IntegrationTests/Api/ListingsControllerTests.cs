@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace MC.Catalog.IntegrationTests.Api;
 
 [Collection(CatalogAppCollection.Name)]
-public sealed class ProductsControllerTests
+public sealed class ListingsControllerTests
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -15,18 +15,18 @@ public sealed class ProductsControllerTests
 
     private readonly CatalogAppFixture _fixture;
 
-    public ProductsControllerTests(CatalogAppFixture fixture)
+    public ListingsControllerTests(CatalogAppFixture fixture)
     {
         _fixture = fixture;
     }
 
     [Fact]
-    public async Task Get_invalid_product_id_returns_400()
+    public async Task Get_invalid_listing_id_returns_400()
     {
         using var client = _fixture.CreateAnonymousClient();
         var cancellationToken = TestContext.Current.CancellationToken;
 
-        var response = await client.GetAsync("/Products/not-a-valid-id", cancellationToken);
+        var response = await client.GetAsync("/Listings/not-a-valid-id", cancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.Content.ReadFromJsonAsync<ErrorBody>(JsonOptions, cancellationToken);
@@ -35,17 +35,17 @@ public sealed class ProductsControllerTests
     }
 
     [Fact]
-    public async Task Create_product_without_auth_returns_401()
+    public async Task Create_listing_without_auth_returns_401()
     {
         using var client = _fixture.CreateAnonymousClient();
 
-        var response = await client.PostAsJsonAsync("/Products/create", NewProduct(1), TestContext.Current.CancellationToken);
+        var response = await client.PostAsJsonAsync("/Listings/create", NewListing(1), TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
     [Fact]
-    public async Task Authenticated_create_persists_product_in_isolated_stores()
+    public async Task Authenticated_create_persists_listing_in_isolated_stores()
     {
         using var anonymous = _fixture.CreateAnonymousClient();
         using var authenticated = _fixture.CreateAuthenticatedClient();
@@ -64,33 +64,33 @@ public sealed class ProductsControllerTests
         Assert.NotEmpty(categories);
         var categoryId = categories[0].Id;
 
-        var title = $"Integration Product {Guid.NewGuid():N}";
-        var createProduct = await authenticated.PostAsJsonAsync("/Products/create", NewProduct(categoryId, title), cancellationToken);
-        Assert.Equal(HttpStatusCode.OK, createProduct.StatusCode);
+        var title = $"Integration Listing {Guid.NewGuid():N}";
+        var createListing = await authenticated.PostAsJsonAsync("/Listings/create", NewListing(categoryId, title), cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, createListing.StatusCode);
 
-        var created = await createProduct.Content.ReadFromJsonAsync<ProductBody>(JsonOptions, cancellationToken);
-        var productId = created is { Id.Length: 24 } ? created.Id : await FindProductIdByTitle(anonymous, title, cancellationToken);
+        var created = await createListing.Content.ReadFromJsonAsync<ListingBody>(JsonOptions, cancellationToken);
+        var listingId = created is { Id.Length: 24 } ? created.Id : await FindListingIdByTitle(anonymous, title, cancellationToken);
 
-        var getResponse = await anonymous.GetAsync($"/Products/{productId}", cancellationToken);
+        var getResponse = await anonymous.GetAsync($"/Listings/{listingId}", cancellationToken);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
-        var fetched = await getResponse.Content.ReadFromJsonAsync<ProductBody>(JsonOptions, cancellationToken);
+        var fetched = await getResponse.Content.ReadFromJsonAsync<ListingBody>(JsonOptions, cancellationToken);
         Assert.NotNull(fetched);
         Assert.Equal(title, fetched.Title);
         Assert.Equal(categoryId, fetched.CategoryId);
     }
 
-    private static async Task<string> FindProductIdByTitle(HttpClient client, string title, CancellationToken cancellationToken)
+    private static async Task<string> FindListingIdByTitle(HttpClient client, string title, CancellationToken cancellationToken)
     {
-        var listResponse = await client.GetAsync("/Products", cancellationToken);
+        var listResponse = await client.GetAsync("/Listings", cancellationToken);
         listResponse.EnsureSuccessStatusCode();
-        var page = await listResponse.Content.ReadFromJsonAsync<ProductPage>(JsonOptions, cancellationToken);
+        var page = await listResponse.Content.ReadFromJsonAsync<ListingPage>(JsonOptions, cancellationToken);
         Assert.NotNull(page);
         var match = Assert.Single(page.Items, item => item.Title == title);
         Assert.False(string.IsNullOrWhiteSpace(match.Id));
         return match.Id;
     }
 
-    private static object NewProduct(uint categoryId, string title = "Unauthorized product") => new
+    private static object NewListing(uint categoryId, string title = "Unauthorized listing") => new
     {
         ownerId = CatalogAppFixture.LocalTestUserId,
         title,
@@ -105,7 +105,7 @@ public sealed class ProductsControllerTests
 
     private sealed record ErrorBody(int Code, string Message);
     private sealed record CategoryBody(uint Id, string Name);
-    private sealed record ProductBody(string Id, string Title, uint CategoryId);
-    private sealed record ProductPage(ProductItem[] Items);
-    private sealed record ProductItem(string Id, string Title);
+    private sealed record ListingBody(string Id, string Title, uint CategoryId);
+    private sealed record ListingPage(ListingItem[] Items);
+    private sealed record ListingItem(string Id, string Title);
 }

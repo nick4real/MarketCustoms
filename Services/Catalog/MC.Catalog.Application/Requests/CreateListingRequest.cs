@@ -1,6 +1,6 @@
-﻿namespace MC.Catalog.Application.Requests;
+namespace MC.Catalog.Application.Requests;
 
-public record CreateProductRequest(
+public record CreateListingRequest(
     string OwnerId,
     string Title,
     string Description,

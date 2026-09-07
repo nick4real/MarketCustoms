@@ -1,6 +1,6 @@
-﻿namespace MC.Catalog.Domain.Entities;
+namespace MC.Catalog.Domain.Entities;
 
-public class Product
+public class Listing
 {
     public string Id { get; set; } = string.Empty;
     public string OwnerId { get; set; } = string.Empty;

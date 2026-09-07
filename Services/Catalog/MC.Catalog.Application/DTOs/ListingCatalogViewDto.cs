@@ -1,6 +1,6 @@
-﻿namespace MC.Catalog.Domain.Views;
+namespace MC.Catalog.Application.DTOs;
 
-public record ProductCatalogView(
+public record ListingCatalogViewDto(
     string Id,
     string Title,
     string Description,

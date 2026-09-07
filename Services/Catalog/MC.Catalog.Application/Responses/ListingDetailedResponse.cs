@@ -1,9 +1,9 @@
-﻿using MC.Catalog.Application.DTOs;
+using MC.Catalog.Application.DTOs;
 using MC.Catalog.Domain.Entities;
 
 namespace MC.Catalog.Application.Responses;
 
-public record ProductDetailedResponse(
+public record ListingDetailedResponse(
     string Id,
     string Title,
     string Description,
@@ -14,4 +14,4 @@ public record ProductDetailedResponse(
     int StockQuantity,
     List<string> ImageLinks,
     List<string> Tags,
-    List<ProductParameterDto> Parameters);
+    List<ListingParameterDto> Parameters);
