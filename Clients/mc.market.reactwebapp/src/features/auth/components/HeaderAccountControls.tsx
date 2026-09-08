@@ -2,16 +2,16 @@ import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useLocation, useNavigate } from "react-router";
 import type { AccountView } from "@/features/auth/types/session";
-import { isAuth0Configured, logoutReturnTo } from "@/features/auth/lib/config/auth0";
-import type { AuthPageMode } from "@/features/auth/lib/login/authPageMode";
+import { isAuth0Configured, logoutReturnTo } from "@/features/auth/lib/auth0";
+import type { AuthPageMode } from "@/features/auth/lib/authPageMode";
 import {
   showAccountNav,
   showGuestAuthActions,
   showIdentityControl,
-} from "@/features/auth/lib/ui/chrome";
-import { startHostedLogin } from "@/features/auth/lib/login/hostedLogin";
-import { sanitizeReturnTo } from "@/features/auth/lib/navigation/returnTo";
-import { useVisitorSession } from "@/features/auth/lib/session/useVisitorSession";
+} from "@/features/auth/lib/chrome";
+import { startHostedLogin } from "@/features/auth/lib/hostedLogin";
+import { sanitizeReturnTo } from "@/features/auth/lib/returnTo";
+import { useVisitorSession } from "@/features/auth/lib/useVisitorSession";
 
 const protectedPaths = new Set(["/profile", "/orders", "/settings"]);
 

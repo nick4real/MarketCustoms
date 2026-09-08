@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mapSessionError } from "@/features/auth/lib/session/sessionError";
+import { mapSessionError } from "@/features/auth/lib/sessionError";
 
 describe("mapSessionError", () => {
   it("maps a profile load failure", () => {

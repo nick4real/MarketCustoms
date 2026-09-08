@@ -3,7 +3,7 @@ import {
   applyProfileMetadata,
   displayNameForProfileEnsure,
   mapAccount,
-} from "@/features/auth/lib/session/mapAccount";
+} from "@/features/auth/lib/mapAccount";
 
 describe("mapAccount", () => {
   it("maps sub, name, and picture", () => {

@@ -3,7 +3,7 @@ import {
   postSignInReturnToKey,
   savePostSignInReturnTo,
   takePostSignInReturnTo,
-} from "@/features/auth/lib/navigation/postSignInReturnTo";
+} from "@/features/auth/lib/postSignInReturnTo";
 
 const memory = new Map<string, string>();
 

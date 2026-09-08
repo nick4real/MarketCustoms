@@ -5,28 +5,28 @@ export {
   ProvideVisitorSession,
   missingConfigSession,
   useVisitorSession,
-} from "@/features/auth/lib/session/useVisitorSession";
+} from "@/features/auth/lib/useVisitorSession";
 export {
   getAuth0ProviderOptions,
   isAuth0Configured,
-} from "@/features/auth/lib/config/auth0";
-export { savePostSignInReturnTo } from "@/features/auth/lib/navigation/postSignInReturnTo";
-export { destinationAfterSignIn } from "@/features/auth/lib/navigation/afterSignIn";
-export { takePostSignInReturnTo } from "@/features/auth/lib/navigation/postSignInReturnTo";
-export { mapSessionError } from "@/features/auth/lib/session/sessionError";
+} from "@/features/auth/lib/auth0";
+export { savePostSignInReturnTo } from "@/features/auth/lib/postSignInReturnTo";
+export { destinationAfterSignIn } from "@/features/auth/lib/afterSignIn";
+export { takePostSignInReturnTo } from "@/features/auth/lib/postSignInReturnTo";
+export { mapSessionError } from "@/features/auth/lib/sessionError";
 export {
   showAccountNav,
   showGuestAuthActions,
   showIdentityControl,
-} from "@/features/auth/lib/ui/chrome";
-export { parseAuthPageMode } from "@/features/auth/lib/login/authPageMode";
-export { startHostedLogin } from "@/features/auth/lib/login/hostedLogin";
+} from "@/features/auth/lib/chrome";
+export { parseAuthPageMode } from "@/features/auth/lib/authPageMode";
+export { startHostedLogin } from "@/features/auth/lib/hostedLogin";
 export {
   emailVerificationPath,
   isPublicStorefrontPath,
   sanitizeReturnTo,
-} from "@/features/auth/lib/navigation/returnTo";
-export type { AuthPageMode } from "@/features/auth/lib/login/authPageMode";
+} from "@/features/auth/lib/returnTo";
+export type { AuthPageMode } from "@/features/auth/lib/authPageMode";
 export type {
   AccountView,
   VisitorSessionView,

@@ -1,17 +1,10 @@
-import { sanitizeReturnTo } from "../navigation/returnTo";
+import type { AuthPageMode } from "./authPageMode";
+import { sanitizeReturnTo } from "./returnTo";
 
 export type HostedLoginRedirect = (options: {
   appState: { returnTo: string };
   authorizationParams?: { screen_hint: "signup" };
 }) => Promise<void>;
-
-export type AuthPageMode = "sign-in" | "sign-up";
-
-export function parseAuthPageMode(
-  value: string | null | undefined,
-): AuthPageMode {
-  return value === "sign-up" ? "sign-up" : "sign-in";
-}
 
 export function buildHostedLoginOptions(
   mode: AuthPageMode,
