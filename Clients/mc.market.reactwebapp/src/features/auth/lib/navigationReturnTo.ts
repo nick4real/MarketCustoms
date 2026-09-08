@@ -81,3 +81,44 @@ export function isPublicStorefrontPath(value: string): boolean {
   const path = pathAndQuery(sanitizeReturnTo(value)).path;
   return path === "/" || path === "/browse" || path.startsWith("/listings/");
 }
+
+export const postSignInReturnToKey = "mc.postSignInReturnTo";
+
+function sessionStore(): Storage | null {
+  try {
+    return globalThis.sessionStorage;
+  } catch {
+    return null;
+  }
+}
+
+export function savePostSignInReturnTo(
+  returnTo: string | null | undefined,
+): void {
+  sessionStore()?.setItem(postSignInReturnToKey, sanitizeReturnTo(returnTo));
+}
+
+export function takePostSignInReturnTo(): string {
+  const store = sessionStore();
+  const stored = store?.getItem(postSignInReturnToKey);
+  store?.removeItem(postSignInReturnToKey);
+  return sanitizeReturnTo(stored);
+}
+
+import type { AccountView } from "@/features/auth/types/session";
+
+// Function to normalize the destination path after sign in
+export function destinationAfterSignIn(
+  returnTo: string | null | undefined,
+  account: Pick<AccountView, "isFullyUsable"> | null,
+): string {
+  const sanitized = sanitizeReturnTo(returnTo);
+
+  if (account && !account.isFullyUsable) {
+    return isPublicStorefrontPath(sanitized)
+      ? emailVerificationPath
+      : sanitized;
+  }
+
+  return sanitized;
+}

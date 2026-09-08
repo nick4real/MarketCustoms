@@ -8,9 +8,9 @@ import {
   showAccountNav,
   showGuestAuthActions,
   showIdentityControl,
-} from "@/features/auth/lib/chrome";
+} from "@/features/auth/lib/sessionChrome";
 import { startHostedLogin } from "@/features/auth/lib/hostedLogin";
-import { sanitizeReturnTo } from "@/features/auth/lib/returnTo";
+import { sanitizeReturnTo } from "@/features/auth/lib/navigationReturnTo";
 import { useVisitorSession } from "@/features/auth/lib/useVisitorSession";
 
 const protectedPaths = new Set(["/profile", "/orders", "/settings"]);

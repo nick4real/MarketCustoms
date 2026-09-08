@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { destinationAfterSignIn } from "@/features/auth/lib/afterSignIn";
-import { emailVerificationPath } from "@/features/auth/lib/returnTo";
+import { emailVerificationPath } from "@/features/auth/lib/navigationReturnTo";
 
 describe("destinationAfterSignIn", () => {
   it("sends an unverified account to the inbox notice after login from a public page", () => {

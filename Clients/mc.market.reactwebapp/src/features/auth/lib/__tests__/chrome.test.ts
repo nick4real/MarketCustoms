@@ -3,7 +3,7 @@ import {
   showAccountNav,
   showGuestAuthActions,
   showIdentityControl,
-} from "@/features/auth/lib/chrome";
+} from "@/features/auth/lib/sessionChrome";
 import type {
   AccountView,
   VisitorSessionView,

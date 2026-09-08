@@ -18,14 +18,14 @@ export {
   showAccountNav,
   showGuestAuthActions,
   showIdentityControl,
-} from "@/features/auth/lib/chrome";
+} from "@/features/auth/lib/sessionChrome";
 export { parseAuthPageMode } from "@/features/auth/lib/authPageMode";
 export { startHostedLogin } from "@/features/auth/lib/hostedLogin";
 export {
   emailVerificationPath,
   isPublicStorefrontPath,
   sanitizeReturnTo,
-} from "@/features/auth/lib/returnTo";
+} from "@/features/auth/lib/navigationReturnTo";
 export type { AuthPageMode } from "@/features/auth/lib/authPageMode";
 export type {
   AccountView,
