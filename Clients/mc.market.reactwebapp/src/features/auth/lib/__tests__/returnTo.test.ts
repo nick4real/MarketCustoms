@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   isPublicStorefrontPath,
   sanitizeReturnTo,
-} from "@/features/auth/lib/navigationReturnTo";
+} from "@/features/auth/lib/returnTo/paths";
 
 describe("sanitizeReturnTo", () => {
   it.each([

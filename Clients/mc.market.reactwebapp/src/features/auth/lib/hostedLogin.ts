@@ -1,12 +1,5 @@
-import { sanitizeReturnTo } from "./navigationReturnTo";
-
-export type AuthPageMode = "sign-in" | "sign-up";
-
-export function parseAuthPageMode(
-  value: string | null | undefined,
-): AuthPageMode {
-  return value === "sign-up" ? "sign-up" : "sign-in";
-}
+import type { AuthPageMode } from "./authPageMode";
+import { sanitizeReturnTo } from "./returnTo/paths";
 
 export type HostedLoginRedirect = (options: {
   appState: { returnTo: string };
@@ -30,7 +23,6 @@ export function buildHostedLoginOptions(
   return { appState: { returnTo: sanitized } };
 }
 
-// Delegated function to start the hosted login flow
 export async function startHostedLogin(
   loginWithRedirect: HostedLoginRedirect,
   mode: AuthPageMode,

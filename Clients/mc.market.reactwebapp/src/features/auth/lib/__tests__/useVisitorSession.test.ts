@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { toVisitorSession } from "@/features/auth/lib/useVisitorSession";
+import { toVisitorSession } from "@/features/auth/lib/visitorSessionView";
 
 const user = {
   sub: "auth0|123",

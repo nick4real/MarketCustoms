@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import EmailVerificationNotice from "./EmailVerificationNotice";
-import { sanitizeReturnTo } from "@/features/auth/lib/navigationReturnTo";
+import { sanitizeReturnTo } from "@/features/auth/lib/returnTo";
 import { useVisitorSession } from "@/features/auth/lib/useVisitorSession";
 
 export function AccountGate() {

@@ -10,7 +10,7 @@ import {
   showIdentityControl,
 } from "@/features/auth/lib/sessionChrome";
 import { startHostedLogin } from "@/features/auth/lib/hostedLogin";
-import { sanitizeReturnTo } from "@/features/auth/lib/navigationReturnTo";
+import { sanitizeReturnTo } from "@/features/auth/lib/returnTo";
 import { useVisitorSession } from "@/features/auth/lib/useVisitorSession";
 
 const protectedPaths = new Set(["/profile", "/orders", "/settings"]);
