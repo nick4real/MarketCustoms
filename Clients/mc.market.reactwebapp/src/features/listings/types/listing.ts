@@ -1,25 +1,44 @@
-export type ListingParameter = {
+export interface ListingParameter {
   name: string;
   value: string;
-};
+}
 
-export type Listing = {
+export interface Category {
   id: number;
+  name: string;
+}
+
+export interface Listing {
+  id: string;
+  ownerId: string;
   title: string;
-  price: number;
-  category: string;
-  condition: string;
-  seller: string;
-  images: string[];
-  location: string;
   description: string;
+  categoryId: number;
+  category: Category;
+  createdAt: string;
+  price: number;
+  stock: number;
+  images: string[];
   tags: string[];
   parameters: ListingParameter[];
-  listedAt: string;
-  stock: number;
-  sellerRating: number;
-  sellerSales: number;
-};
+}
+
+export interface ListingView {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  imageId: string;
+}
+
+export interface ListingPaginatedResponse {
+  items: ListingView[];
+  pageSize: number;
+  pageIndex: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
 
 export function listingImageUrl(
   photoId: string,

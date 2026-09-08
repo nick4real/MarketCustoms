@@ -1,12 +1,16 @@
 export { default as ListingCard } from "@/features/listings/components/ListingCard";
 export {
-  getListingById,
-  getRelatedListings,
-  getTrendingListings,
-  listings,
-} from "@/features/listings/api/listings";
+  createCategory,
+  getCategoryById,
+  getCategoryFullTree,
+  getCategoryWithChildren,
+  getRootCategories,
+} from "@/features/listings/api/categories";
+export { getListings, getListingById } from "@/features/listings/api/listings";
 export type {
   Listing,
+  ListingView,
+  ListingPaginatedResponse,
   ListingParameter,
 } from "@/features/listings/types/listing";
 export {

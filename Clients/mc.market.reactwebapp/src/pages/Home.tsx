@@ -1,5 +1,5 @@
 ﻿import { Link } from "react-router";
-import { getTrendingListings, ListingCard } from "@/features/listings";
+import { getListings, ListingCard } from "@/features/listings";
 
 const categories = [
   { name: "Photography", count: 1842, glyph: "◎" },
@@ -10,7 +10,9 @@ const categories = [
   { name: "Vintage", count: 4127, glyph: "◉" },
 ];
 
-const trending = getTrendingListings();
+const trending = await getListings({ pageIndex: 0, pageSize: 4 }).then(
+  (response) => response.items,
+);
 
 export default function Home() {
   return (

@@ -13,6 +13,15 @@ export interface Category {
   name: string;
 }
 
+export interface CategoryNode extends Category {
+  childCategories?: CategoryNode[];
+}
+
+export interface CreateCategoryPayload {
+  name: string;
+  parentId?: number | null;
+}
+
 export interface ProductParameter {
   name: string;
   value: string;

@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { listings, ListingCard } from "@/features/listings";
+import { useState, useEffect } from "react";
+import {
+  getListings,
+  ListingCard,
+  type ListingPaginatedResponse,
+} from "@/features/listings";
 
 const categories = [
   "All",
@@ -138,15 +142,22 @@ export default function Browse() {
   const [search, setSearch] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const filtered = listings.filter((p) => {
-    const matchCat =
-      selectedCategory === "All" || p.category === selectedCategory;
-    const matchCond =
-      selectedCondition === "Any" || p.condition === selectedCondition;
-    const matchSearch =
-      !search || p.title.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchCond && matchSearch;
+  const [listings, setListings] = useState<ListingPaginatedResponse>({
+    items: [],
+    pageSize: 0,
+    pageIndex: 0,
+    totalPages: 0,
+    hasNextPage: false,
+    hasPreviousPage: false,
   });
+
+  useEffect(() => {
+    getListings().then((response) => {
+      setListings(response);
+    });
+  }, []);
+
+  const filtered = listings.items;
 
   const activeFilters =
     (selectedCategory !== "All" ? 1 : 0) +

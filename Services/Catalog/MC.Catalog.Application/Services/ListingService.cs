@@ -90,7 +90,10 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
             listing.Title,
             listing.Description,
             listing.CategoryId,
-            listing.Category,
+            new CategoryDto(
+                listing.Category.Id, 
+                listing.Category.Name, 
+                null),
             listing.CreatedAt.UtcDateTime,
             listing.Price,
             listing.StockQuantity,

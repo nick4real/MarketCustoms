@@ -1,17 +1,17 @@
 using MC.Catalog.Application.DTOs;
-using MC.Catalog.Domain.Entities;
 
 namespace MC.Catalog.Application.Responses;
 
 public record ListingDetailedResponse(
+    Guid OwnerId,
     string Id,
     string Title,
     string Description,
     uint CategoryId,
-    Category Category,
+    CategoryDto Category,
     DateTime CreatedAt,
     decimal Price,
-    int StockQuantity,
-    List<string> ImageLinks,
+    int Stock,
+    List<string> Images,
     List<string> Tags,
     List<ListingParameterDto> Parameters);

@@ -5,4 +5,4 @@ public record ListingCatalogViewDto(
     string Title,
     string Description,
     decimal Price,
-    string ImageLink);
+    string ImageId);

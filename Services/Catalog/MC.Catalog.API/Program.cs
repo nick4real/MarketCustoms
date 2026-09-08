@@ -1,9 +1,7 @@
 using MC.Catalog.Application;
 using MC.Catalog.Infrastructure;
-using MC.Catalog.Infrastructure.Persistence;
 using MC.Shared.API;
 using MC.Shared.Infrastructure.Interfaces.Persistence;
-using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 // Builder

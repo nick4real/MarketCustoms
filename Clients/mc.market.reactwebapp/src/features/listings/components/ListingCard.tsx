@@ -1,15 +1,15 @@
 import { Link } from "react-router";
-import type { Listing } from "@/features/listings/types/listing";
+import { type ListingView } from "@/features/listings";
 import { listingImageUrl } from "@/features/listings/types/listing";
 
 export default function ListingCard({
   listing,
   showLocation = false,
 }: {
-  listing: Listing;
+  listing: ListingView;
   showLocation?: boolean;
 }) {
-  const coverImage = listing.images[0];
+  const coverImage = listing.imageId;
   if (!coverImage) {
     return null;
   }
@@ -36,7 +36,7 @@ export default function ListingCard({
             className="bg-secondary text-muted-foreground shrink-0 px-1.5 py-0.5 text-[10px]"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
-            {listing.condition}
+            {"New"}
           </span>
         </div>
         {showLocation && (
@@ -44,7 +44,7 @@ export default function ListingCard({
             className="text-foreground-subtle mb-3 text-[10px]"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
-            {listing.location}
+            {"United States"}
           </div>
         )}
         <div
@@ -60,7 +60,7 @@ export default function ListingCard({
             className="text-muted-foreground text-xs"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
-            {listing.seller}
+            {"John Doe"}
           </span>
         </div>
       </div>
