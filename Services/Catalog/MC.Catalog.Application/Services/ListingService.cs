@@ -1,3 +1,4 @@
+using MC.Catalog.Application.Common;
 using MC.Catalog.Application.DTOs;
 using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Application.Interfaces.Services;
@@ -7,6 +8,7 @@ using MC.Catalog.Application.Responses;
 using MC.Catalog.Domain.Entities;
 using MC.Catalog.Domain.Views;
 using MC.Shared.Application.Common;
+using MC.Shared.Application.Requests;
 
 namespace MC.Catalog.Application.Services;
 
@@ -14,7 +16,7 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
 {
     public async Task<Result<ListingDetailedResponse>> GetDetailedListingByIdAsync(string id, CancellationToken ct)
     {
-        if (id.Length != 24)
+        if (id.Length != FieldConstraints.MongoDbKeySize)
         {
             return Result<ListingDetailedResponse>.Failure(new Error(ErrorCode.ValidationFailed, "Invalid listing ID format."));
         }
@@ -28,7 +30,7 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
         return Result<ListingDetailedResponse>.Success(MapListingDetailedResponse(listing));
     }
 
-    public async Task<Result<PaginatedResponse<ListingCatalogViewDto>>> GetListingsAsync(CancellationToken ct, PaginationParams paginationParams, ListingParams? listingParams)
+    public async Task<Result<ListingsPaginatedResponse<ListingCardViewDto>>> GetListingsAsync(CancellationToken ct, PaginationParams paginationParams, ListingParams? listingParams)
     {
         int skip = (paginationParams.PageIndex - 1) * paginationParams.PageSize;
         int take = paginationParams.PageSize;
@@ -40,7 +42,7 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
         bool hasPreviousPage = paginationParams.PageIndex > 1;
         bool hasNextPage = (paginationParams.PageIndex * paginationParams.PageSize) < pagedListings.TotalItems;
 
-        return Result<PaginatedResponse<ListingCatalogViewDto>>.Success(new PaginatedResponse<ListingCatalogViewDto>(
+        return Result<ListingsPaginatedResponse<ListingCardViewDto>>.Success(new ListingsPaginatedResponse<ListingCardViewDto>(
             pagedListings.Items.Select(MapCatalogView).ToArray(),
             paginationParams.PageSize,
             paginationParams.PageIndex,
@@ -55,11 +57,19 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
         {
             var listing = new Listing
             {
-                OwnerId = request.OwnerId,
+                OwnerGuid = request.OwnerGuid,
                 Title = request.Title,
                 Description = request.Description,
                 CategoryId = request.CategoryId,
                 Category = new Category { Id = request.CategoryId, Name = string.Empty },
+                Location = new Location {
+                    Country = request.Location.Country,
+                    Region = request.Location.Region,
+                    City = request.Location.City,
+                    District = request.Location.District,
+                    Latitude = request.Location.Latitude,
+                    Longitude = request.Location.Longitude
+                },
                 Price = request.Price,
                 StockQuantity = request.StockQuantity,
                 ImageLinks = request.ImageLinks ?? [],
@@ -76,7 +86,22 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
         }
     }
 
-    private static ListingCatalogViewDto MapCatalogView(ListingCatalogView view)
+    private static LocationDto MapLocation(Location location)
+        => new(
+            location.Country,
+            location.Region,
+            location.City,
+            location.District,
+            location.Latitude,
+            location.Longitude);
+
+    private static CategoryDto MapCategory(Category category)
+        => new(
+            category.Id,
+            category.Name,
+            category.ChildCategories?.Select(MapCategory).ToList());
+
+    private static ListingCardViewDto MapCatalogView(ListingCardView view)
         => new(
             view.Id,
             view.Title,
@@ -86,18 +111,17 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
 
     private static ListingDetailedResponse MapListingDetailedResponse(Listing listing)
         => new(
+            listing.OwnerGuid,
             listing.Id,
             listing.Title,
             listing.Description,
             listing.CategoryId,
-            new CategoryDto(
-                listing.Category.Id, 
-                listing.Category.Name, 
-                null),
+            MapCategory(listing.Category),
+            MapLocation(listing.Location),
             listing.CreatedAt.UtcDateTime,
             listing.Price,
             listing.StockQuantity,
             listing.ImageLinks ?? [],
             listing.Tags ?? [],
-            listing.Parameters.Select(parameter => new ListingParameterDto(parameter.Item1, parameter.Item2)).ToList());
+            listing.Parameters ?? []);
 }

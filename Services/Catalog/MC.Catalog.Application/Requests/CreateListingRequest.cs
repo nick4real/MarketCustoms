@@ -1,10 +1,13 @@
+using MC.Catalog.Application.DTOs;
+
 namespace MC.Catalog.Application.Requests;
 
 public record CreateListingRequest(
-    string OwnerId,
+    Guid OwnerGuid,
     string Title,
     string Description,
     uint CategoryId,
+    LocationDto Location,
     decimal Price,
     int StockQuantity,
     List<string> ImageLinks,

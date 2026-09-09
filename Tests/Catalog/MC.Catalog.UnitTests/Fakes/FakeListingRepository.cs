@@ -9,7 +9,7 @@ internal sealed class FakeListingRepository : IListingRepository
 {
     private readonly List<Listing> _listings = [];
 
-    public Task<PagedList<ListingCatalogView>> GetListingsCatalogViewAsync(
+    public Task<PagedCollection<ListingCardView>> GetListingsCatalogViewAsync(
         int skip,
         int take,
         CancellationToken ct,
@@ -18,7 +18,7 @@ internal sealed class FakeListingRepository : IListingRepository
         var views = _listings
             .Skip(skip)
             .Take(take)
-            .Select(listing => new ListingCatalogView(
+            .Select(listing => new ListingCardView(
                 listing.Id,
                 listing.Title,
                 listing.Description,
@@ -26,7 +26,7 @@ internal sealed class FakeListingRepository : IListingRepository
                 listing.ImageLinks.FirstOrDefault() ?? string.Empty))
             .ToArray();
 
-        return Task.FromResult(new PagedList<ListingCatalogView>(views, _listings.Count));
+        return Task.FromResult(new PagedCollection<ListingCardView>(views, _listings.Count));
     }
 
     public Task<Listing?> GetListingByIdAsync(string id, CancellationToken ct)

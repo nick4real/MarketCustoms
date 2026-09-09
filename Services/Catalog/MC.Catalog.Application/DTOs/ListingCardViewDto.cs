@@ -1,6 +1,6 @@
 namespace MC.Catalog.Application.DTOs;
 
-public record ListingCatalogViewDto(
+public record ListingCardViewDto(
     string Id,
     string Title,
     string Description,

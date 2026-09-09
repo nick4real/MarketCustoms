@@ -1,6 +1,6 @@
 namespace MC.Catalog.Domain.Views;
 
-public record ListingCatalogView(
+public record ListingCardView(
     string Id,
     string Title,
     string Description,

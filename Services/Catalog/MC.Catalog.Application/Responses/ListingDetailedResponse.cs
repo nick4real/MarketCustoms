@@ -9,9 +9,10 @@ public record ListingDetailedResponse(
     string Description,
     uint CategoryId,
     CategoryDto Category,
+    LocationDto Location,
     DateTime CreatedAt,
     decimal Price,
     int Stock,
     List<string> Images,
     List<string> Tags,
-    List<ListingParameterDto> Parameters);
+    List<Tuple<string, string>> Parameters);

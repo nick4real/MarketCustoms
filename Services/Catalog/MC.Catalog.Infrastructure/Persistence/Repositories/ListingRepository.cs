@@ -2,6 +2,7 @@ using MC.Catalog.Application.Interfaces.Repositories;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Domain.Entities;
 using MC.Catalog.Domain.Views;
+using MC.Shared.Application.Models;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -20,14 +21,22 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
 
         // Fetch the category from the relational database using the CategoryId from the listing
         // TODO: Add CRUD categories 
-        var category = await sqlContext.Categories.FindAsync(listingBson.CategoryId, ct);
+        var categoryTask = sqlContext.Categories.FindAsync(listingBson.CategoryId, ct).AsTask();
+        var locationTask = sqlContext.Locations.FindAsync(listingBson.LocationId, ct).AsTask();
+
+        await Task.WhenAll(categoryTask, locationTask);
+
+        var category = categoryTask.Result;
+        var location = locationTask.Result;
 
         return new Listing
         {
             Id = listingBson.Id,
-            OwnerId = listingBson.OwnerId,
+            OwnerGuid = listingBson.OwnerGuid,
             Title = listingBson.Title,
             Description = listingBson.Description,
+            LocationId = listingBson.LocationId,
+            Location = location ?? new Location { Id = 0, Country = "Unknown", Region = "Unknown", City = "Unknown" }, // TODO: Add CRUD locations
             CategoryId = listingBson.CategoryId,
             Category = category ?? new Category { Id = 0, Name = "Unknown" }, // TODO: Add CRUD categories
             CreatedAt = listingBson.CreatedAt,
@@ -39,7 +48,7 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         };
     }
 
-    public async Task<PagedList<ListingCatalogView>> GetListingsCatalogViewAsync(int skip, int take, CancellationToken ct, ListingParams? listingParams)
+    public async Task<PagedCollection<ListingCardView>> GetListingsCatalogViewAsync(int skip, int take, CancellationToken ct, ListingParams? listingParams)
     {
         var filterBuilder = Builders<Models.ListingBson>.Filter;
         var filter = filterBuilder.Empty;
@@ -61,8 +70,8 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         {
             foreach (var parameter in listingParams.Parameters)
             {
-                var name = Regex.Escape(parameter.Name.Trim());
-                var value = Regex.Escape(parameter.Value.Trim());
+                var name = Regex.Escape(parameter.Item1.Trim());
+                var value = Regex.Escape(parameter.Item2.Trim());
                 filter &= filterBuilder.ElemMatch(
                     p => p.Parameters,
                     Builders<Tuple<string, string>>.Filter.Regex(x => x.Item1, new MongoDB.Bson.BsonRegularExpression($"^{name}$", "i"))
@@ -79,7 +88,7 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
             .SortByDescending(p => p.CreatedAt)
             .Skip(skip)
             .Limit(take)
-            .Project(p => new ListingCatalogView(
+            .Project(p => new ListingCardView(
                 p.Id,
                 p.Title,
                 p.Description,
@@ -90,7 +99,7 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
 
         await Task.WhenAll(listingsTask, totalItemsTask);
 
-        return new PagedList<ListingCatalogView>(
+        return new PagedCollection<ListingCardView>(
             listingsTask.Result.ToArray(),
             (int)totalItemsTask.Result
         );
@@ -98,21 +107,31 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
 
     public async Task AddListingAsync(Listing listing, CancellationToken ct)
     {
-        var listingBson = new Models.ListingBson
+        try
         {
-            OwnerId = listing.OwnerId,
-            Title = listing.Title,
-            Description = listing.Description,
-            CategoryId = listing.CategoryId,
-            CreatedAt = listing.CreatedAt,
-            Price = listing.Price,
-            StockQuantity = listing.StockQuantity,
-            ImageLinks = listing.ImageLinks ?? [],
-            Tags = listing.Tags ?? [],
-            Parameters = listing.Parameters ?? []
-        };
+            var location = await sqlContext.Locations.AddAsync(listing.Location, ct);
 
-        await mongoContext.Listings.InsertOneAsync(listingBson, cancellationToken: ct);
+            var listingBson = new Models.ListingBson
+            {
+                OwnerGuid = listing.OwnerGuid,
+                Title = listing.Title,
+                Description = listing.Description,
+                CategoryId = listing.CategoryId,
+                LocationId = listing.LocationId,
+                CreatedAt = listing.CreatedAt,
+                Price = listing.Price,
+                StockQuantity = listing.StockQuantity,
+                ImageLinks = listing.ImageLinks ?? [],
+                Tags = listing.Tags ?? [],
+                Parameters = listing.Parameters ?? []
+            };
+
+            await mongoContext.Listings.InsertOneAsync(listingBson, cancellationToken: ct);
+        }
+        catch
+        {
+
+        }
     }
 
     public async Task SaveChangesAsync()
