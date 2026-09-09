@@ -2,6 +2,7 @@ using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Application.Requests;
 using MC.Shared.API.Controllers;
+using MC.Shared.Application.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

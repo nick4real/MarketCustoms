@@ -1,9 +1,9 @@
 ﻿namespace MC.Catalog.Application.DTOs;
 
 public record LocationDto(
-    string? Country, 
+    string? Country,
     string? Region,
-    string? City, 
+    string? City,
     string? District,
     decimal Latitude,
     decimal Longitude);

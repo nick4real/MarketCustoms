@@ -62,7 +62,8 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
                 Description = request.Description,
                 CategoryId = request.CategoryId,
                 Category = new Category { Id = request.CategoryId, Name = string.Empty },
-                Location = new Location {
+                Location = new Location
+                {
                     Country = request.Location.Country,
                     Region = request.Location.Region,
                     City = request.Location.City,

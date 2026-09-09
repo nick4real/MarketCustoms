@@ -1,5 +1,4 @@
-﻿using MC.Shared.Application.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 namespace MC.Catalog.Infrastructure.Persistence;

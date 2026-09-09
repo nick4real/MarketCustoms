@@ -2,7 +2,6 @@
 using MC.Catalog.Infrastructure.Options;
 using MC.Catalog.Infrastructure.Persistence;
 using MC.Catalog.Infrastructure.Persistence.Repositories;
-using MC.Shared.Application.Interfaces.Repositories;
 using MC.Shared.Application.Interfaces.Services;
 using MC.Shared.Infrastructure.Interfaces.Persistence;
 using MC.Shared.Infrastructure.Services;
