@@ -2,6 +2,7 @@
 using MC.Catalog.Infrastructure.Options;
 using MC.Catalog.Infrastructure.Persistence;
 using MC.Catalog.Infrastructure.Persistence.Repositories;
+using MC.Shared.Application.Interfaces.Repositories;
 using MC.Shared.Application.Interfaces.Services;
 using MC.Shared.Infrastructure.Interfaces.Persistence;
 using MC.Shared.Infrastructure.Services;
@@ -24,7 +25,7 @@ public static class ServiceCollectionExtension
                 }));
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
 
-            services.AddSingleton<AppMongoDbContext>();
+            services.AddScoped<AppMongoDbContext>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
@@ -35,6 +36,7 @@ public static class ServiceCollectionExtension
             // Repositories
             services.AddScoped<IListingRepository, ListingRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<UnitOfWork>();
 
             return services;
         }

@@ -7,7 +7,7 @@ namespace MC.Catalog.Infrastructure.Persistence;
 
 public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext docContext) : IDatabaseSeeder
 {
-    const string FullGrantedUserId = "google-oauth2|117562971131502174673";
+    private Guid FullGrantedUserId = Guid.NewGuid();
 
     public async Task SeedAsync()
     {
@@ -118,7 +118,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
         {
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Leica M6 TTL Black",
                 Description = "Black chrome Leica M6 TTL with the 0.72 finder. Shutter is even across all speeds, rangefinder patch is bright, and the vulcanite is original with honest wear at the edges. Recently CLA'd in Tokyo — light seals replaced, viewfinder cleaned. Body only; no lens, strap, or box.",
                 CategoryId = 1,
@@ -144,7 +144,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Arc'teryx Beta AR Jacket",
                 Description = "Men's Beta AR in Black Sapphire, size M. Worn twice on spring tours, then stored. No delamination, no snags, pit zips run clean. Gore-Tex Pro face still beads water. From a smoke-free home; includes original stuff sack.",
                 CategoryId = 10,
@@ -170,7 +170,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Braun T3 Alarm Clock",
                 Description = "Dietrich Lubs T3 in working order. Alarm, snooze, and light function as they should. Case has light scuffing on the rear corners; face is clean with no yellowing. Runs on a fresh AA. A small, considered object — not a reproduction.",
                 CategoryId = 4,
@@ -196,7 +196,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Technics SL-1200 MK5",
                 Description = "Silver MK5, fully functional. Pitch is stable, brake is snappy, and the tonearm bearings are quiet. Plinth has rack rash on the rear left corner; dust cover has two small hairline scratches. Includes original headshell (no cartridge), RCA cables, and grounded power cord. 220–240V.",
                 CategoryId = 1,
@@ -222,7 +222,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Hasselblad 500C/M",
                 Description = "Chrome 500C/M body with Acute-Matte screen. Mirror and aux shutter fire cleanly; winding is smooth with no hang-ups. Leatherette is intact with brassing on the winding crank. Body only — no back, finder, or lens. Cosmetics consistent with a working kit, not a shelf piece.",
                 CategoryId = 1,
@@ -248,7 +248,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Levi's 501 1988",
                 Description = "1988 501s with a high rise and a straight leg that has worn in, not out. Red tab, care tag, and button fly all present. Fading is even; one coin-pocket repair done with matching thread. Measured flat: 32\" waist, 32\" inseam. Washed once after purchase, hung dry.",
                 CategoryId = 3,
@@ -274,7 +274,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Sony WH-1000XM5",
                 Description = "Black XM5s used for two months of commuting. Pads and headband are unmarked; ANC and transparency work as expected. Battery still reports a full 30-hour cycle. Includes case, USB-C cable, and 3.5mm adapter. Factory reset before shipping.",
                 CategoryId = 1,
@@ -300,7 +300,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Aesop Departure Kit",
                 Description = "Unopened Departure Kit in the original sleeve. Includes Resurrection Rinse-Free Hand Wash, geranium leaf body cleanser, and mandarin facial cream — travel sizes, still sealed. Purchased as a gift and never used. No dents to the tin.",
                 CategoryId = 4,
@@ -326,7 +326,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
             },
             new ListingBson
             {
-                OwnerId = FullGrantedUserId,
+                OwnerGuid = FullGrantedUserId,
                 Title = "Olympus OM-1 Chrome",
                 Description = "Early chrome OM-1 with a bright finder and an accurate meter (1.5V zinc-air adapter installed). Shutter is even; mirror foam has been replaced. Light brassing on the baseplate and rewind crank. Body only, cap included. A compact SLR that still earns its keep.",
                 CategoryId = 1,

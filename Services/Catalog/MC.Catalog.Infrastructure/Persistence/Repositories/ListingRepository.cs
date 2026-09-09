@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace MC.Catalog.Infrastructure.Persistence.Repositories;
 
-public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbContext mongoContext) : IListingRepository
+public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbContext mongoContext, UnitOfWork unitOfWork) : IListingRepository
 {
     public async Task<Listing?> GetListingByIdAsync(string id, CancellationToken ct)
     {
@@ -107,7 +107,7 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
 
     public async Task AddListingAsync(Listing listing, CancellationToken ct)
     {
-        try
+        await unitOfWork.ExecuteInTransactionAsync(async (mongoSession, ct) =>
         {
             var location = await sqlContext.Locations.AddAsync(listing.Location, ct);
 
@@ -126,12 +126,8 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
                 Parameters = listing.Parameters ?? []
             };
 
-            await mongoContext.Listings.InsertOneAsync(listingBson, cancellationToken: ct);
-        }
-        catch
-        {
-
-        }
+            await mongoContext.Listings.InsertOneAsync(mongoSession, listingBson, cancellationToken: ct);
+        }, ct);
     }
 
     public async Task SaveChangesAsync()

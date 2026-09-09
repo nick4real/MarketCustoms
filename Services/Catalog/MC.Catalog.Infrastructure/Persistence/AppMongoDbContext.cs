@@ -11,6 +11,8 @@ public class AppMongoDbContext
     private readonly IMongoDatabase _mongoDatabase;
     private readonly IMongoCollection<ListingBson> _listings;
     public IMongoCollection<ListingBson> Listings => _listings;
+    public async Task<IClientSessionHandle> GetClientSessionAsync(CancellationToken ct)
+        => await _mongoClient.StartSessionAsync(cancellationToken: ct);
 
     public AppMongoDbContext(IOptions<MongoDbOptions> options)
     {
