@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Outfit:wght@300..700&family=DM+Mono:wght@400;500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-background: #080808;
+  --color-foreground: #f0ece3;
+  --color-card: #111111;
+  --color-card-foreground: #f0ece3;
+  --color-primary: #e8820c;
+  --color-primary-foreground: #080808;
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #f0ece3;
+  --color-muted: #1c1c1c;
+  --color-muted-foreground: #5a5550;
+  --color-accent: #f0c842;
+  --color-accent-foreground: #080808;
+  --color-border: #1e1e1e;
+  --color-border-subtle: #2a2a2a;
+  --color-border-hover: #2e2e2e;
+  --color-border-emphasis: #4a4540;
+  --color-ring: #e8820c;
+
+  --color-surface: #0d0d0d;
+  --color-surface-inset: #0a0a0a;
+
+  --color-primary-hover: #cf7108;
+  --color-primary-subtle: #130e09;
+
+  --color-foreground-muted: #a09890;
+  --color-foreground-subtle: #3a3532;
+  --color-foreground-dim: #7a7570;
+
+  --color-destructive: #dc4040;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+  --font-mono: "DM Mono", "Courier New", monospace;
+
+  --radius: 2px;
+}
+
+html,
+body {
+  background-color: #080808;
+  color: #f0ece3;
+  font-family: "Outfit", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #222;
+}
