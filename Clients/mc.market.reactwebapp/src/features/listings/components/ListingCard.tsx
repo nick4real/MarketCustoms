@@ -10,9 +10,6 @@ export default function ListingCard({
   showLocation?: boolean;
 }) {
   const coverImage = listing.imageId;
-  if (!coverImage) {
-    return null;
-  }
 
   return (
     <Link
@@ -21,11 +18,13 @@ export default function ListingCard({
       style={{ borderRadius: "2px" }}
     >
       <div className="bg-surface aspect-4/3 overflow-hidden">
-        <img
-          src={listingImageUrl(coverImage, 600, 450)}
-          alt={listing.title}
-          className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
-        />
+        {coverImage ? (
+          <img
+            src={listingImageUrl(coverImage, 600, 450)}
+            alt={listing.title}
+            className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : null}
       </div>
       <div className="p-4">
         <div className="mb-1.5 flex items-start justify-between">

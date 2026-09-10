@@ -11,6 +11,17 @@ import {
   type ListingView,
 } from "@/features/listings";
 
+function listingLocationLabel(listing: Listing) {
+  const location = listing.location;
+  if (!location) {
+    return "United States";
+  }
+  const parts = [location.city, location.region, location.country].filter(
+    (part): part is string => Boolean(part && part.trim()),
+  );
+  return parts.join(", ") || "United States";
+}
+
 function ListingGallery({
   images,
   title,
@@ -72,7 +83,7 @@ export default function ListingDetails() {
     getListingById(listingId!).then((response) => {
       setListing(response);
     });
-    getListings({ pageIndex: 0, pageSize: 4 }).then((response) => {
+    getListings({ pageSize: 4 }).then((response) => {
       setRelated(response.items);
     });
     window.scrollTo(0, 0);
@@ -125,7 +136,7 @@ export default function ListingDetails() {
             to="/browse"
             className="hover:text-foreground transition-colors"
           >
-            {listing.category}
+            {listing.category.name}
           </Link>
           <span className="text-foreground-subtle">/</span>
           <span className="text-foreground-muted">{listing.title}</span>
@@ -146,20 +157,20 @@ export default function ListingDetails() {
                 className="bg-secondary text-muted-foreground px-1.5 py-0.5 text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
-                {listing.condition}
+                {listing.condition ?? "New"}
               </span>
               <span
                 className="text-muted-foreground text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
-                {listing.category}
+                {listing.category.name}
               </span>
               <span className="text-foreground-subtle">·</span>
               <span
                 className="text-muted-foreground text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
-                {listing.location}
+                {listingLocationLabel(listing)}
               </span>
             </div>
 
@@ -218,8 +229,8 @@ export default function ListingDetails() {
                   className="text-muted-foreground text-[10px]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
-                  {listing.sellerRating.toFixed(1)} rating ·{" "}
-                  {listing.sellerSales} sales · {listing.location}
+                  {listing.sellerRating?.toFixed(1) ?? "—"} rating ·{" "}
+                  {listing.sellerSales ?? "—"} sales · {listingLocationLabel(listing)}
                 </div>
               </div>
               <span
@@ -253,9 +264,9 @@ export default function ListingDetails() {
                 {[
                   { name: "Item ID", value: listingSku(listing.id) },
                   { name: "Listed", value: listing.createdAt },
-                  { name: "Condition", value: listing.condition },
-                  { name: "Category", value: listing.category },
-                  { name: "Ships from", value: listing.location },
+                  { name: "Condition", value: listing.condition ?? "New" },
+                  { name: "Category", value: listing.category.name },
+                  { name: "Ships from", value: listingLocationLabel(listing) },
                   ...listing.parameters,
                 ].map((row) => (
                   <div
