@@ -350,3 +350,6 @@ ASALocalRun/
 Thumbs.db
 *.swp
 .vscode/
+
+# Secrets / local env
+.env*
