@@ -57,6 +57,8 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
 
         if (listingParams != null && listingParams.CategoryId.HasValue)
         {
+            // Search in the tree of categories for the given categoryId and its children, if any.
+            // TODO: filter &= filterBuilder.In(p => p.CategoryId, expandedCategoryIds);
             filter &= filterBuilder.Eq(p => p.CategoryId, listingParams.CategoryId.Value);
         }
 
@@ -82,6 +84,15 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         var totalItemsTask = filter == filterBuilder.Empty
             ? mongoContext.Listings.EstimatedDocumentCountAsync(cancellationToken: ct)
             : mongoContext.Listings.CountDocumentsAsync(filter, cancellationToken: ct);
+
+        // TODO:
+        //var find = mongoContext.Listings.Find(filter);
+        //find = listingParams?.Sort switch
+        //{
+        //    "priceAsc" => find.SortBy(p => p.Price),
+        //    "priceDesc" => find.SortByDescending(p => p.Price),
+        //    _ => find.SortByDescending(p => p.CreatedAt)
+        //};
 
         var listingsTask = mongoContext.Listings
             .Find(filter)

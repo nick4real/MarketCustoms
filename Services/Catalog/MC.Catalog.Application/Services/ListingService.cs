@@ -35,6 +35,8 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
         int skip = (paginationParams.PageIndex - 1) * paginationParams.PageSize;
         int take = paginationParams.PageSize;
 
+        // TODO: Get descendant ids with categoryId and filter
+
         var pagedListings = await listingRepository.GetListingsCatalogViewAsync(skip, take, ct, listingParams);
         int totalPages = pagedListings.TotalItems == 0
             ? 0
@@ -125,4 +127,13 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
             listing.ImageLinks ?? [],
             listing.Tags ?? [],
             listing.Parameters ?? []);
+
+    //private static Result<ListingsPaginatedResponse<ListingCardViewDto>> EmptyPage(PaginationParams paginationParams)
+    //    => Result<ListingsPaginatedResponse<ListingCardViewDto>>.Success(new ListingsPaginatedResponse<ListingCardViewDto>(
+    //        [],
+    //        paginationParams.PageSize,
+    //        paginationParams.PageIndex,
+    //        0,
+    //        paginationParams.PageIndex > 1,
+    //        false));
 }
