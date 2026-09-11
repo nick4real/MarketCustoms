@@ -61,6 +61,26 @@ export function mapRootCategories(body: unknown): Category[] {
   return body.map(mapCategory);
 }
 
+export interface CategoryFilterRow {
+  id: number;
+  name: string;
+  depth: number;
+}
+
+export function flattenCategoryForest(
+  nodes: CategoryNode[],
+  depth = 0,
+): CategoryFilterRow[] {
+  const rows: CategoryFilterRow[] = [];
+  for (const node of nodes) {
+    rows.push({ id: node.id, name: node.name, depth });
+    if (node.childCategories?.length) {
+      rows.push(...flattenCategoryForest(node.childCategories, depth + 1));
+    }
+  }
+  return rows;
+}
+
 async function readJsonResponse(response: Response, action: string): Promise<unknown> {
   if (!response.ok) {
     throw new Error(`${action} failed (${response.status})`);
@@ -73,6 +93,9 @@ export async function getRootCategories(
   signal?: AbortSignal,
 ): Promise<Category[]> {
   const response = await fetch(categoriesBaseUrl, { signal });
+  if (response.status === 404) {
+    return [];
+  }
   return mapRootCategories(await readJsonResponse(response, "Categories request"));
 }
 

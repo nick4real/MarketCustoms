@@ -1,3 +1,10 @@
+export type ListingSort = "newest" | "priceAsc" | "priceDesc";
+
+export interface ListingParams {
+  categoryId?: number;
+  sort?: ListingSort;
+}
+
 export interface ListingParameter {
   name: string;
   value: string;
@@ -21,6 +28,14 @@ export interface Listing {
   images: string[];
   tags: string[];
   parameters: ListingParameter[];
+  location?: {
+    country?: string | null;
+    region?: string | null;
+    city?: string | null;
+  };
+  condition?: string;
+  sellerRating?: number;
+  sellerSales?: number;
 }
 
 export interface ListingView {
@@ -48,7 +63,7 @@ export function listingImageUrl(
   return `https://images.unsplash.com/${photoId}?w=${width}&h=${height}&fit=crop&auto=format`;
 }
 
-export function listingSku(id: number) {
+export function listingSku(id: string | number) {
   return `MKT-${String(id).padStart(4, "0")}`;
 }
 

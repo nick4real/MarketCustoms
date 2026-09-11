@@ -1,5 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  flattenCategoryForest,
+  getRootCategories,
   mapCategory,
   mapCategoryNode,
   mapRootCategories,
@@ -85,6 +87,63 @@ describe("mapRootCategories", () => {
   it("rejects a non-array payload", () => {
     expect(() => mapRootCategories({ id: 1, name: "Electronics" })).toThrow(
       /Invalid categories response/,
+    );
+  });
+});
+
+describe("flattenCategoryForest", () => {
+  it("flattens roots and nested children with depth", () => {
+    expect(
+      flattenCategoryForest([
+        {
+          id: 1,
+          name: "Electronics",
+          childCategories: [
+            {
+              id: 2,
+              name: "Computers & Laptops",
+              childCategories: [{ id: 3, name: "Laptops" }],
+            },
+          ],
+        },
+        { id: 6, name: "Books" },
+      ]),
+    ).toEqual([
+      { id: 1, name: "Electronics", depth: 0 },
+      { id: 2, name: "Computers & Laptops", depth: 1 },
+      { id: 3, name: "Laptops", depth: 2 },
+      { id: 6, name: "Books", depth: 0 },
+    ]);
+  });
+
+  it("returns an empty list for an empty forest", () => {
+    expect(flattenCategoryForest([])).toEqual([]);
+  });
+});
+
+describe("getRootCategories", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("maps HTTP 404 to an empty list", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(null, { status: 404 })),
+    );
+
+    await expect(getRootCategories()).resolves.toEqual([]);
+  });
+
+  it("throws on other non-OK statuses", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(null, { status: 500 })),
+    );
+
+    await expect(getRootCategories()).rejects.toThrow(
+      /Categories request failed \(500\)/,
     );
   });
 });
