@@ -22,7 +22,9 @@ export default function MainLayout() {
 
   return (
     <div className="bg-background min-h-screen">
+      {/* header */}
       <nav className="border-border bg-background/95 fixed top-0 right-0 left-0 z-50 flex h-14 items-center border-b px-5 backdrop-blur-sm md:px-10">
+        {/* logo */}
         <NavLink
           to="/"
           className="flex flex-1 items-center md:mr-14 md:flex-none"
@@ -36,6 +38,7 @@ export default function MainLayout() {
           </span>
         </NavLink>
 
+        {/* navigation */}
         <div className="hidden flex-1 items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <NavLink
@@ -54,6 +57,7 @@ export default function MainLayout() {
           ))}
         </div>
 
+        {/* search */}
         <div className="flex items-center gap-4">
           <button className="text-muted-foreground hover:text-foreground hidden transition-colors md:block">
             <svg
@@ -69,6 +73,7 @@ export default function MainLayout() {
             </svg>
           </button>
 
+          {/* cart */}
           <button className="text-muted-foreground hover:text-foreground relative transition-colors">
             <svg
               width="17"
