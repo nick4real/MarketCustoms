@@ -24,7 +24,7 @@ public static class ServiceCollectionExtension
                 }));
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
 
-            services.AddSingleton<AppMongoDbContext>();
+            services.AddScoped<AppMongoDbContext>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
@@ -35,6 +35,7 @@ public static class ServiceCollectionExtension
             // Repositories
             services.AddScoped<IListingRepository, ListingRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<UnitOfWork>();
 
             return services;
         }

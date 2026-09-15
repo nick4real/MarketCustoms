@@ -1,17 +1,18 @@
 # MarketCustoms web app
 
-The storefront follows a feature-first structure based on Bulletproof React:
+The storefront follows [Feature-Sliced Design](https://feature-sliced.design/):
 
 ```text
 src/
-  app/          Application bootstrap, providers, router, layouts, and styles
-  features/     Domain slices such as auth and listings
-  pages/        Route-level composition only
-  shared/       Cross-feature UI and utilities
-  assets/       Static frontend assets
+  app/          Bootstrap, providers, router, layouts, global styles
+  pages/        Route-level screens (composition only)
+  widgets/      Composite shell UI (header, mobile nav)
+  features/     User interactions (visitor session, account gate, header auth)
+  entities/     Domain models, gateway API clients, entity UI
+  shared/       Assets and cross-cutting utilities (no business vocabulary)
 ```
 
-Feature code owns its API clients, components, domain types, and behavior. Pages compose feature APIs without reaching into another feature's internals. Application wiring lives under `app`, so the entry point remains a small React bootstrap.
+Import direction: `app` → `pages` / `widgets` / `features` → `entities` → `shared`. Slices expose a public API via `index.ts`.
 
 ## Commands
 

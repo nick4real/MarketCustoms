@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "@/app/layouts/MainLayout";
 import AuthLayout from "@/app/layouts/AuthLayout";
-import { AccountGate } from "@/features/auth";
+import { AccountGate } from "@/widgets/account-gate";
 import Home from "@/pages/Home";
 import Browse from "@/pages/Browse";
 import ListingDetails from "@/pages/ListingDetails";

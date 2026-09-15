@@ -2,7 +2,6 @@ using MC.Profiles.Application;
 using MC.Profiles.Infrastructure;
 using MC.Profiles.Infrastructure.Persistence;
 using MC.Shared.API;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -43,8 +42,6 @@ if (app.Environment.IsDevelopment())
 
         await executionStrategy.ExecuteAsync(async () =>
         {
-            SqlConnection.ClearAllPools();
-
             await dbContext.Database.EnsureDeletedAsync();
             await dbContext.Database.EnsureCreatedAsync();
         });

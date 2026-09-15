@@ -2,12 +2,25 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import {
   getListingById,
-  getRelatedListings,
+  getListings,
   ListingCard,
   listingImageUrl,
   listingSku,
   sellerInitials,
-} from "@/features/listings";
+  type Listing,
+  type ListingView,
+} from "@/entities/listing";
+
+function listingLocationLabel(listing: Listing) {
+  const location = listing.location;
+  if (!location) {
+    return "United States";
+  }
+  const parts = [location.city, location.region, location.country].filter(
+    (part): part is string => Boolean(part && part.trim()),
+  );
+  return parts.join(", ") || "United States";
+}
 
 function ListingGallery({
   images,
@@ -36,9 +49,9 @@ function ListingGallery({
         />
       </div>
       <div className="mt-3 grid grid-cols-3 gap-3">
-        {images.map((image, index) => (
+        {images.map((imageUrl, index) => (
           <button
-            key={image}
+            key={imageUrl}
             type="button"
             onClick={() => setActiveImage(index)}
             className={`bg-surface aspect-4/3 overflow-hidden border transition-colors ${
@@ -50,7 +63,7 @@ function ListingGallery({
             aria-label={`View photo ${index + 1}`}
           >
             <img
-              src={listingImageUrl(image, 400, 300)}
+              src={listingImageUrl(imageUrl, 400, 300)}
               alt=""
               className="h-full w-full object-cover opacity-80"
             />
@@ -63,9 +76,16 @@ function ListingGallery({
 
 export default function ListingDetails() {
   const { listingId } = useParams();
-  const listing = getListingById(listingId);
+  const [listing, setListing] = useState<Listing | undefined>(undefined);
+  const [related, setRelated] = useState<ListingView[]>([]);
 
   useEffect(() => {
+    getListingById(listingId!).then((response) => {
+      setListing(response);
+    });
+    getListings({ pageSize: 4 }).then((response) => {
+      setRelated(response.items);
+    });
     window.scrollTo(0, 0);
   }, [listingId]);
 
@@ -95,7 +115,6 @@ export default function ListingDetails() {
     );
   }
 
-  const related = getRelatedListings(listing);
   const stockLabel =
     listing.stock === 1 ? "1 available" : `${listing.stock} available`;
 
@@ -117,7 +136,7 @@ export default function ListingDetails() {
             to="/browse"
             className="hover:text-foreground transition-colors"
           >
-            {listing.category}
+            {listing.category.name}
           </Link>
           <span className="text-foreground-subtle">/</span>
           <span className="text-foreground-muted">{listing.title}</span>
@@ -138,20 +157,20 @@ export default function ListingDetails() {
                 className="bg-secondary text-muted-foreground px-1.5 py-0.5 text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
-                {listing.condition}
+                {listing.condition ?? "New"}
               </span>
               <span
                 className="text-muted-foreground text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
-                {listing.category}
+                {listing.category.name}
               </span>
               <span className="text-foreground-subtle">·</span>
               <span
                 className="text-muted-foreground text-[10px]"
                 style={{ fontFamily: "DM Mono, monospace" }}
               >
-                {listing.location}
+                {listingLocationLabel(listing)}
               </span>
             </div>
 
@@ -200,18 +219,19 @@ export default function ListingDetails() {
               style={{ borderRadius: "2px" }}
             >
               <div className="bg-secondary text-foreground-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
-                {sellerInitials(listing.seller)}
+                {sellerInitials("John Doe")}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-foreground text-sm font-medium">
-                  {listing.seller}
+                  {"John Doe"}
                 </div>
                 <div
                   className="text-muted-foreground text-[10px]"
                   style={{ fontFamily: "DM Mono, monospace" }}
                 >
-                  {listing.sellerRating.toFixed(1)} rating ·{" "}
-                  {listing.sellerSales} sales · {listing.location}
+                  {listing.sellerRating?.toFixed(1) ?? "—"} rating ·{" "}
+                  {listing.sellerSales ?? "—"} sales ·{" "}
+                  {listingLocationLabel(listing)}
                 </div>
               </div>
               <span
@@ -244,10 +264,10 @@ export default function ListingDetails() {
               <dl className="border-border border-t">
                 {[
                   { name: "Item ID", value: listingSku(listing.id) },
-                  { name: "Listed", value: listing.listedAt },
-                  { name: "Condition", value: listing.condition },
-                  { name: "Category", value: listing.category },
-                  { name: "Ships from", value: listing.location },
+                  { name: "Listed", value: listing.createdAt },
+                  { name: "Condition", value: listing.condition ?? "New" },
+                  { name: "Category", value: listing.category.name },
+                  { name: "Ships from", value: listingLocationLabel(listing) },
                   ...listing.parameters,
                 ].map((row) => (
                   <div

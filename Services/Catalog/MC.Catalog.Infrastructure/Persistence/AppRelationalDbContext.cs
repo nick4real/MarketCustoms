@@ -6,7 +6,7 @@ namespace MC.Catalog.Infrastructure.Persistence;
 public class AppRelationalDbContext(DbContextOptions<AppRelationalDbContext> options) : DbContext(options)
 {
     public DbSet<Category> Categories { get; set; }
-
+    public DbSet<Location> Locations { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

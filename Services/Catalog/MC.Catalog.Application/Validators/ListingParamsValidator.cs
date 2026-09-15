@@ -20,11 +20,11 @@ public class ListingParamsValidator : AbstractValidator<ListingParams>
         RuleForEach(p => p.Parameters)
             .ChildRules(parameter =>
             {
-                parameter.RuleFor(x => x.Name)
+                parameter.RuleFor(x => x.Item1)
                     .NotEmpty()
                     .MaximumLength(100);
 
-                parameter.RuleFor(x => x.Value)
+                parameter.RuleFor(x => x.Item2)
                     .NotEmpty()
                     .MaximumLength(100);
             });

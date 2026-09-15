@@ -40,13 +40,16 @@ Patterns already in use:
 
 ## Frontend architecture
 
-Keep UI, data access, and mapping separate:
+Keep UI, data access, and mapping separate (Feature-Sliced Design under `Clients/mc.market.reactwebapp/src/`):
 
-- `src/pages/` — routes
-- `src/components/` — presentational UI
-- `src/api/` — HTTP to the gateway; map API DTOs to `src/models/`
-- `src/auth/` — Auth0 config and onboarding gates
-- `src/layouts/` — shell
+- `app/` — bootstrap, providers, router, layouts, global styles
+- `pages/` — route screens (thin composition)
+- `widgets/` — composite shell UI
+- `features/` — user interactions (session, gates, flows)
+- `entities/` — domain types, gateway API + mappers, entity UI
+- `shared/` — assets and utilities without business vocabulary
+
+Import only through slice public APIs (`index.ts`). Gateway HTTP lives on entities, not a top-level `api/` folder.
 
 Reuse existing components, copy, empty/loading/error states, and navigation. Do not invent parallel patterns for filters, grids, or forms.
 
