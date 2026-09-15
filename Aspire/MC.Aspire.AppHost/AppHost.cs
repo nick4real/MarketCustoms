@@ -19,11 +19,13 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
 {
     var auth0Domain = builder.AddParameter("Auth0-Domain", true);
     var auth0Audience = builder.AddParameter("Auth0-Audience", true);
-    var auth0ClientId = builder.AddParameter("Auth0-ClientId", true);
-    var auth0ClientSecret = builder.AddParameter("Auth0-ClientSecret", true);
+    var auth0BackendClientId = builder.AddParameter("Auth0-BackendM2M-ClientId", true);
+    var auth0BackendClientSecret = builder.AddParameter("Auth0-BackendM2M-ClientSecret", true);
+    var auth0FrontendClientId = builder.AddParameter("Auth0-Frontend-ClientId", true);
 
     var auth0Parameters = new Auth0Parameters(auth0Domain, auth0Audience);
-    var auth0ManagementParameters = new Auth0ManagementParameters(auth0ClientId, auth0ClientSecret);
+    var auth0ManagementParameters = new Auth0ManagementParameters(auth0BackendClientId, auth0BackendClientSecret);
+    var auth0WebAppParameters = new Auth0WebAppParameters(auth0Domain, auth0Audience, auth0FrontendClientId);
 
     // Servers
     var sqlServer = builder.AddSqlServer("sqlServer")
@@ -64,7 +66,9 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
         .WithReference(catalogMongoDatabase, catalogMongoDatabaseName);
 
     // React Web App
-    var reactwebapp = builder.AddViteApp("reactWebApp", "./../../Clients/mc.market.reactwebapp", "dev");
+    var reactwebapp = builder
+        .AddViteApp("reactWebApp", "./../../Clients/mc.market.reactwebapp", "dev")
+        .WithAuth0WebAppParameters(auth0WebAppParameters);
 
     // Gateway
     var webStoreGateway = builder.AddProject<Projects.MC_Gateway>("marketCustomsGateway")

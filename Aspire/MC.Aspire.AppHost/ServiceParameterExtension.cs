@@ -19,5 +19,13 @@ internal static class ServiceParameterExtension
                 .WithEnvironment("Auth0:Management:ClientId", parameters.ClientId)
                 .WithEnvironment("Auth0:Management:ClientSecret", parameters.ClientSecret);
         }
+
+        public IResourceBuilder<T> WithAuth0WebAppParameters(Auth0WebAppParameters parameters)
+        {
+            return builder
+                .WithEnvironment("VITE_AUTH0_DOMAIN", parameters.Domain)
+                .WithEnvironment("VITE_AUTH0_AUDIENCE", parameters.Audience)
+                .WithEnvironment("VITE_AUTH0_CLIENT_ID", parameters.ClientId);
+        }
     }
 }
