@@ -5,7 +5,6 @@ using MC.Catalog.Domain.Views;
 using MC.Shared.Application.Models;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using System.Text.RegularExpressions;
 
 namespace MC.Catalog.Infrastructure.Persistence.Repositories;
@@ -21,13 +20,9 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
 
         // Fetch the category from the relational database using the CategoryId from the listing
         // TODO: Add CRUD categories 
-        var categoryTask = sqlContext.Categories.FindAsync(listingBson.CategoryId, ct).AsTask();
-        var locationTask = sqlContext.Locations.FindAsync(listingBson.LocationId, ct).AsTask();
 
-        await Task.WhenAll(categoryTask, locationTask);
-
-        var category = categoryTask.Result;
-        var location = locationTask.Result;
+        var category = await sqlContext.Categories.FindAsync(listingBson.CategoryId, ct);
+        var location = await sqlContext.Locations.FindAsync(listingBson.LocationId, ct);
 
         return new Listing
         {
