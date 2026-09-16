@@ -1,5 +1,5 @@
 import type { AccountView } from "@/entities/session/model/types";
-import { readStringNonEmpty } from "@/shared/lib/parseJson";
+import { readStringNonEmpty } from "@/shared/lib/readJson";
 
 export type Auth0UserLike = {
   sub?: string;

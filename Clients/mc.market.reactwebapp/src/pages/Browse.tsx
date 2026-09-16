@@ -12,8 +12,9 @@ import {
   type ListingPaginatedResponse,
   type ListingSort,
 } from "@/entities/listing";
-
-const conditions = ["Any", "New", "Like New", "Excellent", "Good", "Vintage"];
+import { FilterPanel } from "@/widgets/filter-panel";
+import { parsePositiveInteger } from "@/shared/lib/parseJson";
+import { SortDropdownButton } from "@/features/listing-sorters";
 
 const emptyPage: ListingPaginatedResponse = {
   items: [],
@@ -23,172 +24,6 @@ const emptyPage: ListingPaginatedResponse = {
   hasNextPage: false,
   hasPreviousPage: false,
 };
-
-function parseCategoryId(value: string | null): number | null {
-  if (!value) {
-    return null;
-  }
-  const parsed = Number(value);
-  if (!Number.isInteger(parsed) || parsed <= 0) {
-    return null;
-  }
-  return parsed;
-}
-
-function FilterPanel({
-  categoryRows,
-  categoryStatus,
-  selectedCategoryId,
-  setSelectedCategoryId,
-  selectedCondition,
-  setSelectedCondition,
-  search,
-  setSearch,
-}: {
-  categoryRows: CategoryFilterRow[];
-  categoryStatus: "loading" | "ready" | "error";
-  selectedCategoryId: number | null;
-  setSelectedCategoryId: (id: number | null) => void;
-  selectedCondition: string;
-  setSelectedCondition: (v: string) => void;
-  search: string;
-  setSearch: (v: string) => void;
-}) {
-  return (
-    <>
-      {/* Search */}
-      <div className="relative mb-7">
-        <input
-          type="text"
-          placeholder="Search listings..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-3 py-2 pl-8 text-sm transition-colors focus:outline-none"
-          style={{ borderRadius: "2px", fontFamily: "Outfit, sans-serif" }}
-        />
-        <svg
-          className="text-foreground-subtle absolute top-2.5 left-2.5"
-          width="13"
-          height="13"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
-      </div>
-
-      {/* Categories */}
-      <div className="mb-7">
-        <h3
-          className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
-          Category
-        </h3>
-        <div className="flex flex-col gap-0.5">
-          <button
-            type="button"
-            onClick={() => setSelectedCategoryId(null)}
-            className={`px-2 py-1.5 text-left text-sm transition-colors ${
-              selectedCategoryId === null
-                ? "text-primary"
-                : "text-muted-foreground hover:text-foreground-muted"
-            }`}
-            style={{ borderRadius: "2px" }}
-          >
-            All listings
-          </button>
-          {categoryStatus === "loading" ? (
-            <p
-              className="text-muted-foreground px-2 py-1.5 text-xs"
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
-              Loading categories…
-            </p>
-          ) : categoryStatus === "error" ? (
-            <p
-              className="text-muted-foreground px-2 py-1.5 text-xs"
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
-              Couldn&apos;t load categories
-            </p>
-          ) : (
-            categoryRows.map((row) => (
-              <button
-                key={row.id}
-                type="button"
-                onClick={() => setSelectedCategoryId(row.id)}
-                className={`py-1.5 pr-2 text-left text-sm transition-colors ${
-                  selectedCategoryId === row.id
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground-muted"
-                }`}
-                style={{
-                  borderRadius: "2px",
-                  paddingLeft: `${8 + row.depth * 12}px`,
-                }}
-              >
-                {row.name}
-              </button>
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* Condition */}
-      <div className="mb-7">
-        <h3
-          className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
-          Condition
-        </h3>
-        <div className="flex flex-col gap-0.5">
-          {conditions.map((cond) => (
-            <button
-              key={cond}
-              type="button"
-              onClick={() => setSelectedCondition(cond)}
-              className={`px-2 py-1.5 text-left text-sm transition-colors ${
-                selectedCondition === cond
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground-muted"
-              }`}
-              style={{ borderRadius: "2px" }}
-            >
-              {cond}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Price */}
-      <div>
-        <h3
-          className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
-          Price Range
-        </h3>
-        <div className="flex gap-2">
-          <input
-            placeholder="Min"
-            className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-2 py-1.5 text-xs transition-colors focus:outline-none"
-            style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
-          />
-          <input
-            placeholder="Max"
-            className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-2 py-1.5 text-xs transition-colors focus:outline-none"
-            style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
-          />
-        </div>
-      </div>
-    </>
-  );
-}
 
 export default function Browse() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -205,7 +40,9 @@ export default function Browse() {
   >("loading");
   const [listings, setListings] = useState<ListingPaginatedResponse>(emptyPage);
 
-  const requestedCategoryId = parseCategoryId(searchParams.get("categoryId"));
+  const requestedCategoryId = parsePositiveInteger(
+    searchParams.get("categoryId"),
+  );
   const selectedCategoryId = useMemo(() => {
     if (categoryStatus === "error") {
       return null;
@@ -372,27 +209,7 @@ export default function Browse() {
               )}
             </button>
 
-            <div className="flex items-center gap-2">
-              <span
-                className="text-muted-foreground hidden text-xs md:block"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
-                Sort
-              </span>
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as ListingSort)}
-                className="border-border bg-card text-foreground focus:border-primary cursor-pointer border px-2 py-1.5 text-xs focus:outline-none md:px-3 md:text-sm"
-                style={{
-                  borderRadius: "2px",
-                  fontFamily: "Outfit, sans-serif",
-                }}
-              >
-                <option value="newest">Recent</option>
-                <option value="priceAsc">Price: Low to High</option>
-                <option value="priceDesc">Price: High to Low</option>
-              </select>
-            </div>
+            <SortDropdownButton sort={sort} setSort={setSort} />
           </div>
         </div>
 

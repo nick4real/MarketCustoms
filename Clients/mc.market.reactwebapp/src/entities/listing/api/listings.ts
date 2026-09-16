@@ -7,9 +7,9 @@ import type {
 import {
   readBoolean,
   readFiniteNumber,
-  readJsonResponse,
+  readResponse,
   readStringNonEmpty,
-} from "@/shared/lib/parseJson";
+} from "@/shared/lib/readJson";
 import { listingSearchBody } from "@/entities/listing/lib/listingSearchBody";
 
 /* Listings API */
@@ -100,9 +100,7 @@ export async function getListings(
         }
       : {}),
   });
-  return mapPaginatedListings(
-    await readJsonResponse(response, "Listings request"),
-  );
+  return mapPaginatedListings(await readResponse(response, "Listings request"));
 }
 
 export async function getListingById(id: string): Promise<Listing> {
@@ -111,5 +109,5 @@ export async function getListingById(id: string): Promise<Listing> {
   }
 
   const response = await fetch(`${listingsUrl}/${id}`);
-  return (await readJsonResponse(response, "Listing request")) as Listing;
+  return (await readResponse(response, "Listing request")) as Listing;
 }

@@ -1,5 +1,5 @@
 import type { CurrentUserMetadata } from "@/entities/profile/model/types";
-import { readJsonResponse, readStringNonEmpty } from "@/shared/lib/parseJson";
+import { readResponse, readStringNonEmpty } from "@/shared/lib/readJson";
 
 /* Profiles API */
 const metadataUrl = "/api/profiles/me/current-user-metadata";
@@ -46,6 +46,6 @@ export async function ensureCurrentUserMetadata(
   });
 
   return mapCurrentUserMetadata(
-    readJsonResponse(response, "Profile metadata request"),
+    readResponse(response, "Profile metadata request"),
   );
 }

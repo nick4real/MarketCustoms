@@ -3,5 +3,5 @@ export {
   readFiniteNumber,
   readPositiveInt,
   readStringNonEmpty,
-  readJsonResponse,
-} from "@/shared/lib/parseJson";
+  readResponse as readJsonResponse,
+} from "@/shared/lib/readJson";
