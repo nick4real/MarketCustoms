@@ -151,6 +151,7 @@ export default function ListingDetails() {
             title={listing.title}
           />
 
+          {/* Listing details strip */}
           <div>
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <span
@@ -174,6 +175,7 @@ export default function ListingDetails() {
               </span>
             </div>
 
+            {/* Title */}
             <h1
               className="text-foreground mb-4 text-[32px] leading-tight font-bold md:text-[40px]"
               style={{ fontFamily: "Fraunces, Georgia, serif" }}
@@ -181,6 +183,7 @@ export default function ListingDetails() {
               {listing.title}
             </h1>
 
+            {/* Price section & stock label */}
             <div className="mb-8 flex items-baseline gap-3">
               <span
                 className="text-foreground text-[36px] leading-none font-bold"
@@ -196,6 +199,7 @@ export default function ListingDetails() {
               </span>
             </div>
 
+            {/* Buy Now and Make an Offer buttons */}
             <div className="mb-8 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
@@ -213,6 +217,7 @@ export default function ListingDetails() {
               </button>
             </div>
 
+            {/* Seller section */}
             <Link
               to="/profile"
               className="border-border bg-card hover:border-border-hover mb-8 flex items-center gap-3 border p-4 transition-colors"
@@ -242,6 +247,7 @@ export default function ListingDetails() {
               </span>
             </Link>
 
+            {/* Description section */}
             <section className="mb-8">
               <h2
                 className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
@@ -254,6 +260,7 @@ export default function ListingDetails() {
               </p>
             </section>
 
+            {/* Details section */}
             <section className="mb-8">
               <h2
                 className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
