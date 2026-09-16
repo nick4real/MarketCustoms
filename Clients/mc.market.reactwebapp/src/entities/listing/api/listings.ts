@@ -39,7 +39,6 @@ export function mapPaginatedListings(body: unknown): ListingPaginatedResponse {
     throw new Error("Invalid listings response");
   }
 
-  console.log("body", body);
   const row = body as Record<string, unknown>;
   if (!Array.isArray(row.items)) {
     throw new Error("Invalid listings response");
