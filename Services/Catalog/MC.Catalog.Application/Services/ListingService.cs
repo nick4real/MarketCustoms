@@ -77,7 +77,7 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
                 StockQuantity = request.StockQuantity,
                 ImageLinks = request.ImageLinks ?? [],
                 Tags = request.Tags ?? [],
-                Parameters = request.Parameters ?? [],
+                Parameters = request.Parameters?.Select(MapParamDto).ToList() ?? [],
                 CreatedAt = DateTimeOffset.UtcNow
             };
             await listingRepository.AddListingAsync(listing, ct);
@@ -104,6 +104,12 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
             category.Name,
             category.ChildCategories?.Select(MapCategory).ToList());
 
+    private static ParamDto MapParam(Param param)
+        => new(param.Name, param.Value);
+
+    private static Param MapParamDto(ParamDto param)
+        => new Param { Name = param.Name, Value = param.Value };
+
     private static ListingCardViewDto MapCatalogView(ListingCardView view)
         => new(
             view.Id,
@@ -126,7 +132,7 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
             listing.StockQuantity,
             listing.ImageLinks ?? [],
             listing.Tags ?? [],
-            listing.Parameters ?? []);
+            listing.Parameters?.Select(MapParam).ToList() ?? []);
 
     //private static Result<ListingsPaginatedResponse<ListingCardViewDto>> EmptyPage(PaginationParams paginationParams)
     //    => Result<ListingsPaginatedResponse<ListingCardViewDto>>.Success(new ListingsPaginatedResponse<ListingCardViewDto>(

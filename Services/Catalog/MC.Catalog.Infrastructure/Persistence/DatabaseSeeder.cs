@@ -132,14 +132,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1452780212940-6f5c0d16d619"
                 },
                 Tags = new List<string> { "rangefinder", "film", "leica", "analog" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Leica"),
-                    new Tuple<string, string>("Model", "M6 TTL"),
-                    new Tuple<string, string>("Year", "1998"),
-                    new Tuple<string, string>("Finder", "0.72×"),
-                    new Tuple<string, string>("Shutter", "1–1/1000 + B"),
-                    new Tuple<string, string>("Serial", "2471821")
+                    new Param { Name = "Brand", Value = "Leica" },
+                    new Param { Name = "Model", Value = "M6 TTL" },
+                    new Param { Name = "Year", Value = "1998" },
+                    new Param { Name = "Finder", Value = "0.72×" },
+                    new Param { Name = "Shutter", Value = "1–1/1000 + B" },
+                    new Param { Name = "Serial", Value = "2471821" }
                 }
             },
             new ListingBson
@@ -158,14 +158,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1483985988355-763728e1935b"
                 },
                 Tags = new List<string> { "gore-tex", "shell", "outdoor", "arcteryx" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Arc'teryx"),
-                    new Tuple<string, string>("Model", "Beta AR"),
-                    new Tuple<string, string>("Size", "M"),
-                    new Tuple<string, string>("Color", "Black Sapphire"),
-                    new Tuple<string, string>("Fabric", "Gore-Tex Pro"),
-                    new Tuple<string, string>("Fit", "Regular")
+                    new Param { Name = "Brand", Value = "Arc'teryx" },
+                    new Param { Name = "Model", Value = "Beta AR" },
+                    new Param { Name = "Size", Value = "M" },
+                    new Param { Name = "Color", Value = "Black Sapphire" },
+                    new Param { Name = "Fabric", Value = "Gore-Tex Pro" },
+                    new Param { Name = "Fit", Value = "Regular" }
                 }
             },
             new ListingBson
@@ -184,14 +184,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1507473885765-e6ed057f782c"
                 },
                 Tags = new List<string> { "braun", "design", "alarm", "vintage" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Braun"),
-                    new Tuple<string, string>("Model", "T3"),
-                    new Tuple<string, string>("Designer", "Dietrich Lubs"),
-                    new Tuple<string, string>("Origin", "Germany"),
-                    new Tuple<string, string>("Power", "1× AA"),
-                    new Tuple<string, string>("Dimensions", "61 × 61 × 61 mm")
+                    new Param { Name = "Brand", Value = "Braun" },
+                    new Param { Name = "Model", Value = "T3" },
+                    new Param { Name = "Designer", Value = "Dietrich Lubs" },
+                    new Param { Name = "Origin", Value = "Germany" },
+                    new Param { Name = "Power", Value = "1× AA" },
+                    new Param { Name = "Dimensions", Value = "61 × 61 × 61 mm" }
                 }
             },
             new ListingBson
@@ -210,14 +210,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1493225457124-a3eb161ffa5f"
                 },
                 Tags = new List<string> { "turntable", "dj", "technics", "vinyl" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Technics"),
-                    new Tuple<string, string>("Model", "SL-1200 MK5"),
-                    new Tuple<string, string>("Drive", "Direct drive"),
-                    new Tuple<string, string>("Speed", "33⅓ / 45 RPM"),
-                    new Tuple<string, string>("Voltage", "220–240V"),
-                    new Tuple<string, string>("Includes", "Headshell, cables, dust cover")
+                    new Param { Name = "Brand", Value = "Technics" },
+                    new Param { Name = "Model", Value = "SL-1200 MK5" },
+                    new Param { Name = "Drive", Value = "Direct drive" },
+                    new Param { Name = "Speed", Value = "33⅓ / 45 RPM" },
+                    new Param { Name = "Voltage", Value = "220–240V" },
+                    new Param { Name = "Includes", Value = "Headshell, cables, dust cover" }
                 }
             },
             new ListingBson
@@ -236,14 +236,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1452780212940-6f5c0d16d619"
                 },
                 Tags = new List<string> { "medium format", "hasselblad", "film", "v-system" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Hasselblad"),
-                    new Tuple<string, string>("Model", "500C/M"),
-                    new Tuple<string, string>("Format", "6×6"),
-                    new Tuple<string, string>("Screen", "Acute-Matte"),
-                    new Tuple<string, string>("Finish", "Chrome"),
-                    new Tuple<string, string>("Includes", "Body only")
+                    new Param { Name = "Brand", Value = "Hasselblad" },
+                    new Param { Name = "Model", Value = "500C/M" },
+                    new Param { Name = "Format", Value = "6×6" },
+                    new Param { Name = "Screen", Value = "Acute-Matte" },
+                    new Param { Name = "Finish", Value = "Chrome" },
+                    new Param { Name = "Includes", Value = "Body only" }
                 }
             },
             new ListingBson
@@ -262,14 +262,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1582552938357-32b906df40cb"
                 },
                 Tags = new List<string> { "denim", "levis", "501", "vintage" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Levi's"),
-                    new Tuple<string, string>("Model", "501"),
-                    new Tuple<string, string>("Year", "1988"),
-                    new Tuple<string, string>("Waist", "32\""),
-                    new Tuple<string, string>("Inseam", "32\""),
-                    new Tuple<string, string>("Rise", "High")
+                    new Param { Name = "Brand", Value = "Levi's" },
+                    new Param { Name = "Model", Value = "501" },
+                    new Param { Name = "Year", Value = "1988" },
+                    new Param { Name = "Waist", Value = "32\"" },
+                    new Param { Name = "Inseam", Value = "32\"" },
+                    new Param { Name = "Rise", Value = "High" }
                 }
             },
             new ListingBson
@@ -288,14 +288,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1484704849700-f032a568e944"
                 },
                 Tags = new List<string> { "headphones", "anc", "sony", "wireless" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Sony"),
-                    new Tuple<string, string>("Model", "WH-1000XM5"),
-                    new Tuple<string, string>("Color", "Black"),
-                    new Tuple<string, string>("Connectivity", "Bluetooth 5.2"),
-                    new Tuple<string, string>("Battery", "Up to 30 hours"),
-                    new Tuple<string, string>("Includes", "Case, cable, adapter")
+                    new Param { Name = "Brand", Value = "Sony" },
+                    new Param { Name = "Model", Value = "WH-1000XM5" },
+                    new Param { Name = "Color", Value = "Black" },
+                    new Param { Name = "Connectivity", Value = "Bluetooth 5.2" },
+                    new Param { Name = "Battery", Value = "Up to 30 hours" },
+                    new Param { Name = "Includes", Value = "Case, cable, adapter" }
                 }
             },
             new ListingBson
@@ -314,14 +314,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1556228720-195a672e8a03"
                 },
                 Tags = new List<string> { "aesop", "travel", "grooming", "sealed" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Aesop"),
-                    new Tuple<string, string>("Set", "Departure Kit"),
-                    new Tuple<string, string>("Status", "Sealed"),
-                    new Tuple<string, string>("Pieces", "3"),
-                    new Tuple<string, string>("Vessel", "Tin"),
-                    new Tuple<string, string>("Origin", "Australia")
+                    new Param { Name = "Brand", Value = "Aesop" },
+                    new Param { Name = "Set", Value = "Departure Kit" },
+                    new Param { Name = "Status", Value = "Sealed" },
+                    new Param { Name = "Pieces", Value = "3" },
+                    new Param { Name = "Vessel", Value = "Tin" },
+                    new Param { Name = "Origin", Value = "Australia" }
                 }
             },
             new ListingBson
@@ -340,14 +340,14 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                     "photo-1606983340126-99ab4feaa64a"
                 },
                 Tags = new List<string> { "slr", "olympus", "film", "om-system" },
-                Parameters = new List<Tuple<string, string>>
+                Parameters = new List<Param>
                 {
-                    new Tuple<string, string>("Brand", "Olympus"),
-                    new Tuple<string, string>("Model", "OM-1"),
-                    new Tuple<string, string>("Finish", "Chrome"),
-                    new Tuple<string, string>("Shutter", "1–1/1000 + B"),
-                    new Tuple<string, string>("Meter", "Working (1.5V adapter)"),
-                    new Tuple<string, string>("Includes", "Body cap")
+                    new Param { Name = "Brand", Value = "Olympus" },
+                    new Param { Name = "Model", Value = "OM-1" },
+                    new Param { Name = "Finish", Value = "Chrome" },
+                    new Param { Name = "Shutter", Value = "1–1/1000 + B" },
+                    new Param { Name = "Meter", Value = "Working (1.5V adapter)" },
+                    new Param { Name = "Includes", Value = "Body cap" }
                 }
             }
         };

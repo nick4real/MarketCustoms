@@ -15,4 +15,4 @@ public record ListingDetailedResponse(
     int Stock,
     List<string> Images,
     List<string> Tags,
-    List<Tuple<string, string>> Parameters);
+    List<ParamDto> Parameters);

@@ -1,3 +1,4 @@
+using MC.Catalog.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -19,5 +20,5 @@ public class ListingBson
     public int StockQuantity { get; set; }
     public List<string> ImageLinks { get; set; } = [];
     public List<string> Tags { get; set; } = [];
-    public List<Tuple<string, string>> Parameters { get; set; } = [];
+    public List<Param> Parameters { get; set; } = [];
 }

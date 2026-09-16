@@ -71,8 +71,8 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
                 var value = Regex.Escape(parameter.Item2.Trim());
                 filter &= filterBuilder.ElemMatch(
                     p => p.Parameters,
-                    Builders<Tuple<string, string>>.Filter.Regex(x => x.Item1, new MongoDB.Bson.BsonRegularExpression($"^{name}$", "i"))
-                    & Builders<Tuple<string, string>>.Filter.Regex(x => x.Item2, new MongoDB.Bson.BsonRegularExpression($"^{value}$", "i")));
+                    Builders<Param>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression($"^{name}$", "i"))
+                    & Builders<Param>.Filter.Regex(x => x.Value, new MongoDB.Bson.BsonRegularExpression($"^{value}$", "i")));
             }
         }
 

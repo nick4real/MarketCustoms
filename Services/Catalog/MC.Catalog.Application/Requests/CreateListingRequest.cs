@@ -12,5 +12,5 @@ public record CreateListingRequest(
     int StockQuantity,
     List<string> ImageLinks,
     List<string> Tags,
-    List<Tuple<string, string>> Parameters
+    List<ParamDto> Parameters
 );
