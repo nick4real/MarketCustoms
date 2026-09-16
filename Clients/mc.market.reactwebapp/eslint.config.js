@@ -3,6 +3,7 @@ import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import boundaries from "eslint-plugin-boundaries";
+import fsdImport from "eslint-plugin-fsd-import";
 import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 
@@ -20,7 +21,7 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
-    plugins: { boundaries },
+    plugins: { boundaries, "fsd-import": fsdImport },
     languageOptions: {
       globals: globals.browser,
     },
@@ -62,6 +63,9 @@ export default defineConfig([
       ],
     },
     rules: {
+      "fsd-import/fsd-relative-path": "error",
+      "fsd-import/layer-imports": "error",
+      "fsd-import/public-api-imports": "error",
       "boundaries/dependencies": [
         // FSD: Feature-Sliced Design
         "error",
