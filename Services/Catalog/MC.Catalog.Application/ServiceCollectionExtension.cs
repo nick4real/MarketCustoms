@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using Mapster;
-using Microsoft.Extensions.DependencyInjection;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Services;
 using MC.Catalog.Application.Validators;
 using MC.Catalog.Application.Validators.Requests;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MC.Catalog.Application;
 
@@ -15,14 +14,13 @@ public static class ServiceCollectionExtension
     {
         public IServiceCollection AddApplication()
         {
-            services.AddMapster();
-
             // Services
-            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IListingService, ListingService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             // Validators
-            services.AddValidatorsFromAssemblyContaining<ProductParamsValidator>();
-            services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
+            services.AddValidatorsFromAssemblyContaining<ListingParamsValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateListingValidator>();
             services.AddFluentValidationAutoValidation();
 
             return services;

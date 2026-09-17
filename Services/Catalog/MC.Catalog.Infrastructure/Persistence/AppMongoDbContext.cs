@@ -9,8 +9,10 @@ public class AppMongoDbContext
 {
     private readonly IMongoClient _mongoClient;
     private readonly IMongoDatabase _mongoDatabase;
-    private readonly IMongoCollection<ProductBson> _products;
-    public IMongoCollection<ProductBson> Products => _products;
+    private readonly IMongoCollection<ListingBson> _listings;
+    public IMongoCollection<ListingBson> Listings => _listings;
+    public async Task<IClientSessionHandle> GetClientSessionAsync(CancellationToken ct)
+        => await _mongoClient.StartSessionAsync(cancellationToken: ct);
 
     public AppMongoDbContext(IOptions<MongoDbOptions> options)
     {
@@ -18,6 +20,6 @@ public class AppMongoDbContext
 
         _mongoClient = new MongoClient(mongoOptions.Uri);
         _mongoDatabase = _mongoClient.GetDatabase(mongoOptions.DatabaseName);
-        _products = _mongoDatabase.GetCollection<ProductBson>(mongoOptions.ProductCollectionName);
+        _listings = _mongoDatabase.GetCollection<ListingBson>(mongoOptions.ListingCollectionName);
     }
 }

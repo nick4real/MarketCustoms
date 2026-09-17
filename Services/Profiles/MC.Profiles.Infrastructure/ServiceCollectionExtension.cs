@@ -1,18 +1,17 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Identity;
+﻿using MC.Profiles.Application.Interfaces.Repositories;
+using MC.Profiles.Application.Interfaces.Services;
+using MC.Profiles.Infrastructure.Options;
+using MC.Profiles.Infrastructure.Persistence;
+using MC.Profiles.Infrastructure.Persistence.Repositories;
+using MC.Profiles.Infrastructure.Services;
+using MC.Shared.Application.Interfaces.Repositories;
+using MC.Shared.Application.Interfaces.Services;
+using MC.Shared.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebStoreUser.Application.Interfaces.Repositories;
-using WebStoreUser.Application.Interfaces.Services;
-using WebStoreUser.Application.Services;
-using WebStoreUser.Application.Validators.Auth;
-using WebStoreUser.Infrastructure.Persistence;
-using WebStoreUser.Infrastructure.Persistence.Repositories;
-using WebStoreUser.Infrastructure.Services;
 
-namespace WebStoreUser.Infrastructure;
+namespace MC.Profiles.Infrastructure;
 
 public static class ServiceCollectionExtension
 {
@@ -20,24 +19,38 @@ public static class ServiceCollectionExtension
     {
         public IServiceCollection AddInfrastructure(IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("UserDatabase"), builder =>
+            services.AddDbContext<AppRelationalDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("profilesSqlDatabase"), builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
 
+            services.AddHttpClient(Auth0ManagementIdentityService.HttpClientName);
+            services.AddHttpContextAccessor();
+
+            // Options
+            services.Configure<Auth0ManagementOptions>(options =>
+            {
+                options.Domain = configuration["Auth0:Domain"] ?? string.Empty;
+                options.ClientId = configuration["Auth0:Management:ClientId"] ?? string.Empty;
+                options.ClientSecret = configuration["Auth0:Management:ClientSecret"] ?? string.Empty;
+            });
+
             // Repositories
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ISessionRepository, SessionRepository>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Services
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IPasswordHasherService, PasswordHasherService>();
-            services.AddScoped<ITokenGenerator, TokenGenerator>();
-
-            // Validators
-            services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
-            services.AddFluentValidationAutoValidation();
+            services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
+            var useLocalTestIdentity = configuration.GetValue("Authentication:UseLocalTestIdentity", false);
+            if (useLocalTestIdentity)
+            {
+                services.AddScoped<IIdentityService, NoOpIdentityService>();
+            }
+            else
+            {
+                services.AddScoped<IIdentityService, Auth0ManagementIdentityService>();
+            }
 
             return services;
         }

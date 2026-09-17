@@ -7,14 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mapster" />
-	<PackageReference Include="Mapster.DependencyInjection" />
 	<PackageReference Include="FluentValidation" />
 	<PackageReference Include="FluentValidation.AspNetCore" />
 	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\MC.Shared.Application\MC.Shared.Application.csproj" />
     <ProjectReference Include="..\MC.Catalog.Domain\MC.Catalog.Domain.csproj" />
   </ItemGroup>
 

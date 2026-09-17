@@ -1,25 +1,20 @@
-using Microsoft.AspNetCore.HttpOverrides;
+using MC.Profiles.Application;
+using MC.Profiles.Infrastructure;
+using MC.Profiles.Infrastructure.Persistence;
+using MC.Shared.API;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using WebStoreUser.Infrastructure;
-using WebStoreUser.Infrastructure.Filters;
-using WebStoreUser.Infrastructure.Options;
 
 // Builder
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)                
-    .AddEnvironmentVariables();
-
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
-
 builder.AddServiceDefaults();
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<ValidationFilter>();
-});
+builder.Services.AddControllers();
+
+builder.AddAuthenticationDefaults();
+builder.Services.AddAuthorization();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -29,23 +24,28 @@ if (builder.Environment.IsDevelopment())
 // App
 var app = builder.Build();
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-        ForwardedHeaders.XForwardedProto |
-        ForwardedHeaders.XForwardedHost,
-
-    ForwardLimit = 1
-});
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapDefaultEndpoints();
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
-}
 
-app.MapDefaultEndpoints();
-app.MapControllers();
+    await using (var serviceScope = app.Services.CreateAsyncScope())
+    await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppRelationalDbContext>())
+    {
+        var executionStrategy = dbContext.Database.CreateExecutionStrategy();
+
+        await executionStrategy.ExecuteAsync(async () =>
+        {
+            await dbContext.Database.EnsureDeletedAsync();
+            await dbContext.Database.EnsureCreatedAsync();
+        });
+    }
+}
 
 app.Run();

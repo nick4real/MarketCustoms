@@ -1,0 +1,111 @@
+using MC.Catalog.IntegrationTests.Fixtures;
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
+
+namespace MC.Catalog.IntegrationTests.Api;
+
+[Collection(CatalogAppCollection.Name)]
+public sealed class ListingsControllerTests
+{
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    private readonly CatalogAppFixture _fixture;
+
+    public ListingsControllerTests(CatalogAppFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
+    [Fact]
+    public async Task Get_invalid_listing_id_returns_400()
+    {
+        using var client = _fixture.CreateAnonymousClient();
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        var response = await client.GetAsync("/Listings/not-a-valid-id", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.Content.ReadFromJsonAsync<ErrorBody>(JsonOptions, cancellationToken);
+        Assert.NotNull(error);
+        Assert.Equal(400, error.Code);
+    }
+
+    [Fact]
+    public async Task Create_listing_without_auth_returns_401()
+    {
+        using var client = _fixture.CreateAnonymousClient();
+
+        var response = await client.PostAsJsonAsync("/Listings/create", NewListing(1), TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Authenticated_create_persists_listing_in_isolated_stores()
+    {
+        using var anonymous = _fixture.CreateAnonymousClient();
+        using var authenticated = _fixture.CreateAuthenticatedClient();
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        var createCategory = await authenticated.PostAsJsonAsync(
+            "/Categories",
+            new { name = $"Integration Category {Guid.NewGuid():N}", parentId = (uint?)null },
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, createCategory.StatusCode);
+
+        var categoriesResponse = await anonymous.GetAsync("/Categories", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, categoriesResponse.StatusCode);
+        var categories = await categoriesResponse.Content.ReadFromJsonAsync<CategoryBody[]>(JsonOptions, cancellationToken);
+        Assert.NotNull(categories);
+        Assert.NotEmpty(categories);
+        var categoryId = categories[0].Id;
+
+        var title = $"Integration Listing {Guid.NewGuid():N}";
+        var createListing = await authenticated.PostAsJsonAsync("/Listings/create", NewListing(categoryId, title), cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, createListing.StatusCode);
+
+        var created = await createListing.Content.ReadFromJsonAsync<ListingBody>(JsonOptions, cancellationToken);
+        var listingId = created is { Id.Length: 24 } ? created.Id : await FindListingIdByTitle(anonymous, title, cancellationToken);
+
+        var getResponse = await anonymous.GetAsync($"/Listings/{listingId}", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+        var fetched = await getResponse.Content.ReadFromJsonAsync<ListingBody>(JsonOptions, cancellationToken);
+        Assert.NotNull(fetched);
+        Assert.Equal(title, fetched.Title);
+        Assert.Equal(categoryId, fetched.CategoryId);
+    }
+
+    private static async Task<string> FindListingIdByTitle(HttpClient client, string title, CancellationToken cancellationToken)
+    {
+        var listResponse = await client.GetAsync("/Listings", cancellationToken);
+        listResponse.EnsureSuccessStatusCode();
+        var page = await listResponse.Content.ReadFromJsonAsync<ListingPage>(JsonOptions, cancellationToken);
+        Assert.NotNull(page);
+        var match = Assert.Single(page.Items, item => item.Title == title);
+        Assert.False(string.IsNullOrWhiteSpace(match.Id));
+        return match.Id;
+    }
+
+    private static object NewListing(uint categoryId, string title = "Unauthorized listing") => new
+    {
+        ownerId = CatalogAppFixture.LocalTestUserId,
+        title,
+        description = "Created by Catalog integration tests",
+        categoryId,
+        price = 9.99m,
+        stockQuantity = 1,
+        imageLinks = Array.Empty<string>(),
+        tags = Array.Empty<string>(),
+        parameters = Array.Empty<object>()
+    };
+
+    private sealed record ErrorBody(int Code, string Message);
+    private sealed record CategoryBody(uint Id, string Name);
+    private sealed record ListingBody(string Id, string Title, uint CategoryId);
+    private sealed record ListingPage(ListingItem[] Items);
+    private sealed record ListingItem(string Id, string Title);
+}

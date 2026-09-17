@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MC.Catalog.Application.Common;
-using MC.Catalog.Application.Models;
+using MC.Shared.Application.Requests;
 
 namespace MC.Catalog.Application.Validators;
 

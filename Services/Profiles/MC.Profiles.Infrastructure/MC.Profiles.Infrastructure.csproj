@@ -7,6 +7,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Migrations\**" />
+	  <EmbeddedResource Remove="Migrations\**" />
+	  <None Remove="Migrations\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Shared\MC.Shared.Infrastructure\MC.Shared.Infrastructure.csproj" />
 		<ProjectReference Include="..\MC.Profiles.Application\MC.Profiles.Application.csproj" />
 	</ItemGroup>
 
