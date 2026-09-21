@@ -1,4 +1,5 @@
 import type { CategoryFilterRow } from "@/entities/category";
+import { useSearchParams } from "react-router";
 
 export interface CategoryFilterProps {
   categoryRows: CategoryFilterRow[];
@@ -13,6 +14,8 @@ export function CategoryFilter({
   selectedCategoryId,
   setSelectedCategoryId,
 }: CategoryFilterProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   return (
     <div className="mb-7">
       <h3

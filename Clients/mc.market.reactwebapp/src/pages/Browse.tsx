@@ -1,16 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import type { CategoryFilterRow, CategoryNode } from "@/entities/category";
-import {
-  flattenCategoryForest,
-  getCategoryFullTree,
-  getRootCategories,
-} from "@/entities/category";
 import {
   getListings,
   ListingCard,
   type ListingPaginatedResponse,
   type ListingSort,
+  ListingStoreProvider,
 } from "@/entities/listing";
 import { FilterPanel } from "@/widgets/filter-panel";
 import { parsePositiveInteger } from "@/shared/lib/parseJson";
@@ -26,66 +21,32 @@ const emptyPage: ListingPaginatedResponse = {
 };
 
 export default function Browse() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [selectedCondition, setSelectedCondition] = useState("Any");
-  const [sort, setSort] = useState<ListingSort>("newest");
-  const [search, setSearch] = useState("");
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [categoryStatus, setCategoryStatus] = useState<
-    "loading" | "ready" | "error"
-  >("loading");
-  const [categoryRows, setCategoryRows] = useState<CategoryFilterRow[]>([]);
-  const [listingsStatus, setListingsStatus] = useState<
-    "loading" | "ready" | "error"
-  >("loading");
-  const [listings, setListings] = useState<ListingPaginatedResponse>(emptyPage);
+  return (
+    <ListingStoreProvider>
+      <BrowseContent />
+    </ListingStoreProvider>
+  );
+}
+
+export function BrowseContent() {
+  const [searchParams] = useSearchParams();
 
   const requestedCategoryId = parsePositiveInteger(
     searchParams.get("categoryId"),
   );
-  const selectedCategoryId = useMemo(() => {
-    if (categoryStatus === "error") {
-      return null;
-    }
-    if (requestedCategoryId === null) {
-      return null;
-    }
-    if (categoryStatus !== "ready") {
-      return requestedCategoryId;
-    }
-    return categoryRows.some((row) => row.id === requestedCategoryId)
-      ? requestedCategoryId
-      : null;
-  }, [categoryRows, categoryStatus, requestedCategoryId]);
 
-  const selectedCategoryName =
-    categoryRows.find((row) => row.id === selectedCategoryId)?.name ?? null;
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    requestedCategoryId,
+  );
+  const [selectedCondition, setSelectedCondition] = useState<string>("Any");
+  const [sort, setSort] = useState<ListingSort>("newest");
+  const [search, setSearch] = useState<string>("");
+  const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
+  const [listingsStatus, setListingsStatus] = useState<
+    "loading" | "ready" | "error"
+  >("loading");
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    void (async () => {
-      try {
-        const roots = await getRootCategories(controller.signal);
-        const forest: CategoryNode[] = await Promise.all(
-          roots.map((root) => getCategoryFullTree(root.id, controller.signal)),
-        );
-        if (controller.signal.aborted) {
-          return;
-        }
-        setCategoryRows(flattenCategoryForest(forest));
-        setCategoryStatus("ready");
-      } catch (error) {
-        if (controller.signal.aborted || isAbortError(error)) {
-          return;
-        }
-        setCategoryRows([]);
-        setCategoryStatus("error");
-      }
-    })();
-
-    return () => controller.abort();
-  }, []);
+  const [listings, setListings] = useState<ListingPaginatedResponse>(emptyPage);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -128,28 +89,11 @@ export default function Browse() {
     (selectedCondition !== "Any" ? 1 : 0) +
     (search ? 1 : 0);
 
-  function setSelectedCategoryId(id: number | null) {
-    setSearchParams(
-      (current) => {
-        const next = new URLSearchParams(current);
-        if (id === null) {
-          next.delete("categoryId");
-        } else {
-          next.set("categoryId", String(id));
-        }
-        return next;
-      },
-      { replace: true },
-    );
-  }
-
   return (
     <div className="bg-background flex min-h-screen">
       {/* Desktop sidebar */}
       <aside className="border-border sticky top-14 hidden h-[calc(100vh-56px)] w-56 shrink-0 self-start overflow-y-auto border-r p-6 md:block">
         <FilterPanel
-          categoryRows={categoryRows}
-          categoryStatus={categoryStatus}
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}
           selectedCondition={selectedCondition}
@@ -217,8 +161,6 @@ export default function Browse() {
         {filtersOpen && (
           <div className="border-border bg-surface-inset border-b px-4 py-6 md:hidden">
             <FilterPanel
-              categoryRows={categoryRows}
-              categoryStatus={categoryStatus}
               selectedCategoryId={selectedCategoryId}
               setSelectedCategoryId={setSelectedCategoryId}
               selectedCondition={selectedCondition}

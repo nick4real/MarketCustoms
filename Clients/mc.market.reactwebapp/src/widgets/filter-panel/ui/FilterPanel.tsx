@@ -1,4 +1,3 @@
-import type { CategoryFilterRow } from "@/entities/category";
 import {
   PriceFilter,
   CategoryFilter,
@@ -7,8 +6,6 @@ import {
 } from "@/features/listing-filters";
 
 export interface FilterPanelProps {
-  categoryRows: CategoryFilterRow[];
-  categoryStatus: "loading" | "ready" | "error";
   selectedCategoryId: number | null;
   setSelectedCategoryId: (id: number | null) => void;
   selectedCondition: string;
@@ -18,8 +15,6 @@ export interface FilterPanelProps {
 }
 
 export default function FilterPanel({
-  categoryRows,
-  categoryStatus,
   selectedCategoryId,
   setSelectedCategoryId,
   selectedCondition,
@@ -31,8 +26,6 @@ export default function FilterPanel({
     <>
       <SearchFilter search={search} setSearch={setSearch} />
       <CategoryFilter
-        categoryRows={categoryRows}
-        categoryStatus={categoryStatus}
         selectedCategoryId={selectedCategoryId}
         setSelectedCategoryId={setSelectedCategoryId}
       />

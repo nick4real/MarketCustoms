@@ -1,5 +1,8 @@
 export type ListingSort = "newest" | "priceAsc" | "priceDesc";
 
+export type ListingCondition =
+  "any" | "new" | "used" | "refurbished" | "damaged";
+
 export interface ListingQueryParams {
   categoryId?: number;
   sort?: ListingSort;
@@ -33,7 +36,7 @@ export interface Listing {
     region?: string | null;
     city?: string | null;
   };
-  condition?: string;
+  condition?: ListingCondition;
   sellerRating?: number;
   sellerSales?: number;
 }
