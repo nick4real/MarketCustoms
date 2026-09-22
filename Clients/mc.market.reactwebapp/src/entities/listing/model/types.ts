@@ -1,7 +1,10 @@
-export type ListingSort = "newest" | "priceAsc" | "priceDesc";
+import {
+  LISTING_CONDITIONS,
+  LISTING_SORTS,
+} from "@/entities/listing/model/constants";
 
-export type ListingCondition =
-  "any" | "new" | "used" | "refurbished" | "damaged";
+export type ListingCondition = (typeof LISTING_CONDITIONS)[number];
+export type ListingSort = (typeof LISTING_SORTS)[number];
 
 export interface ListingQueryParams {
   categoryId?: number;

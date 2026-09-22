@@ -11,11 +11,14 @@ import {
   getAuth0ProviderOptions,
   isAuth0Configured,
 } from "@/features/visitor-session";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function onRedirectCallback(appState?: { returnTo?: string }) {
   savePostSignInReturnTo(appState?.returnTo);
   void router.navigate("/callback", { replace: true });
 }
+
+const queryClient = new QueryClient();
 
 export default function AppProviders() {
   if (!isAuth0Configured) {
@@ -31,9 +34,11 @@ export default function AppProviders() {
       {...getAuth0ProviderOptions()}
       onRedirectCallback={onRedirectCallback}
     >
-      <Auth0VisitorSessionProvider>
-        <RouterProvider router={router} />
-      </Auth0VisitorSessionProvider>
+      <QueryClientProvider client={queryClient}>
+        <Auth0VisitorSessionProvider>
+          <RouterProvider router={router} />
+        </Auth0VisitorSessionProvider>
+      </QueryClientProvider>
     </Auth0Provider>
   );
 }

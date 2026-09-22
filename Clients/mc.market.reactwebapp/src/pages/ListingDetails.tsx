@@ -81,6 +81,7 @@ export default function ListingDetails() {
   const {
     isPending: isListingPending,
     isError: isListingError,
+    error: listingError,
     data: listing,
   } = useQuery<Listing, Error>({
     queryKey: ["listing", listingId],
@@ -95,6 +96,19 @@ export default function ListingDetails() {
     queryKey: ["related", listingId],
     queryFn: () => getListings({ pageSize: 4 }),
   });
+
+  if (listingError?.message === "Not Found") {
+    return (
+      <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
+        <p
+          className="text-foreground-subtle mb-8 text-xs tracking-widest"
+          style={{ fontFamily: "DM Mono, monospace" }}
+        >
+          Listing not found
+        </p>
+      </div>
+    );
+  }
 
   if (isListingPending) {
     return (

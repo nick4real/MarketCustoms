@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
 import {
   getListings,
   ListingCard,
   type ListingPaginatedResponse,
-  type ListingSort,
   ListingStoreProvider,
+  useListingStoreState,
 } from "@/entities/listing";
 import { FilterPanel } from "@/widgets/filter-panel";
-import { parsePositiveInteger } from "@/shared/lib/parseJson";
 import { SortDropdownButton } from "@/features/listing-sorters";
 
 const emptyPage: ListingPaginatedResponse = {
@@ -29,18 +27,15 @@ export default function Browse() {
 }
 
 export function BrowseContent() {
-  const [searchParams] = useSearchParams();
+  const {
+    selectedCategoryId,
+    selectedCategoryName,
+    selectedCondition,
+    selectedSort,
+    searchText,
+    actions: { setSelectedSort },
+  } = useListingStoreState();
 
-  const requestedCategoryId = parsePositiveInteger(
-    searchParams.get("categoryId"),
-  );
-
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-    requestedCategoryId,
-  );
-  const [selectedCondition, setSelectedCondition] = useState<string>("Any");
-  const [sort, setSort] = useState<ListingSort>("newest");
-  const [search, setSearch] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
   const [listingsStatus, setListingsStatus] = useState<
     "loading" | "ready" | "error"
@@ -61,7 +56,7 @@ export function BrowseContent() {
         const page = await getListings(
           {
             categoryId: selectedCategoryId ?? undefined,
-            sort,
+            sort: selectedSort ?? undefined,
           },
           controller.signal,
         );
@@ -80,27 +75,20 @@ export function BrowseContent() {
     })();
 
     return () => controller.abort();
-  }, [selectedCategoryId, sort]);
+  }, [selectedCategoryId, selectedSort]);
 
   const filtered = listings.items;
 
   const activeFilters =
     (selectedCategoryId !== null ? 1 : 0) +
-    (selectedCondition !== "Any" ? 1 : 0) +
-    (search ? 1 : 0);
+    (selectedCondition !== null ? 1 : 0) +
+    (searchText !== null ? 1 : 0);
 
   return (
     <div className="bg-background flex min-h-screen">
       {/* Desktop sidebar */}
       <aside className="border-border sticky top-14 hidden h-[calc(100vh-56px)] w-56 shrink-0 self-start overflow-y-auto border-r p-6 md:block">
-        <FilterPanel
-          selectedCategoryId={selectedCategoryId}
-          setSelectedCategoryId={setSelectedCategoryId}
-          selectedCondition={selectedCondition}
-          setSelectedCondition={setSelectedCondition}
-          search={search}
-          setSearch={setSearch}
-        />
+        <FilterPanel />
       </aside>
 
       {/* Main */}
@@ -153,21 +141,17 @@ export function BrowseContent() {
               )}
             </button>
 
-            <SortDropdownButton sort={sort} setSort={setSort} />
+            <SortDropdownButton
+              sort={selectedSort ?? "newest"}
+              setSort={(sort) => setSelectedSort(sort)}
+            />
           </div>
         </div>
 
         {/* Mobile filter panel (collapsible) */}
         {filtersOpen && (
           <div className="border-border bg-surface-inset border-b px-4 py-6 md:hidden">
-            <FilterPanel
-              selectedCategoryId={selectedCategoryId}
-              setSelectedCategoryId={setSelectedCategoryId}
-              selectedCondition={selectedCondition}
-              setSelectedCondition={setSelectedCondition}
-              search={search}
-              setSearch={setSearch}
-            />
+            <FilterPanel />
             <button
               className="bg-primary text-primary-foreground mt-4 w-full py-2.5 text-sm font-semibold"
               style={{ borderRadius: "2px" }}

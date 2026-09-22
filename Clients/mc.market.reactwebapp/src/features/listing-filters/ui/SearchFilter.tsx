@@ -1,16 +1,18 @@
-export interface SearchFilterProps {
-  search: string;
-  setSearch: (search: string) => void;
-}
+import { useListingStoreState } from "@/entities/listing";
 
-export function SearchFilter({ search, setSearch }: SearchFilterProps) {
+export function SearchFilter() {
+  const {
+    searchText,
+    actions: { setSearchText },
+  } = useListingStoreState();
+
   return (
     <div className="relative mb-7">
       <input
         type="text"
         placeholder="Search listings..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={searchText ?? undefined}
+        onChange={(e) => setSearchText(e.target.value ?? null)}
         className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-3 py-2 pl-8 text-sm transition-colors focus:outline-none"
         style={{ borderRadius: "2px", fontFamily: "Outfit, sans-serif" }}
       />

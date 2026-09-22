@@ -1,5 +1,10 @@
+export {
+  LISTING_CONDITIONS,
+  LISTING_SORTS,
+} from "@/entities/listing/model/constants";
 export type {
   Category,
+  ListingCondition,
   Listing,
   ListingPaginatedResponse,
   ListingParameter,
@@ -19,6 +24,6 @@ export {
 export { default as ListingCard } from "@/entities/listing/ui/ListingCard";
 export { ListingStoreProvider } from "@/entities/listing/store/ListingStoreProvider";
 export {
+  useListingStoreState,
   useListingStoreActions,
-  useListings,
 } from "@/entities/listing/store/listingStore";

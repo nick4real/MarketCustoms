@@ -1,20 +1,21 @@
-import type { CategoryFilterRow } from "@/entities/category";
-import { useSearchParams } from "react-router";
+import { type Category, getRootCategories } from "@/entities/category";
+import { useListingStoreState } from "@/entities/listing";
+import { useQuery } from "@tanstack/react-query";
 
-export interface CategoryFilterProps {
-  categoryRows: CategoryFilterRow[];
-  categoryStatus: "loading" | "ready" | "error";
-  selectedCategoryId: number | null;
-  setSelectedCategoryId: (id: number | null) => void;
-}
+export function CategoryFilter() {
+  const {
+    selectedCategoryId,
+    actions: { setSelectedCategoryId },
+  } = useListingStoreState();
 
-export function CategoryFilter({
-  categoryRows,
-  categoryStatus,
-  selectedCategoryId,
-  setSelectedCategoryId,
-}: CategoryFilterProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const {
+    isPending: isPendingCategories,
+    isError: isErrorCategories,
+    data: categories,
+  } = useQuery<Category[], Error>({
+    queryKey: ["categories"],
+    queryFn: () => getRootCategories(),
+  });
 
   return (
     <div className="mb-7">
@@ -37,14 +38,14 @@ export function CategoryFilter({
         >
           All listings
         </button>
-        {categoryStatus === "loading" ? (
+        {isPendingCategories ? (
           <p
             className="text-muted-foreground px-2 py-1.5 text-xs"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
             Loading categories…
           </p>
-        ) : categoryStatus === "error" ? (
+        ) : isErrorCategories ? (
           <p
             className="text-muted-foreground px-2 py-1.5 text-xs"
             style={{ fontFamily: "DM Mono, monospace" }}
@@ -52,7 +53,7 @@ export function CategoryFilter({
             Couldn&apos;t load categories
           </p>
         ) : (
-          categoryRows.map((row) => (
+          categories?.map((row) => (
             <button
               key={row.id}
               type="button"
@@ -64,7 +65,7 @@ export function CategoryFilter({
               }`}
               style={{
                 borderRadius: "2px",
-                paddingLeft: `${8 + row.depth * 12}px`,
+                paddingLeft: `${8 + 1 * 12}px`,
               }}
             >
               {row.name}
