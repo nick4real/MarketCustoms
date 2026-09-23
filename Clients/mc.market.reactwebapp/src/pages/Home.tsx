@@ -81,27 +81,6 @@ export default function Home() {
           </div>
           <div className="from-background pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-linear-to-r to-transparent" />
         </div>
-
-        {/* Mobile image strip — hidden on desktop */}
-        <div className="flex gap-2 overflow-x-auto px-6 pb-10 md:px-12 lg:hidden">
-          {[
-            { src: "photo-1606983340126-99ab4feaa64a", alt: "Camera" },
-            { src: "photo-1558618666-fcd25c85cd64", alt: "Turntable" },
-            { src: "photo-1551698618-1dfe5d97d256", alt: "Jacket" },
-          ].map((img) => (
-            <div
-              key={img.src}
-              className="bg-card h-52 w-40 shrink-0 overflow-hidden"
-              style={{ borderRadius: "2px" }}
-            >
-              <img
-                src={`https://images.unsplash.com/${img.src}?w=320&h=416&fit=crop&auto=format`}
-                alt={img.alt}
-                className="h-full w-full object-cover opacity-80"
-              />
-            </div>
-          ))}
-        </div>
       </section>
 
       <SiteStatisticsStrip />

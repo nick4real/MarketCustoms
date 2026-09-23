@@ -28,6 +28,7 @@ export default function Browse() {
 
 export function BrowseContent() {
   const {
+    listings,
     selectedCategoryId,
     selectedCategoryName,
     selectedCondition,
@@ -37,47 +38,6 @@ export function BrowseContent() {
   } = useListingStoreState();
 
   const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
-  const [listingsStatus, setListingsStatus] = useState<
-    "loading" | "ready" | "error"
-  >("loading");
-
-  const [listings, setListings] = useState<ListingPaginatedResponse>(emptyPage);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    void (async () => {
-      await Promise.resolve();
-      if (controller.signal.aborted) {
-        return;
-      }
-      setListingsStatus("loading");
-      try {
-        const page = await getListings(
-          {
-            categoryId: selectedCategoryId ?? undefined,
-            sort: selectedSort ?? undefined,
-          },
-          controller.signal,
-        );
-        if (controller.signal.aborted) {
-          return;
-        }
-        setListings(page);
-        setListingsStatus("ready");
-      } catch (error: unknown) {
-        if (controller.signal.aborted || isAbortError(error)) {
-          return;
-        }
-        setListings(emptyPage);
-        setListingsStatus("error");
-      }
-    })();
-
-    return () => controller.abort();
-  }, [selectedCategoryId, selectedSort]);
-
-  const filtered = listings.items;
 
   const activeFilters =
     (selectedCategoryId !== null ? 1 : 0) +
@@ -106,11 +66,7 @@ export function BrowseContent() {
               className="text-muted-foreground mt-1.5 text-xs"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
-              {listingsStatus === "ready"
-                ? `${filtered.length} results`
-                : listingsStatus === "loading"
-                  ? "Loading…"
-                  : "Unavailable"}
+              {listings.length} results
             </p>
           </div>
 
@@ -157,30 +113,30 @@ export function BrowseContent() {
               style={{ borderRadius: "2px" }}
               onClick={() => setFiltersOpen(false)}
             >
-              Show {filtered.length} results
+              Show {listings.length} results
             </button>
           </div>
         )}
 
         {/* Grid */}
         <div className="px-4 py-5 md:px-8 md:py-8">
-          {listingsStatus === "loading" ? (
+          {listings.length === 0 ? (
             <p
               className="text-foreground-subtle py-24 text-center text-xs tracking-widest"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               Loading listings…
             </p>
-          ) : listingsStatus === "error" ? (
+          ) : listings.length === 0 ? (
             <p
               className="text-foreground-subtle py-24 text-center text-xs tracking-widest"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               Couldn&apos;t load listings
             </p>
-          ) : filtered.length > 0 ? (
+          ) : listings.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((item) => (
+              {listings.map((item) => (
                 <ListingCard key={item.id} listing={item} showLocation />
               ))}
             </div>

@@ -7,7 +7,7 @@ export function SearchFilter() {
   } = useListingStoreState();
 
   return (
-    <div className="relative mb-7">
+    <div className="relative mb-2">
       <input
         type="text"
         placeholder="Search listings..."

@@ -1,6 +1,6 @@
 export function PriceFilter() {
   return (
-    <div>
+    <div className="mb-2">
       <h3
         className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
         style={{ fontFamily: "DM Mono, monospace" }}
