@@ -4,8 +4,10 @@ import {
   type ListingPaginatedResponse,
 } from "@/entities/listing";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export default function SearchButton() {
+  const [isSearching, setIsSearching] = useState(false);
   const {
     selectedCategoryId,
     selectedSort,
@@ -28,27 +30,32 @@ export default function SearchButton() {
       pageIndex,
       pageSize,
     ],
-    queryFn: () =>
-      getListings({
+    queryFn: () => {
+      console.log("queryFn");
+      setIsSearching(true);
+      return getListings({
         pageIndex: pageIndex,
         pageSize: pageSize,
         categoryId: selectedCategoryId ?? undefined,
         sort: selectedSort ?? undefined,
-      }),
+      });
+    },
     enabled: false,
   });
 
   const useSearch = async () => {
     const result = await query.refetch();
-    console.log("useSearch" + result.data);
-    setListings(result.data?.items ?? []);
-    if (result.data) {
-      setTotalPages(result.data.totalPages);
-      setHasNextPage(result.data.hasNextPage);
-      setHasPreviousPage(result.data.hasPreviousPage);
-      setPageSize(result.data.pageSize);
-      setPageIndex(result.data.pageIndex);
-    }
+    const data = result.data;
+
+    if (!data) return;
+
+    setListings(data.items);
+    setTotalPages(data.totalPages);
+    setHasNextPage(data.hasNextPage);
+    setHasPreviousPage(data.hasPreviousPage);
+    setPageSize(data.pageSize);
+    setPageIndex(data.pageIndex);
+    setIsSearching(false);
   };
 
   return (
@@ -57,6 +64,7 @@ export default function SearchButton() {
       className="bg-primary text-primary-foreground mb-7 w-full px-4 py-1.5 text-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40"
       style={{ borderRadius: "2px" }}
       onClick={useSearch}
+      disabled={isSearching}
     >
       Search
     </button>
