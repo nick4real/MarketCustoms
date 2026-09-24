@@ -8,6 +8,7 @@ export interface AppliedListingSearch {
   sort: ListingSort | null;
   condition: ListingCondition | null;
   categoryId: number | null;
+  categoryName: string | null;
   maxPrice: number | null;
   minPrice: number | null;
   pageIndex: number;
@@ -28,6 +29,7 @@ export interface ListingState {
     setSearchText: (text: string | null) => void;
     setSelectedCategoryId: (id: number | null) => void;
     setSelectedCategoryName: (name: string | null) => void;
+    setAppliedCategoryName: (categoryId: number, name: string) => void;
     setSelectedSort: (sort: ListingSort | null) => void;
     setSelectedCondition: (condition: ListingCondition | null) => void;
     setSelectedMaxPrice: (price: number | null) => void;
@@ -43,6 +45,7 @@ const defaultApplied = (
   sort: initialState.selectedSort ?? null,
   condition: initialState.selectedCondition ?? null,
   categoryId: initialState.selectedCategoryId ?? null,
+  categoryName: initialState.selectedCategoryName ?? null,
   maxPrice: initialState.selectedMaxPrice ?? null,
   minPrice: initialState.selectedMinPrice ?? null,
   pageIndex: 1,
@@ -66,6 +69,16 @@ export const createListingStore = (initialState: Partial<ListingState>) => {
         set({ selectedCategoryId: id }),
       setSelectedCategoryName: (name: string | null) =>
         set({ selectedCategoryName: name }),
+      setAppliedCategoryName: (categoryId: number, name: string) =>
+        set((state) => {
+          if (
+            state.applied.categoryId !== categoryId ||
+            state.applied.categoryName === name
+          ) {
+            return state;
+          }
+          return { applied: { ...state.applied, categoryName: name } };
+        }),
       setSelectedSort: (sort: ListingSort | null) =>
         set({ selectedSort: sort }),
       setSelectedCondition: (condition: ListingCondition | null) =>
@@ -81,6 +94,7 @@ export const createListingStore = (initialState: Partial<ListingState>) => {
             sort: state.selectedSort,
             condition: state.selectedCondition,
             categoryId: state.selectedCategoryId,
+            categoryName: state.selectedCategoryName,
             maxPrice: state.selectedMaxPrice,
             minPrice: state.selectedMinPrice,
             pageIndex: 1,

@@ -33,6 +33,7 @@ export const ListingStoreProvider = ({ children }: { children: ReactNode }) => {
         sort: selectedSort,
         condition: selectedCondition,
         categoryId: selectedCategoryId,
+        categoryName: null,
         maxPrice: selectedMaxPrice,
         minPrice: selectedMinPrice,
         pageIndex,

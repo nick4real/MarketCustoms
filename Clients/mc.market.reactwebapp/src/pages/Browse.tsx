@@ -20,8 +20,8 @@ export function BrowseContent() {
   const listingsQuery = useListingsQuery();
   const items = listingsQuery.data?.items ?? [];
   const {
+    applied,
     selectedCategoryId,
-    selectedCategoryName,
     selectedCondition,
     selectedSort,
     searchText,
@@ -51,7 +51,7 @@ export function BrowseContent() {
               className="text-foreground text-[26px] leading-none font-bold md:text-[32px]"
               style={{ fontFamily: "Fraunces, Georgia, serif" }}
             >
-              {selectedCategoryName ?? "All Listings"}
+              {applied.categoryName ?? "All Listings"}
             </h1>
             <p
               className="text-muted-foreground mt-1.5 text-xs"
