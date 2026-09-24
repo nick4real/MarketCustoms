@@ -21,6 +21,7 @@ export {
   getListings,
   mapPaginatedListings as mapListingPage,
 } from "@/entities/listing/api/listings";
+export { useListingsQuery } from "@/entities/listing/api/useListingsQuery";
 export { default as ListingCard } from "@/entities/listing/ui/ListingCard";
 export { ListingStoreProvider } from "@/entities/listing/store/ListingStoreProvider";
 export {

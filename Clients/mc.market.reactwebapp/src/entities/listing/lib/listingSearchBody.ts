@@ -14,8 +14,14 @@ export function listingSearchBody(
   if (input?.sort) {
     body.sort = input.sort;
   }
+  const title = input?.title?.trim();
+  if (title) {
+    body.title = title;
+  }
 
-  return body.categoryId !== undefined || body.sort !== undefined
+  return body.categoryId !== undefined ||
+    body.sort !== undefined ||
+    body.title !== undefined
     ? body
     : undefined;
 }

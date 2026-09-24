@@ -76,6 +76,21 @@ describe("getListings", () => {
     );
   });
 
+  it("POSTs JSON ListingParams when title is set", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(listingPage));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await getListings({ title: "  Leica  ", pageSize: 12 });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/listings?pageSize=12",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ title: "Leica" }),
+      }),
+    );
+  });
+
   it("POSTs JSON ListingParams when categoryId or sort is set", async () => {
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse(listingPage));
     vi.stubGlobal("fetch", fetchMock);

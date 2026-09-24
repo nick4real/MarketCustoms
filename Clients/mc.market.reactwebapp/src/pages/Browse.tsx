@@ -1,9 +1,9 @@
 import { useState } from "react";
 import {
   ListingCard,
-  type ListingView,
   ListingStoreProvider,
   useListingStoreState,
+  useListingsQuery,
 } from "@/entities/listing";
 import { FilterPanel } from "@/widgets/filter-panel";
 import { SortDropdownButton } from "@/features/listing-sorters";
@@ -17,8 +17,9 @@ export default function Browse() {
 }
 
 export function BrowseContent() {
+  const listingsQuery = useListingsQuery();
+  const items = listingsQuery.data?.items ?? [];
   const {
-    listingsPaginated,
     selectedCategoryId,
     selectedCategoryName,
     selectedCondition,
@@ -56,7 +57,7 @@ export function BrowseContent() {
               className="text-muted-foreground mt-1.5 text-xs"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
-              {listingsPaginated.items.length} results
+              {listingsQuery.isPending ? "…" : `${items.length} results`}
             </p>
           </div>
 
@@ -103,30 +104,30 @@ export function BrowseContent() {
               style={{ borderRadius: "2px" }}
               onClick={() => setFiltersOpen(false)}
             >
-              Show {listingsPaginated.items.length} results
+              Show {items.length} results
             </button>
           </div>
         )}
 
         {/* Grid */}
         <div className="px-4 py-5 md:px-8 md:py-8">
-          {listingsPaginated.items.length === 0 ? (
+          {listingsQuery.isPending ? (
             <p
               className="text-foreground-subtle py-24 text-center text-xs tracking-widest"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               Loading listings…
             </p>
-          ) : listingsPaginated.items.length === 0 ? (
+          ) : listingsQuery.isError ? (
             <p
               className="text-foreground-subtle py-24 text-center text-xs tracking-widest"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               Couldn&apos;t load listings
             </p>
-          ) : listingsPaginated.items.length > 0 ? (
+          ) : items.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {listingsPaginated.items.map((item: ListingView) => (
+              {items.map((item) => (
                 <ListingCard key={item.id} listing={item} showLocation />
               ))}
             </div>

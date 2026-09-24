@@ -9,6 +9,7 @@ export type ListingSort = (typeof LISTING_SORTS)[number];
 export interface ListingQueryParams {
   categoryId?: number;
   sort?: ListingSort;
+  title?: string;
 }
 
 export interface ListingParameter {

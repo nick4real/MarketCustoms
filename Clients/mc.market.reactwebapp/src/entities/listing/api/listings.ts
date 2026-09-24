@@ -76,10 +76,12 @@ export async function getListings(
     pageSize?: number;
     categoryId?: number;
     sort?: ListingSort;
+    title?: string;
   },
   signal?: AbortSignal,
 ): Promise<ListingPaginatedResponse> {
   const query = new URLSearchParams();
+
   if (input?.pageIndex && input.pageIndex > 0) {
     query.set("pageIndex", input.pageIndex.toString());
   }
