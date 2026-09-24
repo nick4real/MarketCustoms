@@ -9,17 +9,10 @@ import { useState } from "react";
 export default function SearchButton() {
   const [isSearching, setIsSearching] = useState(false);
   const {
+    listingsPaginated,
     selectedCategoryId,
     selectedSort,
-    pagination: { pageIndex, pageSize },
-    actions: {
-      setListings,
-      setTotalPages,
-      setHasNextPage,
-      setHasPreviousPage,
-      setPageSize,
-      setPageIndex,
-    },
+    actions: { setListingsPaginated },
   } = useListingStoreState();
 
   const query = useQuery<ListingPaginatedResponse, Error>({
@@ -27,15 +20,15 @@ export default function SearchButton() {
       "listings",
       selectedCategoryId,
       selectedSort,
-      pageIndex,
-      pageSize,
+      listingsPaginated.pageIndex,
+      listingsPaginated.pageSize,
     ],
     queryFn: () => {
       console.log("queryFn");
       setIsSearching(true);
       return getListings({
-        pageIndex: pageIndex,
-        pageSize: pageSize,
+        pageIndex: listingsPaginated.pageIndex,
+        pageSize: listingsPaginated.pageSize,
         categoryId: selectedCategoryId ?? undefined,
         sort: selectedSort ?? undefined,
       });
@@ -49,12 +42,7 @@ export default function SearchButton() {
 
     if (!data) return;
 
-    setListings(data.items);
-    setTotalPages(data.totalPages);
-    setHasNextPage(data.hasNextPage);
-    setHasPreviousPage(data.hasPreviousPage);
-    setPageSize(data.pageSize);
-    setPageIndex(data.pageIndex);
+    setListingsPaginated(data);
     setIsSearching(false);
   };
 

@@ -1,22 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  getListings,
   ListingCard,
-  type ListingPaginatedResponse,
+  type ListingView,
   ListingStoreProvider,
   useListingStoreState,
 } from "@/entities/listing";
 import { FilterPanel } from "@/widgets/filter-panel";
 import { SortDropdownButton } from "@/features/listing-sorters";
-
-const emptyPage: ListingPaginatedResponse = {
-  items: [],
-  pageSize: 0,
-  pageIndex: 0,
-  totalPages: 0,
-  hasNextPage: false,
-  hasPreviousPage: false,
-};
 
 export default function Browse() {
   return (
@@ -28,7 +18,7 @@ export default function Browse() {
 
 export function BrowseContent() {
   const {
-    listings,
+    listingsPaginated,
     selectedCategoryId,
     selectedCategoryName,
     selectedCondition,
@@ -66,7 +56,7 @@ export function BrowseContent() {
               className="text-muted-foreground mt-1.5 text-xs"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
-              {listings.length} results
+              {listingsPaginated.items.length} results
             </p>
           </div>
 
@@ -113,30 +103,30 @@ export function BrowseContent() {
               style={{ borderRadius: "2px" }}
               onClick={() => setFiltersOpen(false)}
             >
-              Show {listings.length} results
+              Show {listingsPaginated.items.length} results
             </button>
           </div>
         )}
 
         {/* Grid */}
         <div className="px-4 py-5 md:px-8 md:py-8">
-          {listings.length === 0 ? (
+          {listingsPaginated.items.length === 0 ? (
             <p
               className="text-foreground-subtle py-24 text-center text-xs tracking-widest"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               Loading listings…
             </p>
-          ) : listings.length === 0 ? (
+          ) : listingsPaginated.items.length === 0 ? (
             <p
               className="text-foreground-subtle py-24 text-center text-xs tracking-widest"
               style={{ fontFamily: "DM Mono, monospace" }}
             >
               Couldn&apos;t load listings
             </p>
-          ) : listings.length > 0 ? (
+          ) : listingsPaginated.items.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {listings.map((item) => (
+              {listingsPaginated.items.map((item: ListingView) => (
                 <ListingCard key={item.id} listing={item} showLocation />
               ))}
             </div>
@@ -159,12 +149,5 @@ export function BrowseContent() {
         </div>
       </main>
     </div>
-  );
-}
-
-function isAbortError(error: unknown) {
-  return (
-    (error instanceof DOMException && error.name === "AbortError") ||
-    (error instanceof Error && error.name === "AbortError")
   );
 }

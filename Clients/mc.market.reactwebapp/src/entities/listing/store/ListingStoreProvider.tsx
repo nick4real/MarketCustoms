@@ -8,20 +8,20 @@ import { parseListingCondition, parseListingSort } from "../model/parse";
 export const ListingStoreProvider = ({ children }: { children: ReactNode }) => {
   const [searchParams] = useSearchParams();
   const initialState = {
-    listings: [],
-    searchText: searchParams.get("search"),
-    selectedSort: parseListingSort(searchParams.get("sort")),
-    selectedCondition: parseListingCondition(searchParams.get("condition")),
-    selectedCategoryId: parsePositiveInteger(searchParams.get("categoryId")),
-    selectedMaxPrice: parsePositiveInteger(searchParams.get("maxPrice")),
-    selectedMinPrice: parsePositiveInteger(searchParams.get("minPrice")),
-    pagination: {
+    listingsPaginated: {
+      items: [],
       pageSize: parsePositiveInteger(searchParams.get("pageSize")) ?? 12,
       pageIndex: parsePositiveInteger(searchParams.get("pageIndex")) ?? 1,
       totalPages: 0,
       hasNextPage: false,
       hasPreviousPage: false,
     },
+    searchText: searchParams.get("search"),
+    selectedSort: parseListingSort(searchParams.get("sort")),
+    selectedCondition: parseListingCondition(searchParams.get("condition")),
+    selectedCategoryId: parsePositiveInteger(searchParams.get("categoryId")),
+    selectedMaxPrice: parsePositiveInteger(searchParams.get("maxPrice")),
+    selectedMinPrice: parsePositiveInteger(searchParams.get("minPrice")),
   };
   const [listingStore] = useState(() => createListingStore(initialState));
 
