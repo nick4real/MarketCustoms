@@ -1,8 +1,11 @@
 import { type Category, getRootCategories } from "@/entities/category";
 import { useListingStoreState } from "@/entities/listing";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router";
 
 export function CategoryFilter() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const {
     selectedCategoryId,
     actions: { setSelectedCategoryId },
@@ -17,6 +20,21 @@ export function CategoryFilter() {
     queryFn: () => getRootCategories(),
   });
 
+  const handleCategoryClick = (categoryId: number | null) => {
+    if (searchParams.get("categoryId") === categoryId?.toString()) {
+      return;
+    }
+    setSearchParams((prev) => {
+      if (categoryId === null) {
+        prev.delete("categoryId");
+      } else {
+        prev.set("categoryId", categoryId.toString());
+      }
+      return prev;
+    });
+    setSelectedCategoryId(categoryId ?? null);
+  };
+
   return (
     <div className="mb-7">
       <h3
@@ -28,7 +46,7 @@ export function CategoryFilter() {
       <div className="flex flex-col gap-0.5">
         <button
           type="button"
-          onClick={() => setSelectedCategoryId(null)}
+          onClick={() => handleCategoryClick(null)}
           className={`px-2 py-1.5 text-left text-sm transition-colors ${
             selectedCategoryId === null
               ? "text-primary"
@@ -57,7 +75,7 @@ export function CategoryFilter() {
             <button
               key={row.id}
               type="button"
-              onClick={() => setSelectedCategoryId(row.id)}
+              onClick={() => handleCategoryClick(row.id)}
               className={`py-1.5 pr-2 text-left text-sm transition-colors ${
                 selectedCategoryId === row.id
                   ? "text-primary"
