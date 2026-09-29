@@ -49,30 +49,33 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         var filter = filterBuilder.Empty;
 
         Console.WriteLine(filter == filterBuilder.Empty);
-
-        if (listingParams != null && listingParams.CategoryId.HasValue)
+         
+        if (listingParams != null)
         {
-            // Search in the tree of categories for the given categoryId and its children, if any.
-            // TODO: filter &= filterBuilder.In(p => p.CategoryId, expandedCategoryIds);
-            filter &= filterBuilder.Eq(p => p.CategoryId, listingParams.CategoryId.Value);
-        }
-
-        if (listingParams != null && !string.IsNullOrWhiteSpace(listingParams.Title))
-        {
-            var title = Regex.Escape(listingParams.Title.Trim());
-            filter &= filterBuilder.Regex(p => p.Title, new MongoDB.Bson.BsonRegularExpression(title, "i"));
-        }
-
-        if (listingParams?.Parameters is { Count: > 0 })
-        {
-            foreach (var parameter in listingParams.Parameters)
+            if (listingParams.CategoryId.HasValue)
             {
-                var name = Regex.Escape(parameter.Item1.Trim());
-                var value = Regex.Escape(parameter.Item2.Trim());
-                filter &= filterBuilder.ElemMatch(
-                    p => p.Parameters,
-                    Builders<Param>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression($"^{name}$", "i"))
-                    & Builders<Param>.Filter.Regex(x => x.Value, new MongoDB.Bson.BsonRegularExpression($"^{value}$", "i")));
+                // Search in the tree of categories for the given categoryId and its children, if any.
+                // TODO: filter &= filterBuilder.In(p => p.CategoryId, expandedCategoryIds);
+                filter &= filterBuilder.Eq(p => p.CategoryId, listingParams.CategoryId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(listingParams.Title))
+            {
+                var title = Regex.Escape(listingParams.Title.Trim());
+                filter &= filterBuilder.Regex(p => p.Title, new MongoDB.Bson.BsonRegularExpression(title, "i"));
+            }
+
+            if (listingParams.Parameters is { Count: > 0 })
+            {
+                foreach (var parameter in listingParams.Parameters)
+                {
+                    var name = Regex.Escape(parameter.Item1.Trim());
+                    var value = Regex.Escape(parameter.Item2.Trim());
+                    filter &= filterBuilder.ElemMatch(
+                        p => p.Parameters,
+                        Builders<Param>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression($"^{name}$", "i"))
+                        & Builders<Param>.Filter.Regex(x => x.Value, new MongoDB.Bson.BsonRegularExpression($"^{value}$", "i")));
+                }
             }
         }
 
@@ -81,17 +84,20 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
             : mongoContext.Listings.CountDocumentsAsync(filter, cancellationToken: ct);
 
         // TODO:
-        //var find = mongoContext.Listings.Find(filter);
-        //find = listingParams?.Sort switch
-        //{
-        //    "priceAsc" => find.SortBy(p => p.Price),
-        //    "priceDesc" => find.SortByDescending(p => p.Price),
-        //    _ => find.SortByDescending(p => p.CreatedAt)
-        //};
+        var find = mongoContext.Listings.Find(filter);
+        find = listingParams?.Sort switch
+        {
+            "dateAsc" => find.SortBy(listing => listing.CreatedAt),
+            "dateDesc" => find.SortByDescending(listing => listing.CreatedAt),
+            "priceAsc" => find.SortBy(listing => listing.Price),
+            "priceDesc" => find.SortByDescending(listing => listing.Price),
+            // TODO: Another algorightm in the future
+            "popularityAsc" => find.SortBy(listing => listing.StockQuantity),
+            "popularityDesc" => find.SortByDescending(listing => listing.StockQuantity),
+            _ => find.SortByDescending(listing => listing.CreatedAt)
+        };
 
-        var listingsTask = mongoContext.Listings
-            .Find(filter)
-            .SortByDescending(p => p.CreatedAt)
+        var listingsTask = find
             .Skip(skip)
             .Limit(take)
             .Project(p => new ListingCardView(
