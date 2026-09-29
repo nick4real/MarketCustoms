@@ -130,6 +130,7 @@ public class ListingService(IListingRepository listingRepository, ICategoryRepos
             view.Id,
             view.Title,
             view.Description,
+            view.Condition,
             view.Price,
             view.ImageLink);
 

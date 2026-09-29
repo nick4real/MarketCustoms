@@ -48,6 +48,7 @@ export interface Listing {
 export interface ListingView {
   id: string;
   title: string;
+  condition: ListingCondition;
   description: string;
   price: number;
   imageId: string;

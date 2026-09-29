@@ -103,6 +103,7 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
                 p.Id,
                 p.Title,
                 p.Description,
+                p.Condition.ToString(),
                 p.Price,
                 p.ImageLinks.FirstOrDefault() ?? string.Empty
             ))
@@ -127,6 +128,7 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
                 OwnerGuid = listing.OwnerGuid,
                 Title = listing.Title,
                 Description = listing.Description,
+                Condition = listing.Condition,
                 CategoryId = listing.CategoryId,
                 LocationId = listing.LocationId,
                 CreatedAt = listing.CreatedAt,

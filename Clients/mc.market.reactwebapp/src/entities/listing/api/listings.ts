@@ -3,6 +3,7 @@ import type {
   ListingPaginatedResponse,
   ListingSort,
   ListingView,
+  ListingCondition,
 } from "@/entities/listing/model/types";
 import {
   readBoolean,
@@ -24,14 +25,22 @@ export function mapListingView(body: unknown): ListingView {
   const row = body as Record<string, unknown>;
   const id = readStringNonEmpty(row.id);
   const title = readStringNonEmpty(row.title);
+  const condition = readStringNonEmpty(row.condition);
   const description = readStringNonEmpty(row.description) ?? "";
   const price = readFiniteNumber(row.price);
   const imageId = readStringNonEmpty(row.imageId) ?? "";
-  if (!id || !title || price === null) {
-    throw new Error("Invalid listing");
+  if (!id || !title || !condition || price === null) {
+    throw new Error("Invalid listing view");
   }
 
-  return { id, title, description, price, imageId };
+  return {
+    id,
+    title,
+    condition: condition as ListingCondition,
+    description,
+    price,
+    imageId,
+  };
 }
 
 export function mapPaginatedListings(body: unknown): ListingPaginatedResponse {

@@ -35,7 +35,7 @@ export default function ListingCard({
             className="bg-secondary text-muted-foreground shrink-0 px-1.5 py-0.5 text-[10px]"
             style={{ fontFamily: "DM Mono, monospace" }}
           >
-            {"New"}
+            {listing.condition}
           </span>
         </div>
         {showLocation && (

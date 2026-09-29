@@ -1,3 +1,5 @@
+using MC.Catalog.Domain.Enums;
+
 namespace MC.Catalog.Domain.Entities;
 
 public class Listing
@@ -6,6 +8,7 @@ public class Listing
     public Guid OwnerGuid { get; set; } = Guid.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public Condition Condition { get; set; } = Condition.New;
     public uint CategoryId { get; set; }
     public Category Category { get; set; } = new();
     public uint LocationId { get; set; }
@@ -17,3 +20,4 @@ public class Listing
     public List<string> Tags { get; set; } = [];
     public List<Param> Parameters { get; set; } = [];
 }
+

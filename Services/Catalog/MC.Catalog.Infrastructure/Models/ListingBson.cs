@@ -1,4 +1,5 @@
 using MC.Catalog.Domain.Entities;
+using MC.Catalog.Domain.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -13,6 +14,8 @@ public class ListingBson
     public Guid OwnerGuid { get; set; } = Guid.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    [BsonRepresentation(BsonType.String)]
+    public Condition Condition { get; set; } = Condition.New;
     public uint CategoryId { get; set; }
     public uint LocationId { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
