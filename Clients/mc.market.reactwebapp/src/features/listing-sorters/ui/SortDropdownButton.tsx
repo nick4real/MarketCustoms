@@ -23,9 +23,12 @@ export function SortDropdownButton({ sort, setSort }: SortDropdownButtonProps) {
           fontFamily: "Outfit, sans-serif",
         }}
       >
-        <option value="newest">Recent</option>
+        <option value="dateDesc">Recent</option>
+        <option value="dateAsc">Oldest</option>
         <option value="priceAsc">Price: Low to High</option>
         <option value="priceDesc">Price: High to Low</option>
+        <option value="popularityDesc">Popular</option>
+        <option value="popularityAsc">Unpopular</option>
       </select>
     </div>
   );
