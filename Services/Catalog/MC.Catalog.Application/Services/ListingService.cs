@@ -8,11 +8,12 @@ using MC.Catalog.Application.Responses;
 using MC.Catalog.Domain.Entities;
 using MC.Catalog.Domain.Views;
 using MC.Shared.Application.Common;
+using MC.Shared.Application.Models;
 using MC.Shared.Application.Requests;
 
 namespace MC.Catalog.Application.Services;
 
-public class ListingService(IListingRepository listingRepository) : IListingService
+public class ListingService(IListingRepository listingRepository, ICategoryRepository categoryRepository) : IListingService
 {
     public async Task<Result<ListingDetailedResponse>> GetDetailedListingByIdAsync(string id, CancellationToken ct)
     {
@@ -36,8 +37,22 @@ public class ListingService(IListingRepository listingRepository) : IListingServ
         int take = paginationParams.PageSize;
 
         // TODO: Get descendant ids with categoryId and filter
+        PagedCollection<ListingCardView> pagedListings = null;
 
-        var pagedListings = await listingRepository.GetListingsCatalogViewAsync(skip, take, ct, listingParams);
+        if (listingParams?.CategoryId.HasValue == true)
+        {
+            var expandedCategoryIds = (await categoryRepository
+                .GetCategoryExpandedAsync(ct, listingParams.CategoryId.Value)
+                )?.Select(c => c.Id);
+
+            pagedListings = await listingRepository.GetListingsCatalogViewAsync(skip, take, ct, 
+                expandedCategoryIds: expandedCategoryIds, listingParams: listingParams);
+        }
+        else
+        {
+            pagedListings = await listingRepository.GetListingsCatalogViewAsync(skip, take, ct, listingParams: listingParams);
+        }
+
         int totalPages = pagedListings.TotalItems == 0
             ? 0
             : (int)Math.Ceiling(pagedListings.TotalItems / (double)paginationParams.PageSize);

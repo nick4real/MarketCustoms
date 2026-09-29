@@ -43,7 +43,8 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         };
     }
 
-    public async Task<PagedCollection<ListingCardView>> GetListingsCatalogViewAsync(int skip, int take, CancellationToken ct, ListingParams? listingParams)
+    public async Task<PagedCollection<ListingCardView>> GetListingsCatalogViewAsync
+        (int skip, int take, CancellationToken ct, IEnumerable<uint>? expandedCategoryIds = null, ListingParams? listingParams = null)
     {
         var filterBuilder = Builders<Models.ListingBson>.Filter;
         var filter = filterBuilder.Empty;
@@ -54,9 +55,7 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
         {
             if (listingParams.CategoryId.HasValue)
             {
-                // Search in the tree of categories for the given categoryId and its children, if any.
-                // TODO: filter &= filterBuilder.In(p => p.CategoryId, expandedCategoryIds);
-                filter &= filterBuilder.Eq(p => p.CategoryId, listingParams.CategoryId.Value);
+                filter &= filterBuilder.In(p => p.CategoryId, expandedCategoryIds);
             }
 
             if (!string.IsNullOrWhiteSpace(listingParams.Title))

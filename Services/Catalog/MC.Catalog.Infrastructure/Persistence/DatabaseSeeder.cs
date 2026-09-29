@@ -277,7 +277,7 @@ public class DatabaseSeeder(AppRelationalDbContext relContext, AppMongoDbContext
                 OwnerGuid = FullGrantedUserId,
                 Title = "Sony WH-1000XM5",
                 Description = "Black XM5s used for two months of commuting. Pads and headband are unmarked; ANC and transparency work as expected. Battery still reports a full 30-hour cycle. Includes case, USB-C cable, and 3.5mm adapter. Factory reset before shipping.",
-                CategoryId = 1,
+                CategoryId = 7,
                 CreatedAt = DateTime.UtcNow,
                 Price = 280.00m,
                 StockQuantity = 1,

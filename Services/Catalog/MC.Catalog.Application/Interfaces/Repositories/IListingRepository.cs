@@ -7,7 +7,10 @@ namespace MC.Catalog.Application.Interfaces.Repositories;
 
 public interface IListingRepository
 {
-    Task<PagedCollection<ListingCardView>> GetListingsCatalogViewAsync(int skip, int take, CancellationToken ct, ListingParams? queryParams);
+    Task<PagedCollection<ListingCardView>> GetListingsCatalogViewAsync
+        (int skip, int take, CancellationToken ct, 
+        IEnumerable<uint>? expandedCategoryIds = null, 
+        ListingParams? listingParams = null);
     Task<Listing?> GetListingByIdAsync(string id, CancellationToken ct);
     Task AddListingAsync(Listing listing, CancellationToken ct);
     Task SaveChangesAsync();

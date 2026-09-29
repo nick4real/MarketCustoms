@@ -30,6 +30,21 @@ public class CategoryRepository(AppRelationalDbContext relationalDbContext) : IC
         .ToArrayAsync(ct))
         .FirstOrDefault();
 
+    public async Task<Category[]?> GetCategoryExpandedAsync(CancellationToken ct, uint categoryId)
+        => await relationalDbContext.Categories
+        .FromSqlRaw(@"
+            WITH CategoryTree AS (
+                -- Anchor member: Select root category
+                SELECT * FROM Categories WHERE Id = {0}
+                UNION ALL
+                -- Recursive member: Select child categories
+                SELECT c.* 
+                FROM Categories c
+                INNER JOIN CategoryTree ct ON c.ParentCategoryId = ct.Id
+            )
+            SELECT * FROM CategoryTree", categoryId)
+        .ToArrayAsync(ct);
+
     public async Task<Category[]?> GetRootCategoriesAsync(CancellationToken ct)
         => await relationalDbContext.Categories.Where(c => c.ParentCategoryId == null).ToArrayAsync(ct);
 
