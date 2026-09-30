@@ -5,12 +5,18 @@ export function parseListingSort(value: string | null): ListingSort | null {
     return null;
   }
   switch (value) {
-    case "newest":
-      return "newest";
+    case "dateAsc":
+      return "dateAsc";
+    case "dateDesc":
+      return "dateDesc";
     case "priceAsc":
       return "priceAsc";
     case "priceDesc":
       return "priceDesc";
+    case "popularityAsc":
+      return "popularityAsc";
+    case "popularityDesc":
+      return "popularityDesc";
   }
   throw new Error(`Invalid listing sort: ${value}`);
 }
@@ -26,8 +32,6 @@ export function parseListingCondition(
       return "new";
     case "used":
       return "used";
-    case "refurbished":
-      return "refurbished";
     case "damaged":
       return "damaged";
   }
