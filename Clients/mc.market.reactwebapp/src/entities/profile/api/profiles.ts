@@ -46,6 +46,6 @@ export async function ensureCurrentUserMetadata(
   });
 
   return mapCurrentUserMetadata(
-    readResponse(response, "Profile metadata request"),
+    await readResponse(response, "Profile metadata request"),
   );
 }
