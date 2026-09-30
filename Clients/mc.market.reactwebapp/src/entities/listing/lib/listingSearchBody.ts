@@ -14,6 +14,9 @@ export function listingSearchBody(
   if (input?.sort) {
     body.sort = input.sort;
   }
+  if (input?.condition) {
+    body.condition = input.condition;
+  }
   const title = input?.title?.trim();
   if (title) {
     body.title = title;
@@ -21,7 +24,8 @@ export function listingSearchBody(
 
   return body.categoryId !== undefined ||
     body.sort !== undefined ||
-    body.title !== undefined
+    body.title !== undefined ||
+    body.condition !== undefined
     ? body
     : undefined;
 }

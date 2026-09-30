@@ -58,6 +58,11 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
                 filter &= filterBuilder.In(p => p.CategoryId, expandedCategoryIds);
             }
 
+            if (listingParams.Condition.HasValue)
+            {
+                filter &= filterBuilder.Eq(p => p.Condition, listingParams.Condition.Value);
+            }
+
             if (!string.IsNullOrWhiteSpace(listingParams.Title))
             {
                 var title = Regex.Escape(listingParams.Title.Trim());

@@ -89,7 +89,7 @@ export function BrowseContent() {
             </button>
 
             <SortDropdownButton
-              sort={selectedSort ?? "newest"}
+              sort={selectedSort ?? "dateDesc"}
               setSort={(sort) => setSelectedSort(sort)}
             />
           </div>

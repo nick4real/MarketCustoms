@@ -27,6 +27,7 @@ export function useListingsQuery() {
           pageIndex: applied.pageIndex,
           pageSize: applied.pageSize,
           categoryId: applied.categoryId ?? undefined,
+          condition: applied.condition ?? undefined,
           sort: applied.sort ?? undefined,
           title: applied.searchText ?? undefined,
         },

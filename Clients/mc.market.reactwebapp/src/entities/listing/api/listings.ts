@@ -84,6 +84,7 @@ export async function getListings(
     pageIndex?: number;
     pageSize?: number;
     categoryId?: number;
+    condition?: ListingCondition;
     sort?: ListingSort;
     title?: string;
   },
