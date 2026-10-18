@@ -2,10 +2,10 @@ export default function SiteStatisticsStrip() {
   return (
     <div className="border-border grid grid-cols-2 gap-5 overflow-x-auto border-y px-6 py-6 md:flex md:items-center md:gap-12 md:px-12 lg:gap-16 lg:px-16">
       {[
-        { value: "48,291", label: "Active listings" },
-        { value: "12,847", label: "Verified sellers" },
-        { value: "$2.1M", label: "Traded this month" },
-        { value: "4.92", label: "Avg seller rating" },
+        { value: "—", label: "Active listings" },
+        { value: "—", label: "Verified sellers" },
+        { value: "—", label: "Traded this month" },
+        { value: "—", label: "Avg seller rating" },
       ].map((stat) => (
         <div
           key={stat.label}
