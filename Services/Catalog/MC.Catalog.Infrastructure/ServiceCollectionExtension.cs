@@ -3,7 +3,7 @@ using MC.Catalog.Infrastructure.Options;
 using MC.Catalog.Infrastructure.Persistence;
 using MC.Catalog.Infrastructure.Persistence.Repositories;
 using MC.Shared.Application.Interfaces.Services;
-using MC.Shared.Infrastructure.Interfaces.Persistence;
+using MC.Shared.Infrastructure.Seeding;
 using MC.Shared.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +22,12 @@ public static class ServiceCollectionExtension
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
-            services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
+            services.AddDatabaseSeeder<DatabaseSeeder>(configuration);
+            services.AddOptions<CatalogSeedingOptions>()
+                .Bind(configuration.GetSection(CatalogSeedingOptions.SectionName))
+                .Validate(o => o.ListingsPerSeller is >= 0 and <= CatalogSeedingOptions.MaxListingsPerSeller,
+                    $"Seeding:Catalog:ListingsPerSeller must be between 0 and {CatalogSeedingOptions.MaxListingsPerSeller}.")
+                .ValidateOnStart();
 
             services.AddScoped<AppMongoDbContext>();
 
