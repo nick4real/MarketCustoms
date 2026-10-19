@@ -6,6 +6,7 @@ using MC.Profiles.Infrastructure.Persistence.Repositories;
 using MC.Profiles.Infrastructure.Services;
 using MC.Shared.Application.Interfaces.Repositories;
 using MC.Shared.Application.Interfaces.Services;
+using MC.Shared.Infrastructure.Seeding;
 using MC.Shared.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,9 @@ public static class ServiceCollectionExtension
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
+            services.AddDatabaseSeeder<DatabaseSeeder>(configuration);
+            services.AddOptions<ProfilesSeedingOptions>()
+                .Bind(configuration.GetSection(ProfilesSeedingOptions.SectionName));
 
             services.AddHttpClient(Auth0ManagementIdentityService.HttpClientName);
             services.AddHttpContextAccessor();

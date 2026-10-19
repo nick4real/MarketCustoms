@@ -1,8 +1,7 @@
 using MC.Profiles.Application;
 using MC.Profiles.Infrastructure;
-using MC.Profiles.Infrastructure.Persistence;
 using MC.Shared.API;
-using Microsoft.EntityFrameworkCore;
+using MC.Shared.Infrastructure.Seeding;
 using Scalar.AspNetCore;
 
 // Builder
@@ -35,17 +34,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 
-    await using (var serviceScope = app.Services.CreateAsyncScope())
-    await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppRelationalDbContext>())
-    {
-        var executionStrategy = dbContext.Database.CreateExecutionStrategy();
-
-        await executionStrategy.ExecuteAsync(async () =>
-        {
-            await dbContext.Database.EnsureDeletedAsync();
-            await dbContext.Database.EnsureCreatedAsync();
-        });
-    }
+    await app.SeedDatabaseAsync();
 }
 
 app.Run();

@@ -9,5 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Services\Profiles\MC.Profiles.Application\MC.Profiles.Application.csproj" />
+    <ProjectReference Include="..\..\..\Services\Profiles\MC.Profiles.Infrastructure\MC.Profiles.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
