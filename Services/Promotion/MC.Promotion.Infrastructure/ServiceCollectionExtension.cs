@@ -1,5 +1,6 @@
 ﻿using MC.Promotion.Infrastructure.Persistence;
 using MC.Shared.Application.Interfaces.Services;
+using MC.Shared.Infrastructure.Seeding;
 using MC.Shared.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ public static class ServiceCollectionExtension
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
+            services.AddSchemaOnlySeeder<AppDbContext>(configuration);
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
