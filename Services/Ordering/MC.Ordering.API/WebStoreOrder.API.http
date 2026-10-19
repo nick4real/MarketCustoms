@@ -1,6 +1,0 @@
-@WebStoreOrder.API_HostAddress = http://localhost:5104
-
-GET {{WebStoreOrder.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

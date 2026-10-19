@@ -1,6 +1,0 @@
-@WebStoreNotification.API_HostAddress = http://localhost:5189
-
-GET {{WebStoreNotification.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
