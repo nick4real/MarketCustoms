@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MC.Shared.Application\MC.Shared.Application.csproj" />
   </ItemGroup>
 

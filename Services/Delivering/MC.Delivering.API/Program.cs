@@ -1,32 +1,18 @@
-﻿using Auth0.AspNetCore.Authentication.Api;
-using MC.Delivering.Application;
+﻿using MC.Delivering.Application;
 using MC.Delivering.Infrastructure;
-using MC.Delivering.Infrastructure.Persistence;
-using MC.Shared.API.Authentication;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
+using MC.Shared.API;
+using MC.Shared.Infrastructure.Seeding;
 using Scalar.AspNetCore;
 
 // Builder
 var builder = WebApplication.CreateBuilder(args);
-var useLocalTestIdentity = builder.Configuration.GetValue("Authentication:UseLocalTestIdentity", false);
 
 builder.AddServiceDefaults();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 
-if (useLocalTestIdentity)
-{
-    builder.Services.AddAuthentication(LocalTestAuthenticationHandler.SchemeName)
-        .AddScheme<AuthenticationSchemeOptions, LocalTestAuthenticationHandler>(
-            LocalTestAuthenticationHandler.SchemeName, _ => { });
-}
-else
-{
-    builder.Services.AddAuth0ApiAuthentication(builder.Configuration.GetSection("Auth0"));
-}
-
+builder.AddAuthenticationDefaults();
 builder.Services.AddAuthorization();
 
 if (builder.Environment.IsDevelopment())
@@ -43,25 +29,12 @@ app.UseAuthorization();
 app.MapDefaultEndpoints();
 app.MapControllers();
 
-if (app.Environment.IsDevelopment() || useLocalTestIdentity)
+if (app.Environment.IsDevelopment())
 {
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapOpenApi();
-        app.MapScalarApiReference();
-    }
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 
-    await using (var serviceScope = app.Services.CreateAsyncScope())
-    await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
-    {
-        var executionStrategy = dbContext.Database.CreateExecutionStrategy();
-
-        await executionStrategy.ExecuteAsync(async () =>
-        {
-            await dbContext.Database.EnsureDeletedAsync();
-            await dbContext.Database.EnsureCreatedAsync();
-        });
-    }
+    await app.SeedDatabaseAsync();
 }
 
 app.Run();

@@ -50,6 +50,7 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
     var profilesService = builder.AddProject<Projects.MC_Profiles_API>("profilesService")
         .WithAuth0Parameters(auth0Parameters)
         .WithAuth0ManagementParameters(auth0ManagementParameters)
+        .WithSeeding(builder.Configuration)
         .WaitFor(profilesSqlDatabase)
         .WithReference(profilesSqlDatabase, profilesSqlDatabaseName);
 
@@ -60,6 +61,7 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
     var catalogMongoDatabase = mongoServer.AddDatabase(catalogMongoDatabaseName);
     var catalogService = builder.AddProject<Projects.MC_Catalog_API>("catalogService")
         .WithAuth0Parameters(auth0Parameters)
+        .WithSeeding(builder.Configuration)
         .WaitFor(catalogSqlDatabase)
         .WaitFor(catalogMongoDatabase)
         .WithReference(catalogSqlDatabase, catalogSqlDatabaseName)

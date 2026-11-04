@@ -1,4 +1,5 @@
 ﻿using MC.Aspire.AppHost.Parameters;
+using Microsoft.Extensions.Configuration;
 
 namespace MC.Aspire.AppHost;
 
@@ -18,6 +19,20 @@ internal static class ServiceParameterExtension
             return builder
                 .WithEnvironment("Auth0:Management:ClientId", parameters.ClientId)
                 .WithEnvironment("Auth0:Management:ClientSecret", parameters.ClientSecret);
+        }
+
+        public IResourceBuilder<T> WithSeeding(IConfiguration configuration)
+        {
+            var settings = configuration.GetSection("Seeding")
+                .AsEnumerable()
+                .Where(setting => !string.IsNullOrWhiteSpace(setting.Value));
+
+            foreach (var (key, value) in settings)
+            {
+                builder.WithEnvironment(key, value);
+            }
+
+            return builder;
         }
 
         public IResourceBuilder<T> WithAuth0WebAppParameters(Auth0WebAppParameters parameters)

@@ -2,5 +2,7 @@
 
 public interface IDatabaseSeeder
 {
-    Task SeedAsync();
+    Task PrepareSchemaAsync(bool reset, CancellationToken ct);
+    Task<bool> IsEmptyAsync(CancellationToken ct);
+    Task SeedAsync(CancellationToken ct);
 }

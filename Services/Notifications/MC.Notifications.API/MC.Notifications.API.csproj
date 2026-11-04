@@ -12,7 +12,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\MC.Aspire.ServiceDefaults\MC.Aspire.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\..\Shared\MC.Shared.API\MC.Shared.API.csproj" />
     <ProjectReference Include="..\MC.Notifications.Infrastructure\MC.Notifications.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

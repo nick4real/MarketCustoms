@@ -1,7 +1,7 @@
 using MC.Catalog.Application;
 using MC.Catalog.Infrastructure;
 using MC.Shared.API;
-using MC.Shared.Infrastructure.Interfaces.Persistence;
+using MC.Shared.Infrastructure.Seeding;
 using Scalar.AspNetCore;
 
 // Builder
@@ -34,9 +34,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 
-    using var scope = app.Services.CreateScope();
-    var seeder = scope.ServiceProvider.GetRequiredService<IDatabaseSeeder>();
-    await seeder.SeedAsync();
+    await app.SeedDatabaseAsync();
 }
 
 app.Run();
