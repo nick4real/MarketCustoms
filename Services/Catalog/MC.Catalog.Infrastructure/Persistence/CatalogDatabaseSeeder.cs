@@ -8,7 +8,7 @@ using MongoDB.Driver;
 
 namespace MC.Catalog.Infrastructure.Persistence;
 
-public class DatabaseSeeder(
+public class CatalogDatabaseSeeder(
     AppRelationalDbContext relContext,
     AppMongoDbContext docContext,
     IOptions<SeedingOptions> seedingOptions,

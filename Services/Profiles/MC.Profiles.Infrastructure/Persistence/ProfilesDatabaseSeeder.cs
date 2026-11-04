@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace MC.Profiles.Infrastructure.Persistence;
 
-public class DatabaseSeeder(
+public class ProfilesDatabaseSeeder(
     AppRelationalDbContext context,
     IOptions<SeedingOptions> options,
     IOptions<ProfilesSeedingOptions> profilesSeedingOptions)

@@ -22,7 +22,7 @@ public static class ServiceCollectionExtension
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
-            services.AddDatabaseSeeder<DatabaseSeeder>(configuration);
+            services.AddDatabaseSeeder<CatalogDatabaseSeeder>(configuration);
             services.AddOptions<CatalogSeedingOptions>()
                 .Bind(configuration.GetSection(CatalogSeedingOptions.SectionName))
                 .Validate(o => o.ListingsPerSeller is >= 0 and <= CatalogSeedingOptions.MaxListingsPerSeller,

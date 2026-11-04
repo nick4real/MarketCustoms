@@ -25,7 +25,7 @@ public static class ServiceCollectionExtension
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 }));
-            services.AddDatabaseSeeder<DatabaseSeeder>(configuration);
+            services.AddDatabaseSeeder<ProfilesDatabaseSeeder>(configuration);
             services.AddOptions<ProfilesSeedingOptions>()
                 .Bind(configuration.GetSection(ProfilesSeedingOptions.SectionName));
 
