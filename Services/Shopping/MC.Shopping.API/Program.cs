@@ -23,6 +23,8 @@ if (builder.Environment.IsDevelopment())
 // App
 var app = builder.Build();
 
+app.UseClientCancellationLogging();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

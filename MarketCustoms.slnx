@@ -79,6 +79,9 @@
     <Project Path="Services/Statistics/MC.Statistics.Infrastructure/MC.Statistics.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Tests/" />
+  <Folder Name="/Tests/Shared/">
+    <Project Path="Tests/Shared/MC.Shared.UnitTests/MC.Shared.UnitTests.csproj" />
+  </Folder>
   <Folder Name="/Tests/Catalog/">
     <Project Path="Tests/Catalog/MC.Catalog.IntegrationTests/MC.Catalog.IntegrationTests.csproj" />
     <Project Path="Tests/Catalog/MC.Catalog.UnitTests/MC.Catalog.UnitTests.csproj" />
