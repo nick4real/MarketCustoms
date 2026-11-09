@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\MC.Aspire.ServiceDefaults\MC.Aspire.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\..\..\Shared\MC.Shared.API\MC.Shared.API.csproj" />
+    <ProjectReference Include="..\..\Shared\MC.Shared.API\MC.Shared.API.csproj" />
     <ProjectReference Include="..\MC.Catalog.Infrastructure\MC.Catalog.Infrastructure.csproj" />
   </ItemGroup>
 
