@@ -14,7 +14,7 @@ Gateway/
   MC.Gateway/                 YARP reverse proxy, the single entry point for the client
 Services/
   <Service>/                  One folder per bounded context, four projects each
-  Shared/                     Cross-cutting building blocks used by every service
+  Shared/                     Cross-cutting building blocks used across services
 Tests/
   <Service>/                  Unit and integration test projects per service
 scripts/
