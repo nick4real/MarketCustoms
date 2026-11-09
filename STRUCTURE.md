@@ -48,7 +48,7 @@ flowchart TD
   Infrastructure --> Domain
 ```
 
-Domain depends on nothing. Application depends only on Domain. Infrastructure implements the interfaces declared in Application. API composes everything at startup.
+Domain depends on nothing. Application depends only on Domain. Infrastructure implements the interfaces declared in Application. API composes everything at startup. Each layer may also reference its matching `MC.Shared.<Layer>` project.
 
 ## Services
 
@@ -65,7 +65,7 @@ Domain depends on nothing. Application depends only on Domain. Infrastructure im
 | Notifications | User notifications |
 | Statistics | Marketplace analytics |
 
-Only Profiles and Catalog are wired into the AppHost today. The rest are scaffolded with the four-project layout.
+Only Profiles and Catalog run in the local Aspire environment. Ordering and Notifications are started only by the isolated integration-test composition. The rest are scaffolded with the four-project layout.
 
 Persistence per running service:
 
@@ -88,8 +88,8 @@ Persistence per running service:
 
 | Path | Destination |
 | --- | --- |
-| `/api/profiles/*` | Profiles service |
-| `/api/listings/*`, `/api/categories/*` | Catalog service |
+| `/api/profiles/**` | Profiles service |
+| `/api/listings/**`, `/api/categories/**` | Catalog service |
 | everything else | React web app |
 
 ## Aspire
