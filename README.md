@@ -53,6 +53,7 @@ Cross-cutting code (authentication defaults, result types, pagination, seeding) 
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - Aspire CLI: `dotnet tool install --global Aspire.Cli`
+- EF Core CLI (only for creating migrations): `dotnet tool install --global dotnet-ef`
 - [Docker](https://www.docker.com/) (SQL Server, MongoDB and Mongo Express run as containers)
 - [Node.js](https://nodejs.org/) for the web client
 - An [Auth0](https://auth0.com/) tenant with an API, a single-page application and a machine-to-machine application
@@ -62,12 +63,17 @@ Cross-cutting code (authentication defaults, result types, pagination, seeding) 
 Set the AppHost parameters as user secrets:
 
 ```bash
-dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-Domain" "<your-tenant>.auth0.com"
+dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-Domain" "<your-auth0-domain>"
 dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-Audience" "<api-identifier>"
 dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-Frontend-ClientId" "<spa-client-id>"
 dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-BackendM2M-ClientId" "<m2m-client-id>"
 dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-BackendM2M-ClientSecret" "<m2m-client-secret>"
 ```
+
+In the Auth0 dashboard:
+
+- **Single-page application:** add `https://localhost:7117/callback` to Allowed Callback URLs, and `https://localhost:7117` to Allowed Logout URLs and Allowed Web Origins. This is the gateway's local address.
+- **Machine-to-machine application:** authorise it for the Auth0 Management API. The Profiles service uses it to sync users.
 
 ### Run
 
@@ -76,7 +82,7 @@ cd Clients/mc.market.reactwebapp && npm install && cd ../..
 aspire run
 ```
 
-The Aspire dashboard opens with every resource, its logs and its traces. Open the **marketCustomsGateway** endpoint to use the storefront. SQL Server is exposed on host port `14333`. Database containers persist between runs.
+The Aspire dashboard opens with every resource, its logs and its traces. Open the **marketCustomsGateway** endpoint to use the storefront. SQL Server is exposed on host port `14333`. Database containers and their volumes persist between runs, but seeding may still reset the data (see below).
 
 > **Seeding:** `Seeding:Mode` in `Aspire/MC.Aspire.AppHost/appsettings.json` defaults to `Reset`, which drops and reseeds the databases on every start. Set it to `IfEmpty` or `None` to keep your data.
 
@@ -86,7 +92,7 @@ The Aspire dashboard opens with every resource, its logs and its traces. Open th
 dotnet test
 ```
 
-This runs unit and integration tests. Integration tests start the service under test through Aspire with throwaway containers and a local test identity, so they need Docker but not Auth0.
+This runs unit and integration tests. Integration tests start the service under test in an isolated Aspire composition. Catalog and Profiles tests use throwaway database containers and a local test identity, so they need Docker but not Auth0.
 
 Web client tests:
 
@@ -97,7 +103,7 @@ npm run test
 
 ## Database migrations
 
-EF Core migrations are wrapped by root npm scripts:
+EF Core migrations for the SQL Server databases (Profiles and Catalog) are wrapped by root npm scripts:
 
 ```bash
 npm run ef:add -- Catalog AddCategoryTree

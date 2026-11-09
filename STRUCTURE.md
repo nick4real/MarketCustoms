@@ -48,7 +48,7 @@ flowchart TD
   Infrastructure --> Domain
 ```
 
-Domain depends on nothing. Application depends only on Domain. Infrastructure implements the interfaces declared in Application. API composes everything at startup. Each layer may also reference its matching `MC.Shared.<Layer>` project.
+Domain depends on nothing. Application depends only on Domain. Infrastructure implements the interfaces declared in Application. API composes everything at startup. The API, Application and Infrastructure layers may also reference their matching `MC.Shared.<Layer>` project.
 
 ## Services
 
@@ -74,7 +74,7 @@ Persistence per running service:
 
 ## Shared
 
-`Services/Shared/` holds code reused by all services. It has no Domain project because it carries no business vocabulary.
+`Services/Shared/` holds code reused across services. It has no Domain project because it carries no business vocabulary.
 
 | Project | Provides |
 | --- | --- |
