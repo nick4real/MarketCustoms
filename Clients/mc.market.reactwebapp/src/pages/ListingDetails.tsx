@@ -1,27 +1,23 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 import {
-  getListingById,
-  getListings,
+  ConditionBadge,
   ListingCard,
   listingImageUrl,
+  listingLocationLabel,
   listingSku,
-  sellerInitials,
-  type Listing,
-  type ListingPaginatedResponse,
+  useListingQuery,
+  useRelatedListingsQuery,
 } from "@/entities/listing";
-import { useQuery } from "@tanstack/react-query";
-
-function listingLocationLabel(listing: Listing) {
-  const location = listing.location;
-  if (!location) {
-    return "United States";
-  }
-  const parts = [location.city, location.region, location.country].filter(
-    (part): part is string => Boolean(part && part.trim()),
-  );
-  return parts.join(", ") || "United States";
-}
+import {
+  Avatar,
+  Button,
+  ButtonLink,
+  Eyebrow,
+  SectionHeader,
+  StatusMessage,
+  isNotFoundError,
+} from "@/shared";
 
 function ListingGallery({
   images,
@@ -39,10 +35,7 @@ function ListingGallery({
 
   return (
     <div>
-      <div
-        className="border-border bg-surface aspect-4/3 overflow-hidden border"
-        style={{ borderRadius: "2px" }}
-      >
+      <div className="border-border bg-surface aspect-4/3 overflow-hidden rounded-xs border">
         <img
           src={listingImageUrl(currentImage, 1200, 900)}
           alt={title}
@@ -55,12 +48,11 @@ function ListingGallery({
             key={imageUrl}
             type="button"
             onClick={() => setActiveImage(index)}
-            className={`bg-surface aspect-4/3 overflow-hidden border transition-colors ${
+            className={`bg-surface aspect-4/3 overflow-hidden rounded-xs border transition-colors ${
               activeImage === index
                 ? "border-primary"
                 : "border-border hover:border-border-hover"
             }`}
-            style={{ borderRadius: "2px" }}
             aria-label={`View photo ${index + 1}`}
           >
             <img
@@ -77,104 +69,40 @@ function ListingGallery({
 
 export default function ListingDetails() {
   const { listingId } = useParams();
+  const listingQuery = useListingQuery(listingId);
+  const relatedQuery = useRelatedListingsQuery(listingQuery.data);
 
-  const {
-    isPending: isListingPending,
-    isError: isListingError,
-    error: listingError,
-    data: listing,
-  } = useQuery<Listing, Error>({
-    queryKey: ["listing", listingId],
-    queryFn: () => getListingById(listingId!),
-  });
-
-  const {
-    isPending: isRelatedPending,
-    isError: isRelatedError,
-    data: related,
-  } = useQuery<ListingPaginatedResponse, Error>({
-    queryKey: ["related", listingId],
-    queryFn: () => getListings({ pageSize: 4 }),
-  });
-
-  if (listingError?.message === "Not Found") {
+  if (isNotFoundError(listingQuery.error)) {
     return (
-      <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
-        <p
-          className="text-foreground-subtle mb-8 text-xs tracking-widest"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
-          Listing not found
-        </p>
-      </div>
-    );
-  }
-
-  if (isListingPending) {
-    return (
-      <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
-        <p
-          className="text-foreground-subtle mb-8 text-xs tracking-widest"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
-          Loading...
-        </p>
-      </div>
-    );
-  }
-
-  if (isListingError) {
-    return (
-      <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
-        <div
-          className="text-border-subtle mb-4 text-5xl"
-          style={{ fontFamily: "Fraunces, Georgia, serif" }}
-        >
-          Whoops!
-        </div>
-        <p
-          className="text-foreground-subtle mb-8 text-xs tracking-widest"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
-          Error loading listing
-        </p>
-      </div>
-    );
-  }
-
-  if (!listing) {
-    return (
-      <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
-        <div
-          className="text-border-subtle mb-4 text-5xl"
-          style={{ fontFamily: "Fraunces, Georgia, serif" }}
-        >
-          ∅
-        </div>
-        <p
-          className="text-foreground-subtle mb-8 text-xs tracking-widest"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
-          Listing not found
-        </p>
-        <Link
-          to="/browse"
-          className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 text-sm font-semibold tracking-wide transition-colors"
-          style={{ borderRadius: "2px" }}
-        >
+      <StatusMessage size="page" symbol="∅" message="Listing not found">
+        <ButtonLink to="/browse" size="lg">
           Back to Browse
-        </Link>
-      </div>
+        </ButtonLink>
+      </StatusMessage>
     );
   }
+
+  if (listingQuery.isPending) {
+    return <StatusMessage size="page" message="Loading..." />;
+  }
+
+  if (listingQuery.isError) {
+    return (
+      <StatusMessage
+        size="page"
+        symbol="Whoops!"
+        message="Error loading listing"
+      />
+    );
+  }
+
+  const listing = listingQuery.data;
+  const location = listingLocationLabel(listing.location);
 
   return (
     <div className="bg-background min-h-[calc(100vh-56px)]">
       <div className="px-6 pt-8 pb-4 md:px-12 lg:px-16">
-        <nav
-          className="text-muted-foreground flex flex-wrap items-center gap-2 text-[11px]"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
+        <nav className="text-muted-foreground flex flex-wrap items-center gap-2 font-mono text-[11px]">
           <Link
             to="/browse"
             className="hover:text-foreground transition-colors"
@@ -183,7 +111,7 @@ export default function ListingDetails() {
           </Link>
           <span className="text-foreground-subtle">/</span>
           <Link
-            to="/browse"
+            to={`/browse?categoryId=${listing.categoryId}`}
             className="hover:text-foreground transition-colors"
           >
             {listing.category.name}
@@ -201,145 +129,90 @@ export default function ListingDetails() {
             title={listing.title}
           />
 
-          {/* Listing details strip */}
           <div>
             <div className="mb-4 flex flex-wrap items-center gap-2">
-              <span
-                className="bg-secondary text-muted-foreground px-1.5 py-0.5 text-[10px]"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
-                {listing.condition ?? "New"}
-              </span>
-              <span
-                className="text-muted-foreground text-[10px]"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
+              <ConditionBadge condition={listing.condition} />
+              <Eyebrow as="span" className="tracking-normal normal-case">
                 {listing.category.name}
-              </span>
+              </Eyebrow>
               <span className="text-foreground-subtle">·</span>
-              <span
-                className="text-muted-foreground text-[10px]"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
-                {listingLocationLabel(listing)}
-              </span>
+              <Eyebrow as="span" className="tracking-normal normal-case">
+                {location}
+              </Eyebrow>
             </div>
 
-            {/* Title */}
-            <h1
-              className="text-foreground mb-4 text-[32px] leading-tight font-bold md:text-[40px]"
-              style={{ fontFamily: "Fraunces, Georgia, serif" }}
-            >
+            <h1 className="text-foreground font-display mb-4 text-[32px] leading-tight font-bold md:text-[40px]">
               {listing.title}
             </h1>
 
-            {/* Price section & stock label */}
             <div className="mb-8 flex items-baseline gap-3">
-              <span
-                className="text-foreground text-[36px] leading-none font-bold"
-                style={{ fontFamily: "Fraunces, Georgia, serif" }}
-              >
+              <span className="text-foreground font-display text-[36px] leading-none font-bold">
                 ${listing.price.toLocaleString()}
               </span>
-              <span
-                className="text-muted-foreground text-xs"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
+              <span className="text-muted-foreground font-mono text-xs">
                 {listing.stock === 1
                   ? "1 available"
                   : `${listing.stock} available`}
               </span>
             </div>
 
-            {/* Buy Now and Make an Offer buttons */}
             <div className="mb-8 flex flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 text-sm font-semibold tracking-wide transition-colors"
-                style={{ borderRadius: "2px" }}
-              >
-                Buy Now
-              </button>
-              <button
-                type="button"
-                className="border-border-subtle text-foreground hover:border-border-emphasis border px-6 py-3 text-sm font-medium tracking-wide transition-colors"
-                style={{ borderRadius: "2px" }}
-              >
+              <Button size="lg">Buy Now</Button>
+              <Button variant="outline" size="lg">
                 Make an Offer
-              </button>
+              </Button>
             </div>
 
-            {/* Seller section */}
             <Link
               to="/profile"
-              className="border-border bg-card hover:border-border-hover mb-8 flex items-center gap-3 border p-4 transition-colors"
-              style={{ borderRadius: "2px" }}
+              className="border-border bg-card hover:border-border-hover mb-8 flex items-center gap-3 rounded-xs border p-4 transition-colors"
             >
-              <div className="bg-secondary text-foreground-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
-                {sellerInitials("John Doe")}
-              </div>
+              <Avatar size="md" initials="—" />
               <div className="min-w-0 flex-1">
-                <div className="text-foreground text-sm font-medium">
-                  {"John Doe"}
-                </div>
-                <div
-                  className="text-muted-foreground text-[10px]"
-                  style={{ fontFamily: "DM Mono, monospace" }}
-                >
+                <div className="text-foreground text-sm font-medium">—</div>
+                <div className="text-muted-foreground font-mono text-[10px]">
                   {listing.sellerRating?.toFixed(1) ?? "—"} rating ·{" "}
-                  {listing.sellerSales ?? "—"} sales ·{" "}
-                  {listingLocationLabel(listing)}
+                  {listing.sellerSales ?? "—"} sales · {location}
                 </div>
               </div>
-              <span
-                className="text-muted-foreground shrink-0 text-xs"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
+              <span className="text-muted-foreground shrink-0 font-mono text-xs">
                 Profile →
               </span>
             </Link>
 
-            {/* Description section */}
             <section className="mb-8">
-              <h2
-                className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
+              <Eyebrow as="h2" className="mb-3">
                 Description
-              </h2>
+              </Eyebrow>
               <p className="text-foreground-muted text-sm leading-relaxed font-light">
                 {listing.description}
               </p>
             </section>
 
-            {/* Details section */}
             <section className="mb-8">
-              <h2
-                className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
+              <Eyebrow as="h2" className="mb-3">
                 Details
-              </h2>
+              </Eyebrow>
               <dl className="border-border border-t">
                 {[
                   { name: "Item ID", value: listingSku(listing.id) },
                   { name: "Listed", value: listing.createdAt },
-                  { name: "Condition", value: listing.condition ?? "New" },
-                  { name: "Category", value: listing.category.name },
                   {
-                    name: "Ships from",
-                    value: listingLocationLabel(listing),
+                    name: "Condition",
+                    value: listing.condition
+                      ? listing.condition.charAt(0).toUpperCase() +
+                        listing.condition.slice(1)
+                      : "—",
                   },
+                  { name: "Category", value: listing.category.name },
+                  { name: "Ships from", value: location },
                   ...listing.parameters,
                 ].map((row) => (
                   <div
                     key={row.name}
                     className="border-border grid grid-cols-2 gap-4 border-b py-3"
                   >
-                    <dt
-                      className="text-muted-foreground text-xs"
-                      style={{ fontFamily: "DM Mono, monospace" }}
-                    >
+                    <dt className="text-muted-foreground font-mono text-xs">
                       {row.name}
                     </dt>
                     <dd className="text-foreground text-right text-sm">
@@ -351,21 +224,14 @@ export default function ListingDetails() {
             </section>
 
             <section>
-              <h2
-                className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
+              <Eyebrow as="h2" className="mb-3">
                 Tags
-              </h2>
+              </Eyebrow>
               <div className="flex flex-wrap gap-2">
                 {listing.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="border-border bg-card text-foreground-muted border px-2.5 py-1 text-[11px]"
-                    style={{
-                      borderRadius: "2px",
-                      fontFamily: "DM Mono, monospace",
-                    }}
+                    className="border-border bg-card text-foreground-muted rounded-xs border px-2.5 py-1 font-mono text-[11px]"
                   >
                     {tag}
                   </span>
@@ -375,57 +241,34 @@ export default function ListingDetails() {
           </div>
         </div>
 
-        {isRelatedPending ? (
-          <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
-            <p
-              className="text-foreground-subtle mb-8 text-xs tracking-widest"
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
-              Loading...
-            </p>
-          </div>
-        ) : isRelatedError ? (
-          <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
-            <p
-              className="text-foreground-subtle mb-8 text-xs tracking-widest"
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
-              Error loading related listings
-            </p>
-          </div>
-        ) : related && related.items.length > 0 ? (
+        {relatedQuery.isPending ? (
+          <StatusMessage
+            size="inline"
+            className="mt-16"
+            message="Loading related listings…"
+          />
+        ) : relatedQuery.isError ? (
+          <StatusMessage
+            size="inline"
+            className="mt-16"
+            message="Couldn't load related listings"
+          />
+        ) : relatedQuery.data.length > 0 ? (
           <section className="border-border mt-16 border-t pt-12 lg:mt-20">
-            <div className="mb-8 flex items-end justify-between">
-              <h2
-                className="text-foreground text-[28px] font-bold sm:text-[32px]"
-                style={{ fontFamily: "Fraunces, Georgia, serif" }}
-              >
-                More like this
-              </h2>
-              <Link
-                to="/browse"
-                className="text-muted-foreground hover:text-foreground ml-4 shrink-0 text-xs tracking-wide transition-colors"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
-                See all →
-              </Link>
-            </div>
+            <SectionHeader
+              title="More like this"
+              action={{
+                to: `/browse?categoryId=${listing.categoryId}`,
+                label: "See all →",
+              }}
+            />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {related.items.map((item) => (
+              {relatedQuery.data.map((item) => (
                 <ListingCard key={item.id} listing={item} showLocation />
               ))}
             </div>
           </section>
-        ) : (
-          <div className="bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center">
-            <p
-              className="text-foreground-subtle mb-8 text-xs tracking-widest"
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
-              No related listings found
-            </p>
-          </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ export const listingsQueryKey = (applied: AppliedListingSearch) =>
     "listings",
     applied.searchId, // Comment it to use cached results
     applied.categoryId,
+    applied.condition,
     applied.sort,
     applied.searchText,
     applied.pageIndex,

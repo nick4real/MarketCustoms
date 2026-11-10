@@ -1,48 +1,56 @@
 import { useState } from "react";
 import { useVisitorSession } from "@/features/visitor-session";
+import { ConditionBadge, type ListingCondition } from "@/entities/listing";
+import { Avatar, Button, Tabs, getInitials } from "@/shared";
 
-const listings = [
+const listings: {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  condition: ListingCondition;
+}[] = [
   {
     id: 1,
     title: "Rolleiflex 2.8F",
     price: 1650,
     image: "photo-1471341971476-ae15ff5dd4ea",
-    condition: "Excellent",
+    condition: "used",
   },
   {
     id: 2,
     title: "Barbour Beaufort Jacket",
     price: 290,
     image: "photo-1544441893-675973e31985",
-    condition: "Good",
+    condition: "used",
   },
   {
     id: 3,
     title: "Braun LE1 Speakers",
     price: 480,
     image: "photo-1545454675-3531b543be5d",
-    condition: "Good",
+    condition: "used",
   },
   {
     id: 4,
     title: "Patagonia Baggies 1990",
     price: 75,
     image: "photo-1473966968600-fa801b869a1a",
-    condition: "Vintage",
+    condition: "used",
   },
   {
     id: 5,
     title: "Nikon FM2 Chrome",
     price: 420,
     image: "photo-1516035069371-29a1b244cc32",
-    condition: "Excellent",
+    condition: "used",
   },
   {
     id: 6,
     title: "Muji Stationery Set",
     price: 55,
     image: "photo-1517971071642-34a2d3ecc9cd",
-    condition: "New",
+    condition: "new",
   },
 ];
 
@@ -69,32 +77,18 @@ const reviews = [
 
 type Tab = "listings" | "reviews" | "about";
 
-function profileInitials(
-  displayName: string,
-  email: string | null | undefined,
-): string {
-  const parts = displayName.trim().split(/\s+/).filter(Boolean);
-  if (parts.length >= 2) {
-    const first = parts[0]?.[0] ?? "";
-    const last = parts[parts.length - 1]?.[0] ?? "";
-    return `${first}${last}`.toUpperCase();
-  }
-  if (displayName.trim().length >= 2 && !displayName.includes("@")) {
-    return displayName.trim().slice(0, 2).toUpperCase();
-  }
-  const local = email?.split("@")[0];
-  if (local) {
-    return local.slice(0, 2).toUpperCase();
-  }
-  return "MC";
-}
+const tabs: { id: Tab; label: string }[] = [
+  { id: "listings", label: "listings" },
+  { id: "reviews", label: "reviews" },
+  { id: "about", label: "about" },
+];
 
 export default function Profile() {
   const [tab, setTab] = useState<Tab>("listings");
   const { account } = useVisitorSession();
   const displayName = account?.displayName ?? account?.email ?? "Your profile";
   const handle = account?.email ?? "Signed in";
-  const initials = profileInitials(displayName, account?.email);
+  const initials = getInitials(account?.displayName, account?.email);
 
   return (
     <div className="bg-background min-h-screen">
@@ -111,59 +105,23 @@ export default function Profile() {
       <div className="px-4 md:px-12 lg:px-16">
         {/* Profile header */}
         <div className="relative z-10 -mt-10 mb-6 flex flex-col gap-4 sm:flex-row sm:items-end md:-mt-14">
-          <div className="border-background bg-card text-foreground-muted flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 text-lg font-semibold md:h-24 md:w-24">
-            {account?.photoUrl ? (
-              <img
-                src={account.photoUrl}
-                alt=""
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <span style={{ fontFamily: "DM Mono, monospace" }}>
-                {initials}
-              </span>
-            )}
-          </div>
+          <Avatar size="xl" src={account?.photoUrl} initials={initials} />
 
           <div className="flex-1 sm:pb-1">
             <div className="mb-1 flex flex-wrap items-center gap-2">
-              <h1
-                className="text-foreground text-[24px] leading-none font-bold md:text-[28px]"
-                style={{ fontFamily: "Fraunces, Georgia, serif" }}
-              >
+              <h1 className="text-foreground font-display text-[24px] leading-none font-bold md:text-[28px]">
                 {displayName}
               </h1>
-              <span
-                className="bg-primary text-primary-foreground px-2 py-0.5 text-[10px] font-bold tracking-wider"
-                style={{
-                  fontFamily: "DM Mono, monospace",
-                  borderRadius: "2px",
-                }}
-              >
+              <span className="bg-primary text-primary-foreground rounded-xs px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
                 VERIFIED
               </span>
             </div>
-            <p
-              className="text-muted-foreground text-xs"
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
-              {handle}
-            </p>
+            <p className="text-muted-foreground font-mono text-xs">{handle}</p>
           </div>
 
           <div className="flex gap-2 self-start sm:gap-3 sm:self-auto sm:pb-1">
-            <button
-              className="border-border-subtle text-foreground hover:border-border-emphasis border px-4 py-2 text-sm font-medium transition-colors"
-              style={{ borderRadius: "2px" }}
-            >
-              Message
-            </button>
-            <button
-              className="bg-primary text-primary-foreground hover:bg-primary-hover px-4 py-2 text-sm font-semibold transition-colors"
-              style={{ borderRadius: "2px" }}
-            >
-              Follow
-            </button>
+            <Button variant="outline">Message</Button>
+            <Button variant="primary">Follow</Button>
           </div>
         </div>
 
@@ -177,23 +135,14 @@ export default function Profile() {
           ].map((stat) => (
             <div key={stat.label}>
               <div className="flex items-baseline gap-2">
-                <span
-                  className="text-foreground text-[22px] leading-none font-bold md:text-[26px]"
-                  style={{ fontFamily: "Fraunces, Georgia, serif" }}
-                >
+                <span className="text-foreground font-display text-[22px] leading-none font-bold md:text-[26px]">
                   {stat.value}
                 </span>
-                <span
-                  className="text-muted-foreground text-xs"
-                  style={{ fontFamily: "DM Mono, monospace" }}
-                >
+                <span className="text-muted-foreground font-mono text-xs">
                   {stat.label}
                 </span>
               </div>
-              <div
-                className="text-foreground-subtle mt-0.5 text-[10px]"
-                style={{ fontFamily: "DM Mono, monospace" }}
-              >
+              <div className="text-foreground-subtle mt-0.5 font-mono text-[10px]">
                 {stat.sub}
               </div>
             </div>
@@ -201,22 +150,12 @@ export default function Profile() {
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 flex gap-8 overflow-x-auto pt-5">
-          {(["listings", "reviews", "about"] as Tab[]).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`shrink-0 border-b-2 pb-4 text-xs tracking-[0.15em] uppercase transition-colors ${
-                tab === t
-                  ? "border-primary text-foreground"
-                  : "text-muted-foreground hover:text-foreground-muted border-transparent"
-              }`}
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          className="mb-6 overflow-x-auto pt-5"
+          items={tabs}
+          value={tab}
+          onChange={setTab}
+        />
 
         {/* Listings */}
         {tab === "listings" && (
@@ -224,8 +163,7 @@ export default function Profile() {
             {listings.map((item) => (
               <div
                 key={item.id}
-                className="group border-border bg-card hover:border-border-hover cursor-pointer overflow-hidden border transition-all"
-                style={{ borderRadius: "2px" }}
+                className="group border-border bg-card hover:border-border-hover cursor-pointer overflow-hidden rounded-xs border transition-all"
               >
                 <div className="bg-surface aspect-4/3 overflow-hidden">
                   <img
@@ -239,17 +177,11 @@ export default function Profile() {
                     <h3 className="text-foreground text-sm font-medium">
                       {item.title}
                     </h3>
-                    <span
-                      className="bg-secondary text-muted-foreground ml-2 shrink-0 px-1.5 py-0.5 text-[10px]"
-                      style={{ fontFamily: "DM Mono, monospace" }}
-                    >
-                      {item.condition}
+                    <span className="ml-2">
+                      <ConditionBadge condition={item.condition} />
                     </span>
                   </div>
-                  <span
-                    className="text-foreground text-xl font-bold"
-                    style={{ fontFamily: "Fraunces, Georgia, serif" }}
-                  >
+                  <span className="text-foreground font-display text-xl font-bold">
                     ${item.price.toLocaleString()}
                   </span>
                 </div>
@@ -264,14 +196,11 @@ export default function Profile() {
             {reviews.map((r, i) => (
               <div
                 key={i}
-                className="border-border bg-card border p-5 md:p-6"
-                style={{ borderRadius: "2px" }}
+                className="border-border bg-card rounded-xs border p-5 md:p-6"
               >
                 <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="bg-secondary text-foreground-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
-                      {r.author[0]}
-                    </div>
+                    <Avatar size="sm" initials={r.author[0] ?? ""} />
                     <span className="text-foreground text-sm font-medium">
                       {r.author}
                     </span>
@@ -287,10 +216,7 @@ export default function Profile() {
                         </span>
                       ))}
                     </div>
-                    <span
-                      className="text-muted-foreground text-xs"
-                      style={{ fontFamily: "DM Mono, monospace" }}
-                    >
+                    <span className="text-muted-foreground font-mono text-xs">
                       {r.date}
                     </span>
                   </div>

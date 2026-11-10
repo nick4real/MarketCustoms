@@ -3,6 +3,7 @@ import {
   LISTING_CONDITIONS,
   useListingStoreState,
 } from "@/entities/listing";
+import { cx, Eyebrow } from "@/shared";
 
 export function ConditionFilter() {
   const {
@@ -14,12 +15,9 @@ export function ConditionFilter() {
 
   return (
     <div className="mb-7">
-      <h3
-        className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-        style={{ fontFamily: "DM Mono, monospace" }}
-      >
+      <Eyebrow as="h3" className="mb-3">
         Condition
-      </h3>
+      </Eyebrow>
       <div className="flex flex-col gap-0.5">
         {conditions.map((cond) => (
           <button
@@ -30,13 +28,13 @@ export function ConditionFilter() {
                 cond === "any" ? null : (cond as ListingCondition),
               )
             }
-            className={`px-2 py-1.5 text-left text-sm transition-colors ${
+            className={cx(
+              "rounded-xs px-2 py-1.5 text-left text-sm transition-colors",
               selectedCondition === cond ||
-              (selectedCondition === null && cond === "any")
+                (selectedCondition === null && cond === "any")
                 ? "text-primary"
-                : "text-muted-foreground hover:text-foreground-muted"
-            }`}
-            style={{ borderRadius: "2px" }}
+                : "text-muted-foreground hover:text-foreground-muted",
+            )}
           >
             {cond.charAt(0).toUpperCase() + cond.slice(1)}
           </button>

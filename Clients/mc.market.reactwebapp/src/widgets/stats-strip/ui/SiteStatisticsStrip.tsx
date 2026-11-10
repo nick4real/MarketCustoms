@@ -11,16 +11,10 @@ export default function SiteStatisticsStrip() {
           key={stat.label}
           className="flex shrink-0 flex-col gap-1 md:flex-row md:items-baseline md:gap-3"
         >
-          <span
-            className="text-foreground text-[26px] leading-none font-bold lg:text-[32px]"
-            style={{ fontFamily: "Fraunces, Georgia, serif" }}
-          >
+          <span className="text-foreground font-display text-[26px] leading-none font-bold lg:text-[32px]">
             {stat.value}
           </span>
-          <span
-            className="text-muted-foreground text-[10px] tracking-wide"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
+          <span className="text-muted-foreground font-mono text-[10px] tracking-wide">
             {stat.label}
           </span>
         </div>

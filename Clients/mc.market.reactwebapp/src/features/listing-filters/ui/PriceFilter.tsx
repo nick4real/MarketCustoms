@@ -1,22 +1,21 @@
+import { Eyebrow } from "@/shared";
+
 export function PriceFilter() {
   return (
     <div className="mb-2">
-      <h3
-        className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-        style={{ fontFamily: "DM Mono, monospace" }}
-      >
+      <Eyebrow as="h3" className="mb-3">
         Price Range
-      </h3>
+      </Eyebrow>
       <div className="flex gap-2">
         <input
           placeholder="Min"
-          className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-2 py-1.5 text-xs transition-colors focus:outline-none"
-          style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
+          aria-label="Minimum price"
+          className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full rounded-xs border px-2 py-1.5 font-mono text-xs transition-colors focus:outline-none"
         />
         <input
           placeholder="Max"
-          className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-2 py-1.5 text-xs transition-colors focus:outline-none"
-          style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
+          aria-label="Maximum price"
+          className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full rounded-xs border px-2 py-1.5 font-mono text-xs transition-colors focus:outline-none"
         />
       </div>
     </div>

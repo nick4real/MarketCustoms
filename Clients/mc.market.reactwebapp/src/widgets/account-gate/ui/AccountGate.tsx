@@ -1,4 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router";
+import { StatusMessage } from "@/shared";
 import EmailVerificationNotice from "./EmailVerificationNotice";
 import {
   sanitizeReturnTo,
@@ -12,9 +13,7 @@ export default function AccountGate() {
   if (session.status === "authenticating") {
     return (
       <div className="flex min-h-[calc(100vh-56px)] items-center justify-center px-6">
-        <p className="text-muted-foreground text-sm font-light">
-          Loading your account…
-        </p>
+        <StatusMessage size="inline" message="Loading your account…" />
       </div>
     );
   }

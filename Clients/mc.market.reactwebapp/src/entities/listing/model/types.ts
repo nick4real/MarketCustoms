@@ -23,6 +23,12 @@ export interface Category {
   name: string;
 }
 
+export interface ListingLocation {
+  country: string | null;
+  region: string | null;
+  city: string | null;
+}
+
 export interface Listing {
   id: string;
   ownerId: string;
@@ -36,14 +42,10 @@ export interface Listing {
   images: string[];
   tags: string[];
   parameters: ListingParameter[];
-  location?: {
-    country?: string | null;
-    region?: string | null;
-    city?: string | null;
-  };
-  condition?: ListingCondition;
-  sellerRating?: number;
-  sellerSales?: number;
+  location: ListingLocation | null;
+  condition: ListingCondition | null;
+  sellerRating: number | null;
+  sellerSales: number | null;
 }
 
 export interface ListingView {

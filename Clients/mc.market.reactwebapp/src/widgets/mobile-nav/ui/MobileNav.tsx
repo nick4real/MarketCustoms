@@ -30,19 +30,11 @@ export default function MobileNav({
           >
             {({ isActive }) => (
               <>
-                <span
-                  className="text-[28px] font-black tracking-tight"
-                  style={{ fontFamily: "Fraunces, Georgia, serif" }}
-                >
+                <span className="font-display text-[28px] font-black tracking-tight">
                   {link.label}
                 </span>
                 {isActive && (
-                  <span
-                    className="text-primary text-xs"
-                    style={{ fontFamily: "DM Mono, monospace" }}
-                  >
-                    ●
-                  </span>
+                  <span className="text-primary font-mono text-xs">●</span>
                 )}
               </>
             )}

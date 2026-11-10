@@ -15,3 +15,7 @@ export {
   mapCategoryNode,
   mapRootCategories,
 } from "@/entities/category/api/categories";
+export {
+  rootCategoriesQueryKey,
+  useRootCategoriesQuery,
+} from "@/entities/category/api/useRootCategoriesQuery";

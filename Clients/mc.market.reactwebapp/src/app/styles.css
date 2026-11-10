@@ -31,19 +31,19 @@
   --color-foreground-dim: #7a7570;
 
   --color-destructive: #dc4040;
+  --color-success: #4caf82;
+  --color-info: #5b8def;
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Outfit", system-ui, sans-serif;
   --font-mono: "DM Mono", "Courier New", monospace;
-
-  --radius: 2px;
 }
 
 html,
 body {
-  background-color: #080808;
-  color: #f0ece3;
-  font-family: "Outfit", system-ui, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -8,20 +8,13 @@ export interface SortDropdownButtonProps {
 export function SortDropdownButton({ sort, setSort }: SortDropdownButtonProps) {
   return (
     <div className="flex items-center gap-2">
-      <span
-        className="text-muted-foreground hidden text-xs md:block"
-        style={{ fontFamily: "DM Mono, monospace" }}
-      >
+      <span className="text-muted-foreground hidden font-mono text-xs md:block">
         Sort
       </span>
       <select
         value={sort}
         onChange={(e) => setSort(e.target.value as ListingSort)}
-        className="border-border bg-card text-foreground focus:border-primary cursor-pointer border px-2 py-1.5 text-xs focus:outline-none md:px-3 md:text-sm"
-        style={{
-          borderRadius: "2px",
-          fontFamily: "Outfit, sans-serif",
-        }}
+        className="border-border bg-card text-foreground focus:border-primary cursor-pointer rounded-xs border px-2 py-1.5 text-xs focus:outline-none md:px-3 md:text-sm"
       >
         <option value="dateDesc">Recent</option>
         <option value="dateAsc">Oldest</option>

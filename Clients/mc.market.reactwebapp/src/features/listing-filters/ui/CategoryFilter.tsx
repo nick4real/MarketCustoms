@@ -2,8 +2,9 @@ import {
   type Category,
   getCategoryById,
   getCategoryWithChildren,
-  getRootCategories,
+  useRootCategoriesQuery,
 } from "@/entities/category";
+import { Eyebrow, isNotFoundError, StatusMessage } from "@/shared";
 import { useListingStoreState } from "@/entities/listing";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
@@ -28,7 +29,7 @@ async function loadCategoryLevel(
       })),
     };
   } catch (error) {
-    if (!(error instanceof Error) || !error.message.includes("404")) {
+    if (!isNotFoundError(error)) {
       throw error;
     }
     const category = await getCategoryById(categoryId, signal);
@@ -53,11 +54,7 @@ export function CategoryFilter() {
     },
   } = useListingStoreState();
 
-  const rootsQuery = useQuery({
-    queryKey: ["categories"],
-    queryFn: ({ signal }) => getRootCategories(signal),
-    enabled: selectedCategoryId === null,
-  });
+  const rootsQuery = useRootCategoriesQuery();
 
   const levelQuery = useQuery({
     queryKey: ["categories", "children", selectedCategoryId],
@@ -151,12 +148,9 @@ export function CategoryFilter() {
 
   return (
     <div className="mb-7">
-      <h3
-        className="text-muted-foreground mb-3 text-[10px] tracking-[0.15em] uppercase"
-        style={{ fontFamily: "DM Mono, monospace" }}
-      >
+      <Eyebrow as="h3" className="mb-3">
         Category
-      </h3>
+      </Eyebrow>
       <div className="flex flex-col gap-0.5">
         <button
           type="button"
@@ -171,8 +165,7 @@ export function CategoryFilter() {
               ? "All listings"
               : `Back from ${selectedLabel}`
           }
-          className="text-primary flex items-center gap-1.5 px-2 py-1.5 text-left text-sm transition-colors"
-          style={{ borderRadius: "2px" }}
+          className="text-primary flex items-center gap-1.5 rounded-xs px-2 py-1.5 text-left text-sm transition-colors"
         >
           {selectedCategoryId !== null && (
             <svg
@@ -191,27 +184,24 @@ export function CategoryFilter() {
           {selectedLabel}
         </button>
         {isPending ? (
-          <p
-            className="text-muted-foreground px-2 py-1.5 text-xs"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
-            Loading categories…
-          </p>
+          <StatusMessage
+            size="inline"
+            message="Loading categories…"
+            className="px-2 py-1.5"
+          />
         ) : isError ? (
-          <p
-            className="text-muted-foreground px-2 py-1.5 text-xs"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
-            Couldn&apos;t load categories
-          </p>
+          <StatusMessage
+            size="inline"
+            message="Couldn't load categories"
+            className="px-2 py-1.5"
+          />
         ) : (
           rows.map((row) => (
             <button
               key={row.id}
               type="button"
               onClick={() => handleCategoryClick(row.id, row.name)}
-              className="text-muted-foreground hover:text-foreground-muted px-2 py-1.5 text-left text-sm transition-colors"
-              style={{ borderRadius: "2px" }}
+              className="text-muted-foreground hover:text-foreground-muted rounded-xs px-2 py-1.5 text-left text-sm transition-colors"
             >
               {row.name}
             </button>

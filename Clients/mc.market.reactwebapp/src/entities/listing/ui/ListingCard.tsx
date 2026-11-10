@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import type { ListingView } from "@/entities/listing";
 import { listingImageUrl } from "@/entities/listing";
+import ConditionBadge from "./ConditionBadge";
 
 export default function ListingCard({
   listing,
@@ -14,8 +15,7 @@ export default function ListingCard({
   return (
     <Link
       to={`/listings/${listing.id}`}
-      className="group border-border bg-card hover:border-border-hover overflow-hidden border transition-all duration-200"
-      style={{ borderRadius: "2px" }}
+      className="group border-border bg-card hover:border-border-hover overflow-hidden rounded-xs border transition-all duration-200"
     >
       <div className="bg-surface aspect-4/3 overflow-hidden">
         {coverImage ? (
@@ -31,36 +31,20 @@ export default function ListingCard({
           <h3 className="text-foreground flex-1 pr-2 text-sm leading-snug font-medium">
             {listing.title}
           </h3>
-          <span
-            className="bg-secondary text-muted-foreground shrink-0 px-1.5 py-0.5 text-[10px]"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
-            {listing.condition}
-          </span>
+          <ConditionBadge condition={listing.condition} />
         </div>
         {showLocation && (
-          <div
-            className="text-foreground-subtle mb-3 text-[10px]"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
-            {"United States"}
+          <div className="text-foreground-subtle mb-3 font-mono text-[10px]">
+            {"—"}
           </div>
         )}
         <div
           className={`flex items-center justify-between ${showLocation ? "" : "mt-3"}`}
         >
-          <span
-            className="text-foreground text-xl font-bold"
-            style={{ fontFamily: "Fraunces, Georgia, serif" }}
-          >
+          <span className="text-foreground font-display text-xl font-bold">
             ${listing.price.toLocaleString()}
           </span>
-          <span
-            className="text-muted-foreground text-xs"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
-            {"John Doe"}
-          </span>
+          <span className="text-muted-foreground font-mono text-xs">{"—"}</span>
         </div>
       </div>
     </Link>

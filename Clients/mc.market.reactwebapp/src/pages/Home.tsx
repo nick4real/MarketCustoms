@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router";
+import { Button, ButtonLink } from "@/shared";
 import { SiteFooter } from "@/widgets/footer";
 import { TrendingStrip } from "@/widgets/trending-strip";
 import { CategoriesTopicsStrip } from "@/widgets/categories-topics-strip";
@@ -13,18 +13,12 @@ export default function Home() {
         <div className="flex flex-col justify-center px-6 pt-14 pb-10 md:px-12 lg:max-w-[58%] lg:flex-1 lg:px-16 lg:py-24">
           <div className="mb-6 flex items-center gap-3 lg:mb-8">
             <span className="bg-primary h-px w-6 shrink-0" />
-            <span
-              className="text-primary text-[10px] tracking-[0.2em] uppercase"
-              style={{ fontFamily: "DM Mono, monospace" }}
-            >
+            <span className="text-primary font-mono text-[10px] tracking-[0.2em] uppercase">
               Est. 2024 — The Discerning Market
             </span>
           </div>
 
-          <h1
-            className="text-foreground mb-7 text-[52px] leading-[0.92] font-black tracking-tight sm:text-[68px] lg:mb-10 lg:text-[84px]"
-            style={{ fontFamily: "Fraunces, Georgia, serif" }}
-          >
+          <h1 className="text-foreground font-display mb-7 text-[52px] leading-[0.92] font-black tracking-tight sm:text-[68px] lg:mb-10 lg:text-[84px]">
             Trade
             <br />
             Things
@@ -38,19 +32,12 @@ export default function Home() {
           </p>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/browse"
-              className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 text-sm font-semibold tracking-wide transition-colors md:px-8 md:py-3.5"
-              style={{ borderRadius: "2px" }}
-            >
+            <ButtonLink to="/browse" size="lg" className="md:px-8 md:py-3.5">
               Start Browsing
-            </Link>
-            <button
-              className="border-border-subtle text-foreground hover:border-border-emphasis border px-6 py-3 text-sm font-medium tracking-wide transition-colors md:px-8 md:py-3.5"
-              style={{ borderRadius: "2px" }}
-            >
+            </ButtonLink>
+            <Button variant="outline" size="lg" className="md:px-8 md:py-3.5">
               List an Item
-            </button>
+            </Button>
           </div>
         </div>
 

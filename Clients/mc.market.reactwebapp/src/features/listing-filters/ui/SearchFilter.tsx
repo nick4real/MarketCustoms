@@ -13,8 +13,7 @@ export function SearchFilter() {
         placeholder="Search listings..."
         value={searchText ?? undefined}
         onChange={(e) => setSearchText(e.target.value ?? null)}
-        className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full border px-3 py-2 pl-8 text-sm transition-colors focus:outline-none"
-        style={{ borderRadius: "2px", fontFamily: "Outfit, sans-serif" }}
+        className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full rounded-xs border px-3 py-2 pl-8 text-sm transition-colors focus:outline-none"
       />
       <svg
         className="text-foreground-subtle absolute top-2.5 left-2.5"

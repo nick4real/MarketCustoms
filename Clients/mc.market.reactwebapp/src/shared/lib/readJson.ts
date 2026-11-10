@@ -1,3 +1,5 @@
+import { HttpError } from "@/shared/lib/httpError";
+
 export function readFiniteNumber(value: unknown): number | null {
   if (typeof value !== "number" || !Number.isFinite(value)) {
     return null;
@@ -29,8 +31,9 @@ export async function readResponse(
   action: string,
 ): Promise<unknown> {
   if (!response.ok) {
-    throw new Error(
-      `${action} failed: ${response.status} ${response.statusText}`,
+    throw new HttpError(
+      response.status,
+      `${action} failed (${response.status})`,
     );
   }
   return await response.json();

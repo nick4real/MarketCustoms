@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { ButtonLink } from "@/shared";
 
 export default function EmailVerificationNotice() {
   return (
@@ -6,17 +6,11 @@ export default function EmailVerificationNotice() {
       <div className="w-full max-w-lg">
         <div className="mb-6 flex items-center gap-3">
           <span className="bg-primary h-px w-6 shrink-0" />
-          <span
-            className="text-primary text-[10px] tracking-[0.2em] uppercase"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
+          <span className="text-primary font-mono text-[10px] tracking-[0.2em] uppercase">
             Verify email
           </span>
         </div>
-        <h1
-          className="text-foreground mb-4 text-[32px] leading-[0.95] font-black tracking-tight md:text-[40px]"
-          style={{ fontFamily: "Fraunces, Georgia, serif" }}
-        >
+        <h1 className="text-foreground font-display mb-4 text-[32px] leading-[0.95] font-black tracking-tight md:text-[40px]">
           Check your inbox.
         </h1>
         <p className="text-muted-foreground mb-8 text-[15px] leading-relaxed font-light">
@@ -25,20 +19,12 @@ export default function EmailVerificationNotice() {
           can keep browsing the market.
         </p>
         <div className="flex flex-wrap items-center gap-3">
-          <Link
-            to="/"
-            className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 text-sm font-semibold tracking-wide transition-colors"
-            style={{ borderRadius: "2px" }}
-          >
+          <ButtonLink to="/" size="lg">
             Continue browsing
-          </Link>
-          <Link
-            to="/browse"
-            className="border-border-subtle text-foreground hover:border-border-emphasis border px-6 py-3 text-sm font-medium tracking-wide transition-colors"
-            style={{ borderRadius: "2px" }}
-          >
+          </ButtonLink>
+          <ButtonLink to="/browse" variant="outline" size="lg">
             Browse listings
-          </Link>
+          </ButtonLink>
         </div>
       </div>
     </div>

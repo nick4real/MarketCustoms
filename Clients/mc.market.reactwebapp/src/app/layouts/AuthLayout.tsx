@@ -6,17 +6,13 @@ export default function AuthLayout() {
       {/* header */}
       <header className="flex h-14 items-center justify-between px-5 md:px-10">
         <Link to="/" className="flex items-center">
-          <span
-            className="text-foreground text-[22px] leading-none font-black tracking-tighter"
-            style={{ fontFamily: "Fraunces, Georgia, serif" }}
-          >
+          <span className="text-foreground font-display text-[22px] leading-none font-black tracking-tighter">
             MKT<span className="text-primary">.</span>
           </span>
         </Link>
         <Link
           to="/"
-          className="text-muted-foreground hover:text-foreground-muted text-xs tracking-[0.15em] uppercase transition-colors"
-          style={{ fontFamily: "DM Mono, monospace" }}
+          className="text-muted-foreground hover:text-foreground-muted font-mono text-xs tracking-[0.15em] uppercase transition-colors"
         >
           Back to market
         </Link>

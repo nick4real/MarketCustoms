@@ -19,10 +19,7 @@ export default function SiteHeader({
         className="flex flex-1 items-center md:mr-14 md:flex-none"
         onClick={closeMenu}
       >
-        <span
-          className="text-foreground text-[22px] leading-none font-black tracking-tighter"
-          style={{ fontFamily: "Fraunces, Georgia, serif" }}
-        >
+        <span className="text-foreground font-display text-[22px] leading-none font-black tracking-tighter">
           MKT<span className="text-primary">.</span>
         </span>
       </NavLink>
@@ -79,10 +76,7 @@ export default function SiteHeader({
             <line x1="3" y1="6" x2="21" y2="6" />
             <path d="M16 10a4 4 0 0 1-8 0" />
           </svg>
-          <span
-            className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
+          <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full font-mono text-[9px] font-bold">
             3
           </span>
         </button>

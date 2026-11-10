@@ -15,6 +15,7 @@ import {
   useVisitorSession,
   type AuthPageMode,
 } from "@/features/visitor-session";
+import { Avatar, getInitials } from "@/shared";
 
 const protectedPaths = new Set(["/profile", "/orders", "/settings"]);
 
@@ -163,8 +164,7 @@ function GuestAuthButtons({
           type="button"
           onClick={onSignIn}
           disabled={busy}
-          className="border-border-subtle text-foreground w-full border px-4 py-3 text-center text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
-          style={{ borderRadius: "2px" }}
+          className="border-border-subtle text-foreground w-full rounded-xs border px-4 py-3 text-center text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
         >
           Sign in
         </button>
@@ -172,8 +172,7 @@ function GuestAuthButtons({
           type="button"
           onClick={onSignUp}
           disabled={busy}
-          className="bg-primary text-primary-foreground w-full px-4 py-3 text-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40"
-          style={{ borderRadius: "2px" }}
+          className="bg-primary text-primary-foreground w-full rounded-xs px-4 py-3 text-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40"
         >
           Sign up
         </button>
@@ -195,8 +194,7 @@ function GuestAuthButtons({
         type="button"
         onClick={onSignUp}
         disabled={busy}
-        className="bg-primary text-primary-foreground hover:bg-primary-hover px-3 py-1.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-        style={{ borderRadius: "2px" }}
+        className="bg-primary text-primary-foreground hover:bg-primary-hover rounded-xs px-3 py-1.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40"
       >
         Sign up
       </button>
@@ -240,7 +238,6 @@ function Auth0SignOut({
 }) {
   const { logout } = useAuth0();
   const label = account.displayName ?? account.email ?? "Signed in";
-  const initials = accountInitials(account);
 
   function signOut() {
     onNavigate?.();
@@ -254,14 +251,22 @@ function Auth0SignOut({
       className="flex items-center gap-3"
       aria-label={label}
     >
-      <IdentityMark account={account} initials={initials} />
+      <Avatar
+        size="xs"
+        src={account.photoUrl}
+        initials={getInitials(account.displayName, account.email)}
+      />
       {variant === "mobile" && (
         <span className="text-foreground text-sm font-semibold">{label}</span>
       )}
     </Link>
   ) : (
     <div className="flex items-center gap-3" aria-label={label}>
-      <IdentityMark account={account} initials={initials} />
+      <Avatar
+        size="xs"
+        src={account.photoUrl}
+        initials={getInitials(account.displayName, account.email)}
+      />
       {variant === "mobile" && (
         <span className="text-foreground text-sm font-semibold">{label}</span>
       )}
@@ -295,47 +300,4 @@ function Auth0SignOut({
       </button>
     </div>
   );
-}
-
-// UI component to display the identity mark
-function IdentityMark({
-  account,
-  initials,
-}: {
-  account: AccountView;
-  initials: string;
-}) {
-  return (
-    <div className="border-border-subtle bg-secondary text-foreground-muted flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border text-[10px] font-semibold tracking-wide">
-      {account.photoUrl ? (
-        <img
-          src={account.photoUrl}
-          alt=""
-          className="h-full w-full object-cover"
-        />
-      ) : (
-        <span style={{ fontFamily: "DM Mono, monospace" }}>{initials}</span>
-      )}
-    </div>
-  );
-}
-
-// Function to extract the initials from the account
-function accountInitials(account: AccountView): string {
-  if (account.displayName) {
-    const parts = account.displayName.trim().split(/\s+/).filter(Boolean);
-    if (parts.length >= 2) {
-      const first = parts[0]?.[0] ?? "";
-      const last = parts[parts.length - 1]?.[0] ?? "";
-      return `${first}${last}`.toUpperCase();
-    }
-    return account.displayName.slice(0, 2).toUpperCase();
-  }
-
-  const local = account.email?.split("@")[0];
-  if (local) {
-    return local.slice(0, 2).toUpperCase();
-  }
-
-  return "MC";
 }

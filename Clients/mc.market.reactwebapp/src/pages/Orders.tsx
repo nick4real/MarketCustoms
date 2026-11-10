@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, StatusMessage, cx } from "@/shared";
 
 type OrderStatus = "Processing" | "In Transit" | "Delivered";
 type Filter = "All" | OrderStatus;
@@ -66,10 +67,10 @@ const orders = [
   },
 ];
 
-const statusStyle: Record<OrderStatus, { color: string; bg: string }> = {
-  Processing: { color: "#f0c842", bg: "rgba(240,200,66,0.08)" },
-  "In Transit": { color: "#5b8def", bg: "rgba(91,141,239,0.08)" },
-  Delivered: { color: "#4caf82", bg: "rgba(76,175,130,0.08)" },
+const statusStyle: Record<OrderStatus, string> = {
+  Processing: "text-accent bg-accent/8",
+  "In Transit": "text-info bg-info/8",
+  Delivered: "text-success bg-success/8",
 };
 
 const filters: Filter[] = ["All", "Processing", "In Transit", "Delivered"];
@@ -86,35 +87,27 @@ export default function Orders() {
       {/* Header */}
       <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between lg:mb-10">
         <div>
-          <h1
-            className="text-foreground text-[32px] leading-none font-bold lg:text-[38px]"
-            style={{ fontFamily: "Fraunces, Georgia, serif" }}
-          >
+          <h1 className="text-foreground font-display text-[32px] leading-none font-bold lg:text-[38px]">
             Orders
           </h1>
-          <p
-            className="text-muted-foreground mt-2 text-xs"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
+          <p className="text-muted-foreground mt-2 font-mono text-xs">
             {orders.length} total orders
           </p>
         </div>
 
         {/* Filter tabs */}
-        <div
-          className="border-border bg-card flex gap-0.5 self-start overflow-x-auto border p-1 sm:self-auto"
-          style={{ borderRadius: "2px" }}
-        >
+        <div className="border-border bg-card flex gap-0.5 self-start overflow-x-auto rounded-xs border p-1 sm:self-auto">
           {filters.map((f) => (
             <button
               key={f}
+              type="button"
               onClick={() => setFilter(f)}
-              className={`px-3 py-1.5 text-[10px] tracking-wide whitespace-nowrap transition-colors md:px-4 md:text-xs ${
+              className={cx(
+                "rounded-xs px-3 py-1.5 font-mono text-[10px] tracking-wide whitespace-nowrap transition-colors md:px-4 md:text-xs",
                 filter === f
                   ? "bg-foreground text-primary-foreground font-bold"
-                  : "text-muted-foreground hover:text-foreground-muted"
-              }`}
-              style={{ borderRadius: "2px", fontFamily: "DM Mono, monospace" }}
+                  : "text-muted-foreground hover:text-foreground-muted",
+              )}
             >
               {f}
             </button>
@@ -130,19 +123,16 @@ export default function Orders() {
           return (
             <div
               key={order.id}
-              className="border-border bg-card hover:border-border-subtle overflow-hidden border transition-colors"
-              style={{ borderRadius: "2px" }}
+              className="border-border bg-card hover:border-border-subtle overflow-hidden rounded-xs border transition-colors"
             >
               {/* Row */}
               <button
+                type="button"
                 className="flex w-full items-center gap-3 px-4 py-4 text-left md:gap-5 md:px-5"
                 onClick={() => setExpanded(isOpen ? null : order.id)}
               >
                 {/* Image */}
-                <div
-                  className="bg-surface h-12 w-12 shrink-0 overflow-hidden md:h-14 md:w-14"
-                  style={{ borderRadius: "2px" }}
-                >
+                <div className="bg-surface h-12 w-12 shrink-0 overflow-hidden rounded-xs md:h-14 md:w-14">
                   <img
                     src={`https://images.unsplash.com/${order.image}?w=128&h=128&fit=crop&auto=format`}
                     alt={order.item}
@@ -153,57 +143,44 @@ export default function Orders() {
                 {/* Info */}
                 <div className="min-w-0 flex-1 text-left">
                   <div className="mb-0.5 flex items-center gap-2">
-                    <span
-                      className="text-muted-foreground text-[10px]"
-                      style={{ fontFamily: "DM Mono, monospace" }}
-                    >
+                    <span className="text-muted-foreground font-mono text-[10px]">
                       {order.id}
                     </span>
                     <span className="text-border-subtle hidden sm:block">
                       ·
                     </span>
-                    <span
-                      className="text-muted-foreground hidden text-[10px] sm:block"
-                      style={{ fontFamily: "DM Mono, monospace" }}
-                    >
+                    <span className="text-muted-foreground hidden font-mono text-[10px] sm:block">
                       {order.date}
                     </span>
                   </div>
                   <div className="text-foreground truncate text-sm font-medium">
                     {order.item}
                   </div>
-                  <div
-                    className="text-foreground-subtle mt-0.5 hidden text-[10px] sm:block"
-                    style={{ fontFamily: "DM Mono, monospace" }}
-                  >
+                  <div className="text-foreground-subtle mt-0.5 hidden font-mono text-[10px] sm:block">
                     from {order.seller} · {order.location}
                   </div>
                 </div>
 
                 {/* Status — hidden on smallest screens, shown inline on sm+ */}
                 <div
-                  className="hidden shrink-0 px-3 py-1 text-[10px] font-bold tracking-widest uppercase sm:block"
-                  style={{
-                    fontFamily: "DM Mono, monospace",
-                    color: s.color,
-                    backgroundColor: s.bg,
-                    borderRadius: "2px",
-                  }}
+                  className={cx(
+                    "hidden shrink-0 rounded-xs px-3 py-1 font-mono text-[10px] font-bold tracking-widest uppercase sm:block",
+                    s,
+                  )}
                 >
                   {order.status}
                 </div>
 
                 {/* Total + chevron */}
                 <div className="flex shrink-0 items-center gap-2">
-                  <div
-                    className="text-foreground text-lg font-bold md:text-xl"
-                    style={{ fontFamily: "Fraunces, Georgia, serif" }}
-                  >
+                  <div className="text-foreground font-display text-lg font-bold md:text-xl">
                     ${order.total.toLocaleString()}
                   </div>
                   <div
-                    className="text-foreground-subtle transition-transform duration-200"
-                    style={{ transform: isOpen ? "rotate(180deg)" : "none" }}
+                    className={cx(
+                      "text-foreground-subtle transition-transform duration-200",
+                      isOpen && "rotate-180",
+                    )}
                   >
                     <svg
                       width="13"
@@ -222,20 +199,14 @@ export default function Orders() {
               {/* Mobile status bar (only on xs) */}
               <div className="-mt-2 flex items-center gap-2 px-4 pb-3 sm:hidden">
                 <span
-                  className="px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase"
-                  style={{
-                    fontFamily: "DM Mono, monospace",
-                    color: s.color,
-                    backgroundColor: s.bg,
-                    borderRadius: "2px",
-                  }}
+                  className={cx(
+                    "rounded-xs px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase",
+                    s,
+                  )}
                 >
                   {order.status}
                 </span>
-                <span
-                  className="text-foreground-subtle text-[10px]"
-                  style={{ fontFamily: "DM Mono, monospace" }}
-                >
+                <span className="text-foreground-subtle font-mono text-[10px]">
                   {order.date}
                 </span>
               </div>
@@ -245,53 +216,29 @@ export default function Orders() {
                 <div className="border-border border-t px-4 pb-5 md:px-5">
                   <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-3 sm:gap-8">
                     <div>
-                      <div
-                        className="text-muted-foreground mb-1.5 text-[10px] tracking-[0.15em] uppercase"
-                        style={{ fontFamily: "DM Mono, monospace" }}
-                      >
+                      <div className="text-muted-foreground mb-1.5 font-mono text-[10px] tracking-[0.15em] uppercase">
                         Tracking number
                       </div>
-                      <div
-                        className="text-foreground text-sm"
-                        style={{ fontFamily: "DM Mono, monospace" }}
-                      >
+                      <div className="text-foreground font-mono text-sm">
                         {order.tracking}
                       </div>
                     </div>
                     <div>
-                      <div
-                        className="text-muted-foreground mb-1.5 text-[10px] tracking-[0.15em] uppercase"
-                        style={{ fontFamily: "DM Mono, monospace" }}
-                      >
+                      <div className="text-muted-foreground mb-1.5 font-mono text-[10px] tracking-[0.15em] uppercase">
                         Delivery
                       </div>
-                      <div
-                        className="text-foreground text-sm"
-                        style={{ fontFamily: "DM Mono, monospace" }}
-                      >
+                      <div className="text-foreground font-mono text-sm">
                         {order.eta}
                       </div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        className="border-border-subtle text-foreground hover:border-border-emphasis border px-3 py-2 text-xs transition-colors"
-                        style={{
-                          borderRadius: "2px",
-                          fontFamily: "DM Mono, monospace",
-                        }}
-                      >
+                      <Button variant="outline" size="sm">
                         Contact seller
-                      </button>
+                      </Button>
                       {order.status === "Delivered" && (
-                        <button
-                          className="bg-primary text-primary-foreground hover:bg-primary-hover px-3 py-2 text-xs font-bold transition-colors"
-                          style={{
-                            borderRadius: "2px",
-                            fontFamily: "DM Mono, monospace",
-                          }}
-                        >
+                        <Button variant="primary" size="sm">
                           Leave review
-                        </button>
+                        </Button>
                       )}
                     </div>
                   </div>
@@ -303,20 +250,11 @@ export default function Orders() {
       </div>
 
       {visible.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-24">
-          <div
-            className="text-border-subtle mb-4 text-5xl"
-            style={{ fontFamily: "Fraunces, Georgia, serif" }}
-          >
-            ∅
-          </div>
-          <p
-            className="text-foreground-subtle text-xs tracking-widest"
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
-            No orders with this status
-          </p>
-        </div>
+        <StatusMessage
+          size="block"
+          symbol="∅"
+          message="No orders with this status"
+        />
       )}
     </div>
   );

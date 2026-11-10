@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 import { mapSessionError } from "@/entities/session";
+import { Button, Tabs } from "@/shared";
 import {
   emailVerificationPath,
   isAuth0Configured,
@@ -12,6 +13,11 @@ import {
   type AuthPageMode,
   useVisitorSession,
 } from "@/features/visitor-session";
+
+const MODE_TABS = [
+  { id: "sign-in", label: "Sign in" },
+  { id: "sign-up", label: "Sign up" },
+] as const;
 
 function modeCopy(mode: AuthPageMode): {
   title: string;
@@ -57,16 +63,10 @@ function Auth0LoginPanel() {
   if (session.status === "authenticating") {
     return (
       <div className="w-full max-w-md">
-        <p
-          className="text-primary text-[10px] tracking-[0.2em] uppercase"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
+        <p className="text-primary font-mono text-[10px] tracking-[0.2em] uppercase">
           Session
         </p>
-        <h1
-          className="text-foreground mt-4 text-[32px] leading-none font-black tracking-tight"
-          style={{ fontFamily: "Fraunces, Georgia, serif" }}
-        >
+        <h1 className="text-foreground font-display mt-4 text-[32px] leading-none font-black tracking-tight">
           Checking your account.
         </h1>
       </div>
@@ -139,42 +139,20 @@ function LoginPanel({
     <div className="w-full max-w-md">
       <div className="mb-8 flex items-center gap-3">
         <span className="bg-primary h-px w-6 shrink-0" />
-        <span
-          className="text-primary text-[10px] tracking-[0.2em] uppercase"
-          style={{ fontFamily: "DM Mono, monospace" }}
-        >
+        <span className="text-primary font-mono text-[10px] tracking-[0.2em] uppercase">
           Account
         </span>
       </div>
 
-      <div className="border-border mb-8 flex gap-6 border-b">
-        {(
-          [
-            { id: "sign-in", label: "Sign in" },
-            { id: "sign-up", label: "Sign up" },
-          ] as const
-        ).map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            onClick={() => onModeChange?.(tab.id)}
-            disabled={!configured || busy}
-            className={`border-b-2 pb-3 text-xs tracking-[0.15em] uppercase transition-colors ${
-              mode === tab.id
-                ? "border-primary text-foreground"
-                : "text-muted-foreground hover:text-foreground-muted border-transparent"
-            }`}
-            style={{ fontFamily: "DM Mono, monospace" }}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        items={MODE_TABS}
+        value={mode}
+        onChange={(next) => onModeChange?.(next)}
+        disabled={!configured || busy}
+        className="mb-8"
+      />
 
-      <h1
-        className="text-foreground mb-4 text-[36px] leading-[0.95] font-black tracking-tight md:text-[44px]"
-        style={{ fontFamily: "Fraunces, Georgia, serif" }}
-      >
+      <h1 className="text-foreground font-display mb-4 text-[36px] leading-[0.95] font-black tracking-tight md:text-[44px]">
         {copy.title}
       </h1>
       <p className="text-muted-foreground mb-8 text-[15px] leading-relaxed font-light">
@@ -183,23 +161,21 @@ function LoginPanel({
 
       {message && (
         <div
-          className="border-border-subtle bg-card text-foreground mb-6 border px-4 py-3 text-sm font-light"
-          style={{ borderRadius: "2px" }}
+          className="border-border-subtle bg-card text-foreground mb-6 rounded-xs border px-4 py-3 text-sm font-light"
           role="alert"
         >
           {message}
         </div>
       )}
 
-      <button
-        type="button"
+      <Button
+        size="lg"
         onClick={onContinue}
         disabled={!configured || busy || !onContinue}
-        className="bg-primary text-primary-foreground hover:bg-primary-hover w-full px-6 py-3 text-sm font-semibold tracking-wide transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-        style={{ borderRadius: "2px" }}
+        className="w-full"
       >
         {busy ? copy.actionBusy : copy.action}
-      </button>
+      </Button>
 
       {mode === "sign-in" && (
         <p className="text-muted-foreground mt-5 text-sm font-light">

@@ -59,16 +59,10 @@ function CallbackHandler() {
 
   return (
     <div className="w-full max-w-md text-center">
-      <p
-        className="text-primary text-[10px] tracking-[0.2em] uppercase"
-        style={{ fontFamily: "DM Mono, monospace" }}
-      >
+      <p className="text-primary font-mono text-[10px] tracking-[0.2em] uppercase">
         {error || session.error ? "Returning you to sign in" : "Signing you in"}
       </p>
-      <h1
-        className="text-foreground mt-4 text-[32px] leading-none font-black tracking-tight"
-        style={{ fontFamily: "Fraunces, Georgia, serif" }}
-      >
+      <h1 className="text-foreground font-display mt-4 text-[32px] leading-none font-black tracking-tight">
         {error || session.error ? "Almost back." : "One moment."}
       </h1>
       <p className="text-muted-foreground mt-4 text-sm font-light">
