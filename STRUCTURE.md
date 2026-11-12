@@ -17,6 +17,7 @@ Services/
   Shared/                     Cross-cutting building blocks used across services
 Tests/
   <Service>/                  Unit and integration test projects per service
+  Bruno/                      Bruno API collection for manual requests against the gateway and services
 scripts/
   ef.js                       EF Core migration helper behind the root npm scripts
 .github/workflows/            GitHub Actions pipelines

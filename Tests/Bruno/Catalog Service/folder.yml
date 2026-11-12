@@ -1,0 +1,7 @@
+info:
+  name: Catalog Service
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit

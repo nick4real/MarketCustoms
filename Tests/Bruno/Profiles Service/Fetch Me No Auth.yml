@@ -1,0 +1,16 @@
+info:
+  name: Fetch Me No Auth
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{gatewayUrl}}/api/profiles/me"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

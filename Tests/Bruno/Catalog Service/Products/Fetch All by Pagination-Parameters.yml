@@ -1,0 +1,26 @@
+info:
+  name: Fetch All by Pagination/Parameters
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{gatewayUrl}}/api/products?page=1&size=2"
+  params:
+    - name: page
+      value: "1"
+      type: query
+    - name: size
+      value: "2"
+      type: query
+  body:
+    type: json
+    data: "{\r\n    \"categoryid\" : 1\r\n}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

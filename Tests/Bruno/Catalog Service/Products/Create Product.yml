@@ -1,0 +1,91 @@
+info:
+  name: Create Product
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{gatewayUrl}}/api/products/create"
+  body:
+    type: json
+    data: "{\r
+
+      \  \"ownerId\": \"werwer\",\r
+
+      \  \"title\": \"Arabica Coffee\",\r
+
+      \  \"description\": \"Some cool Arabica Coffee lorem ipsum very cool\",\r
+
+      \  \"categoryId\": 1,\r
+
+      \  \"price\": 67.99,\r
+
+      \  \"stockQuantity\": 1,\r
+
+      \  \"imageLinks\": [\r
+
+      \    \"https://colombiancoffee.us/cdn/shop/articles/tips-to-recognize-good-quality-coffee-424970.png\",\r
+
+      \    \"https://thumbs.dreamstime.com/b/png-cup-cappuccino-beautiful-heart-latte-art-isolated-transparent-background-concept-coffee-drink-breakfast-beverage-381399174.jpg\"\r
+
+      \  ],\r
+
+      \  \"tags\": [\r
+
+      \    \"Drinks\",\r
+
+      \    \"Coffee\",\r
+
+      \    \"Coffeine\"\r
+
+      \  ],\r
+
+      \  \"parameters\": [\r
+
+      \    {\r
+
+      \      \"item1\": \"Release year\",\r
+
+      \      \"item2\": \"2018\"\r
+
+      \    },\r
+
+      \    {\r
+
+      \      \"item1\": \"Is roasted\",\r
+
+      \      \"item2\": \"Yes\"\r
+
+      \    }\r
+
+      \  ]\r
+
+      }"
+  auth:
+    type: oauth2
+    flow: authorization_code
+    authorizationUrl: https://wsnh.eu.auth0.com/authorize
+    accessTokenUrl: https://wsnh.eu.auth0.com/oauth/token
+    callbackUrl: https://oauth.pstmn.io/v1/callback
+    credentials:
+      clientId: "{{vault:cliendId}}"
+      placement: basic_auth_header
+    additionalParameters:
+      authorizationRequest:
+        - name: audience
+          placement: query
+          value: "{{gatewayUrl}}"
+    scope: openid profile email
+    pkce: {}
+    tokenConfig:
+      id: Auth0Token
+      placement:
+        header: Bearer
+      source: access_token
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

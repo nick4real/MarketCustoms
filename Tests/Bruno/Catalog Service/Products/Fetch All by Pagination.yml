@@ -1,0 +1,23 @@
+info:
+  name: Fetch All by Pagination
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{gatewayUrl}}/api/listings?pageIndex=1&pageSize=2"
+  params:
+    - name: pageIndex
+      value: "1"
+      type: query
+    - name: pageSize
+      value: "2"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,7 @@
+info:
+  name: Profiles Service
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit

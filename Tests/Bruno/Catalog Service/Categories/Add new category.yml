@@ -1,0 +1,28 @@
+info:
+  name: Add new category
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{gatewayUrl}}/api/categories"
+  headers:
+    - name: Authorization
+      value: "{{vault:jwt_auth0}}"
+  body:
+    type: json
+    data: "{\r
+
+      \  \"name\": \"Test\",\r
+
+      \  \"parentId\": null\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
