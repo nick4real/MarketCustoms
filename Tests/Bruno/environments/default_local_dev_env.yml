@@ -1,0 +1,5 @@
+name: default_local_dev_env
+variables:
+  - name: gatewayUrl
+    value: https://localhost:7117/
+    description: ""
