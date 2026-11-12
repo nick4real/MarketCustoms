@@ -5,7 +5,7 @@ import {
   mapListing,
   mapListingView,
   mapPaginatedListings,
-} from "@/entities/listing/api/listings";
+} from "../listings";
 
 const listingPage = {
   items: [

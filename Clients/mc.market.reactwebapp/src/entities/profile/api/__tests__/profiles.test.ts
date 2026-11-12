@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mapCurrentUserMetadata } from "@/entities/profile/api/profiles";
+import { mapCurrentUserMetadata } from "../profiles";
 
 describe("mapCurrentUserMetadata", () => {
   it("maps a successful Profiles payload", () => {

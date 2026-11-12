@@ -1,4 +1,5 @@
 import { Link, Outlet } from "react-router";
+import { Logo } from "@/shared/ui";
 
 export default function AuthLayout() {
   return (
@@ -6,9 +7,7 @@ export default function AuthLayout() {
       {/* header */}
       <header className="flex h-14 items-center justify-between px-5 md:px-10">
         <Link to="/" className="flex items-center">
-          <span className="text-foreground font-display text-[22px] leading-none font-black tracking-tighter">
-            MKT<span className="text-primary">.</span>
-          </span>
+          <Logo className="text-[22px] leading-none tracking-tighter" />
         </Link>
         <Link
           to="/"

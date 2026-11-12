@@ -6,16 +6,16 @@ import type {
   ListingSort,
   ListingView,
   ListingCondition,
-} from "@/entities/listing/model/types";
+} from "../model/types";
 import {
   readBoolean,
   readFiniteNumber,
-  readJsonResponse,
   readPositiveInt,
   readStringNonEmpty,
-} from "@/shared";
+} from "@/shared/lib";
+import { readResponse } from "@/shared/api";
 import { parseListingCondition } from "../model/parse";
-import { listingSearchBody } from "@/entities/listing/lib/listingSearchBody";
+import { listingSearchBody } from "../lib/listingSearchBody";
 
 /* Listings API */
 const listingsUrl = "/api/listings";
@@ -221,9 +221,7 @@ export async function getListings(
         }
       : {}),
   });
-  return mapPaginatedListings(
-    await readJsonResponse(response, "Listings request"),
-  );
+  return mapPaginatedListings(await readResponse(response, "Listings request"));
 }
 
 export async function getListingById(
@@ -235,5 +233,5 @@ export async function getListingById(
   }
 
   const response = await fetch(`${listingsUrl}/${id}`, { signal });
-  return mapListing(await readJsonResponse(response, "Listing request"));
+  return mapListing(await readResponse(response, "Listing request"));
 }

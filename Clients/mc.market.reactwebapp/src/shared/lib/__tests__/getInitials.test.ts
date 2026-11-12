@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getInitials } from "@/shared/lib/getInitials";
+import { getInitials } from "../getInitials";
 
 describe("getInitials", () => {
   it("uses first and last initials for multi-word names", () => {

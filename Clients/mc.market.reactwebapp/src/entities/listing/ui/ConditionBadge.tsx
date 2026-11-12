@@ -1,6 +1,6 @@
 import type { ListingCondition } from "../model/types";
 
-export default function ConditionBadge({
+export function ConditionBadge({
   condition,
 }: {
   condition: ListingCondition | null;

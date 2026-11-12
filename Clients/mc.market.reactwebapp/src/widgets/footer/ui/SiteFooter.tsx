@@ -1,9 +1,9 @@
-export default function SiteFooter() {
+import { Logo } from "@/shared/ui";
+
+export function SiteFooter() {
   return (
     <div className="border-border flex flex-col gap-6 border-t px-6 py-8 sm:flex-row sm:items-center sm:justify-between md:px-12 lg:px-16 lg:py-10">
-      <span className="text-foreground font-display text-2xl font-black">
-        MKT<span className="text-primary">.</span>
-      </span>
+      <Logo className="text-2xl" />
       <div className="flex flex-wrap gap-x-6 gap-y-2">
         {["About", "Sell", "Support", "Terms", "Privacy"].map((l) => (
           <span

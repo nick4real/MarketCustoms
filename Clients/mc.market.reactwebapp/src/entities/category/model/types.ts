@@ -8,8 +8,3 @@ export interface CategoryNode {
   name: string;
   childCategories?: CategoryNode[];
 }
-
-export interface CreateCategoryPayload {
-  name: string;
-  parentId?: number | null;
-}

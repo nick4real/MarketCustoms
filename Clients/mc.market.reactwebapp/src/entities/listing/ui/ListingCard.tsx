@@ -1,9 +1,10 @@
 import { Link } from "react-router";
-import type { ListingView } from "@/entities/listing";
-import { listingImageUrl } from "@/entities/listing";
-import ConditionBadge from "./ConditionBadge";
+import { cx } from "@/shared/lib";
+import { listingImageUrl } from "../lib/listingImageUrl";
+import type { ListingView } from "../model/types";
+import { ConditionBadge } from "./ConditionBadge";
 
-export default function ListingCard({
+export function ListingCard({
   listing,
   showLocation = false,
 }: {
@@ -39,7 +40,10 @@ export default function ListingCard({
           </div>
         )}
         <div
-          className={`flex items-center justify-between ${showLocation ? "" : "mt-3"}`}
+          className={cx(
+            "flex items-center justify-between",
+            !showLocation && "mt-3",
+          )}
         >
           <span className="text-foreground font-display text-xl font-bold">
             ${listing.price.toLocaleString()}

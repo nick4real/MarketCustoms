@@ -1,7 +1,4 @@
-import {
-  LISTING_CONDITIONS,
-  LISTING_SORTS,
-} from "@/entities/listing/model/constants";
+import { LISTING_CONDITIONS, LISTING_SORTS } from "./constants";
 
 export type ListingCondition = (typeof LISTING_CONDITIONS)[number];
 export type ListingSort = (typeof LISTING_SORTS)[number];
@@ -18,7 +15,7 @@ export interface ListingParameter {
   value: string;
 }
 
-export interface Category {
+export interface ListingCategory {
   id: number;
   name: string;
 }
@@ -35,7 +32,7 @@ export interface Listing {
   title: string;
   description: string;
   categoryId: number;
-  category: Category;
+  category: ListingCategory;
   createdAt: string;
   price: number;
   stock: number;
