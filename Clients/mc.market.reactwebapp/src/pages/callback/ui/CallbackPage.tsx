@@ -6,11 +6,11 @@ import {
   destinationAfterSignIn,
   takePostSignInReturnTo,
 } from "@/features/auth";
-import { isAuth0Configured } from "@/shared/config";
+import { isAuth0Configured, routes } from "@/shared/config";
 
 export function CallbackPage() {
   if (!isAuth0Configured) {
-    return <Navigate to="/login?error=missing_config" replace />;
+    return <Navigate to={`${routes.login}?error=missing_config`} replace />;
   }
   return <CallbackHandler />;
 }
@@ -43,7 +43,7 @@ function CallbackHandler() {
       const destination =
         session.status === "signed-in"
           ? destinationAfterSignIn(takePostSignInReturnTo(), session.account)
-          : "/login";
+          : routes.login;
       void navigate(destination, { replace: true });
     }
   }, [

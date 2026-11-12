@@ -79,5 +79,9 @@ export function sanitizeReturnTo(value: string | null | undefined): string {
 
 export function isPublicStorefrontPath(value: string): boolean {
   const path = pathAndQuery(sanitizeReturnTo(value)).path;
-  return path === "/" || path === "/browse" || path.startsWith("/listings/");
+  return (
+    path === routes.home ||
+    path === routes.browse ||
+    path.startsWith(routes.listing(""))
+  );
 }

@@ -232,6 +232,8 @@ export async function getListingById(
     throw new Error("Invalid listing ID");
   }
 
-  const response = await fetch(`${listingsUrl}/${id}`, { signal });
+  const response = await fetch(`${listingsUrl}/${encodeURIComponent(id)}`, {
+    signal,
+  });
   return mapListing(await readResponse(response, "Listing request"));
 }

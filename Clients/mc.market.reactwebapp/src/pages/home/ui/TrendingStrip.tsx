@@ -1,4 +1,5 @@
 import { ListingCard, useLatestListingsQuery } from "@/entities/listing";
+import { routes } from "@/shared/config";
 import { SectionHeader, StatusMessage } from "@/shared/ui";
 
 export function TrendingStrip() {
@@ -14,7 +15,7 @@ export function TrendingStrip() {
       <SectionHeader
         title="Trending Now"
         subtitle="High-demand items, moving fast."
-        action={{ to: "/browse", label: "See all →" }}
+        action={{ to: routes.browse, label: "See all →" }}
       />
 
       {isPending ? (

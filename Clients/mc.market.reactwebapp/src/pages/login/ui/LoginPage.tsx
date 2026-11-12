@@ -11,7 +11,7 @@ import {
   startHostedLogin,
   type AuthPageMode,
 } from "@/features/auth";
-import { isAuth0Configured } from "@/shared/config";
+import { isAuth0Configured, routes } from "@/shared/config";
 
 const MODE_TABS = [
   { id: "sign-in", label: "Sign in" },
@@ -77,7 +77,9 @@ function Auth0LoginPanel() {
       return <Navigate to={emailVerificationPath} replace />;
     }
     const sanitized = sanitizeReturnTo(returnTo);
-    const destination = isPublicStorefrontPath(sanitized) ? sanitized : "/";
+    const destination = isPublicStorefrontPath(sanitized)
+      ? sanitized
+      : routes.home;
     return <Navigate to={destination} replace />;
   }
 
@@ -194,7 +196,7 @@ function LoginPanel({
       <p className="text-muted-foreground mt-8 text-sm font-light">
         Prefer to keep browsing?{" "}
         <Link
-          to="/"
+          to={routes.home}
           className="text-foreground decoration-border-subtle hover:decoration-primary underline underline-offset-4 transition-colors"
         >
           Return to the market

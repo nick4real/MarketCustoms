@@ -1,7 +1,8 @@
 export const routes = {
   home: "/",
   browse: "/browse",
-  listing: (id: string) => `/listings/${id}`,
+  listing: (id: string) => `/listings/${encodeURIComponent(id)}`,
+  browseCategory: (categoryId: number) => `/browse?categoryId=${categoryId}`,
   profile: "/profile",
   orders: "/orders",
   settings: "/settings",

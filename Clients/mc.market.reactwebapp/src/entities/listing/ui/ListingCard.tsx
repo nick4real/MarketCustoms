@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { routes } from "@/shared/config";
 import { cx } from "@/shared/lib";
 import { listingImageUrl } from "../lib/listingImageUrl";
 import type { ListingView } from "../model/types";
@@ -15,7 +16,7 @@ export function ListingCard({
 
   return (
     <Link
-      to={`/listings/${listing.id}`}
+      to={routes.listing(listing.id)}
       className="group border-border bg-card hover:border-border-hover overflow-hidden rounded-xs border transition-all duration-200"
     >
       <div className="bg-surface aspect-4/3 overflow-hidden">

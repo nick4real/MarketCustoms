@@ -112,7 +112,7 @@ export function ListingDetailsPage() {
           </Link>
           <span className="text-foreground-subtle">/</span>
           <Link
-            to={`/browse?categoryId=${listing.categoryId}`}
+            to={routes.browseCategory(listing.categoryId)}
             className="hover:text-foreground transition-colors"
           >
             {listing.category.name}
@@ -259,7 +259,7 @@ export function ListingDetailsPage() {
             <SectionHeader
               title="More like this"
               action={{
-                to: `/browse?categoryId=${listing.categoryId}`,
+                to: routes.browseCategory(listing.categoryId),
                 label: "See all →",
               }}
             />

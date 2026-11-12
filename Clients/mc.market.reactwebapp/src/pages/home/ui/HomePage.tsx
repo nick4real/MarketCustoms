@@ -1,3 +1,4 @@
+import { routes } from "@/shared/config";
 import { Button, ButtonLink } from "@/shared/ui";
 import { SiteFooter } from "@/widgets/footer";
 import { TrendingStrip } from "./TrendingStrip";
@@ -32,7 +33,11 @@ export function HomePage() {
           </p>
 
           <div className="flex items-center gap-3">
-            <ButtonLink to="/browse" size="lg" className="md:px-8 md:py-3.5">
+            <ButtonLink
+              to={routes.browse}
+              size="lg"
+              className="md:px-8 md:py-3.5"
+            >
               Start Browsing
             </ButtonLink>
             <Button variant="outline" size="lg" className="md:px-8 md:py-3.5">

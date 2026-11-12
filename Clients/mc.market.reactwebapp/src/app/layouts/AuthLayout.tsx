@@ -1,4 +1,5 @@
 import { Link, Outlet } from "react-router";
+import { routes } from "@/shared/config";
 import { Logo } from "@/shared/ui";
 
 export default function AuthLayout() {
@@ -6,11 +7,11 @@ export default function AuthLayout() {
     <div className="bg-background flex min-h-screen flex-col">
       {/* header */}
       <header className="flex h-14 items-center justify-between px-5 md:px-10">
-        <Link to="/" className="flex items-center">
+        <Link to={routes.home} className="flex items-center">
           <Logo className="text-[22px] leading-none tracking-tighter" />
         </Link>
         <Link
-          to="/"
+          to={routes.home}
           className="text-muted-foreground hover:text-foreground-muted font-mono text-xs tracking-[0.15em] uppercase transition-colors"
         >
           Back to market

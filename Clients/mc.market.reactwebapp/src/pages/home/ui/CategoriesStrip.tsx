@@ -1,4 +1,5 @@
 import { useRootCategoriesQuery } from "@/entities/category";
+import { routes } from "@/shared/config";
 import { SectionHeader, StatusMessage } from "@/shared/ui";
 import { Link } from "react-router";
 
@@ -13,7 +14,7 @@ export function CategoriesStrip() {
     <section className="px-6 py-14 md:px-12 lg:px-16 lg:py-20">
       <SectionHeader
         title="Browse by Category"
-        action={{ to: "/browse", label: "All →" }}
+        action={{ to: routes.browse, label: "All →" }}
       />
 
       {isPending ? (
@@ -25,7 +26,7 @@ export function CategoriesStrip() {
           {data.map((cat) => (
             <Link
               key={cat.id}
-              to={`/browse?categoryId=${cat.id}`}
+              to={routes.browseCategory(cat.id)}
               className="group border-border bg-card hover:border-primary/50 hover:bg-primary-subtle rounded-xs border p-4 transition-all duration-200"
             >
               <div className="text-foreground mb-1 text-sm font-medium">
