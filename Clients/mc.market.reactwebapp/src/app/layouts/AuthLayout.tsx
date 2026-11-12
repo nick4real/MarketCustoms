@@ -1,22 +1,18 @@
 import { Link, Outlet } from "react-router";
+import { routes } from "@/shared/config";
+import { Logo } from "@/shared/ui";
 
 export default function AuthLayout() {
   return (
     <div className="bg-background flex min-h-screen flex-col">
       {/* header */}
       <header className="flex h-14 items-center justify-between px-5 md:px-10">
-        <Link to="/" className="flex items-center">
-          <span
-            className="text-foreground text-[22px] leading-none font-black tracking-tighter"
-            style={{ fontFamily: "Fraunces, Georgia, serif" }}
-          >
-            MKT<span className="text-primary">.</span>
-          </span>
+        <Link to={routes.home} className="flex items-center">
+          <Logo className="text-[22px] leading-none tracking-tighter" />
         </Link>
         <Link
-          to="/"
-          className="text-muted-foreground hover:text-foreground-muted text-xs tracking-[0.15em] uppercase transition-colors"
-          style={{ fontFamily: "DM Mono, monospace" }}
+          to={routes.home}
+          className="text-muted-foreground hover:text-foreground-muted font-mono text-xs tracking-[0.15em] uppercase transition-colors"
         >
           Back to market
         </Link>

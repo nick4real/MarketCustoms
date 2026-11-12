@@ -23,15 +23,3 @@ export function readStringNonEmpty(value: unknown): string | null {
   const trimmed = value.trim();
   return trimmed ? trimmed : null;
 }
-
-export async function readResponse(
-  response: Response,
-  action: string,
-): Promise<unknown> {
-  if (!response.ok) {
-    throw new Error(
-      `${action} failed: ${response.status} ${response.statusText}`,
-    );
-  }
-  return await response.json();
-}

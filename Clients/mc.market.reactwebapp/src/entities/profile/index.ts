@@ -1,9 +1,2 @@
-export type {
-  CurrentUserMetadata,
-  OwnerProfile,
-  PublicProfile,
-} from "@/entities/profile/model/types";
-export {
-  ensureCurrentUserMetadata,
-  mapCurrentUserMetadata,
-} from "@/entities/profile/api/profiles";
+export type { CurrentUserMetadata } from "./model/types";
+export { ensureCurrentUserMetadata } from "./api/profiles";

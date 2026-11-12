@@ -1,0 +1,24 @@
+export function StatsStrip() {
+  return (
+    <div className="border-border grid grid-cols-2 gap-5 overflow-x-auto border-y px-6 py-6 md:flex md:items-center md:gap-12 md:px-12 lg:gap-16 lg:px-16">
+      {[
+        { value: "—", label: "Active listings" },
+        { value: "—", label: "Verified sellers" },
+        { value: "—", label: "Traded this month" },
+        { value: "—", label: "Avg seller rating" },
+      ].map((stat) => (
+        <div
+          key={stat.label}
+          className="flex shrink-0 flex-col gap-1 md:flex-row md:items-baseline md:gap-3"
+        >
+          <span className="text-foreground font-display text-[26px] leading-none font-bold lg:text-[32px]">
+            {stat.value}
+          </span>
+          <span className="text-muted-foreground font-mono text-[10px] tracking-wide">
+            {stat.label}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}

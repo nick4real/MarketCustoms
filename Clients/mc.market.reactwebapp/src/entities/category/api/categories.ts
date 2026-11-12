@@ -1,13 +1,6 @@
-import type {
-  Category,
-  CategoryNode,
-  CreateCategoryPayload,
-} from "@/entities/category/model/types";
-import {
-  readPositiveInt,
-  readStringNonEmpty,
-  readJsonResponse,
-} from "@/shared";
+import type { Category, CategoryNode } from "../model/types";
+import { readPositiveInt, readStringNonEmpty } from "@/shared/lib";
+import { readResponse } from "@/shared/api";
 
 /* Categories API */
 const categoriesBaseUrl = "/api/categories";
@@ -59,9 +52,7 @@ export async function getRootCategories(
   if (response.status === 404) {
     return [];
   }
-  return mapRootCategories(
-    await readJsonResponse(response, "Categories request"),
-  );
+  return mapRootCategories(await readResponse(response, "Categories request"));
 }
 
 export async function getCategoryById(
@@ -71,7 +62,7 @@ export async function getCategoryById(
   const response = await fetch(`${categoriesBaseUrl}/${categoryId}`, {
     signal,
   });
-  return mapCategory(await readJsonResponse(response, "Category request"));
+  return mapCategory(await readResponse(response, "Category request"));
 }
 
 export async function getCategoryWithChildren(
@@ -82,39 +73,6 @@ export async function getCategoryWithChildren(
     signal,
   });
   return mapCategoryNode(
-    await readJsonResponse(response, "Category children request"),
+    await readResponse(response, "Category children request"),
   );
-}
-
-export async function getCategoryFullTree(
-  categoryId: number,
-  signal?: AbortSignal,
-): Promise<CategoryNode> {
-  const response = await fetch(`${categoriesBaseUrl}/tree/${categoryId}`, {
-    signal,
-  });
-  return mapCategoryNode(
-    await readJsonResponse(response, "Category tree request"),
-  );
-}
-
-export async function createCategory(
-  accessToken: string,
-  payload: CreateCategoryPayload,
-  signal?: AbortSignal,
-): Promise<void> {
-  const response = await fetch(categoriesBaseUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: payload.name,
-      parentId: payload.parentId ?? null,
-    }),
-    signal,
-  });
-
-  await readJsonResponse(response, "Create category request");
 }

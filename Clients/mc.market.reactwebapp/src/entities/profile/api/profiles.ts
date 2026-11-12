@@ -1,5 +1,6 @@
-import type { CurrentUserMetadata } from "@/entities/profile/model/types";
-import { readResponse, readStringNonEmpty } from "@/shared/lib/readJson";
+import type { CurrentUserMetadata } from "../model/types";
+import { readResponse } from "@/shared/api";
+import { readStringNonEmpty } from "@/shared/lib";
 
 /* Profiles API */
 const metadataUrl = "/api/profiles/me/current-user-metadata";

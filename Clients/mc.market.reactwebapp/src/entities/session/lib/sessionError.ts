@@ -1,4 +1,4 @@
-import type { SessionErrorView } from "@/entities/session/model/types";
+import type { SessionErrorView } from "../model/types";
 
 const MISSING_CONFIG: SessionErrorView = {
   code: "missing_config",

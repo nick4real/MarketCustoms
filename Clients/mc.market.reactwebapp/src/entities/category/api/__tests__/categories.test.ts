@@ -1,11 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
-  flattenCategoryForest,
   getRootCategories,
   mapCategory,
   mapCategoryNode,
   mapRootCategories,
-} from "@/entities/category/";
+} from "../categories";
 
 describe("mapCategoryNode", () => {
   it("maps a flat category payload", () => {
@@ -90,36 +89,6 @@ describe("mapRootCategories", () => {
     expect(() => mapRootCategories({ id: 1, name: "Electronics" })).toThrow(
       /Invalid categories response/,
     );
-  });
-});
-
-describe("flattenCategoryForest", () => {
-  it("flattens roots and nested children with depth", () => {
-    expect(
-      flattenCategoryForest([
-        {
-          id: 1,
-          name: "Electronics",
-          childCategories: [
-            {
-              id: 2,
-              name: "Computers & Laptops",
-              childCategories: [{ id: 3, name: "Laptops" }],
-            },
-          ],
-        },
-        { id: 6, name: "Books" },
-      ]),
-    ).toEqual([
-      { id: 1, name: "Electronics", depth: 0 },
-      { id: 2, name: "Computers & Laptops", depth: 1 },
-      { id: 3, name: "Laptops", depth: 2 },
-      { id: 6, name: "Books", depth: 0 },
-    ]);
-  });
-
-  it("returns an empty list for an empty forest", () => {
-    expect(flattenCategoryForest([])).toEqual([]);
   });
 });
 
