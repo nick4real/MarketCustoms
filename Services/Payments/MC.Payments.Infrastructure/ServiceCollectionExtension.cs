@@ -1,0 +1,30 @@
+﻿using MC.Payments.Infrastructure.Persistence;
+using MC.Shared.Application.Interfaces.Services;
+using MC.Shared.Infrastructure.Seeding;
+using MC.Shared.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace MC.Payments.Infrastructure;
+
+public static class ServiceCollectionExtension
+{
+    extension(IServiceCollection services)
+    {
+        public IServiceCollection AddInfrastructure(IConfiguration configuration)
+        {
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("paymentsSqlDatabase"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                }));
+            services.AddSchemaOnlySeeder<AppDbContext>(configuration);
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, Auth0CurrentUserService>();
+
+            return services;
+        }
+    }
+}

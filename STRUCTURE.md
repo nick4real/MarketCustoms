@@ -58,13 +58,14 @@ Domain depends on nothing. Application depends only on Domain. Infrastructure im
 | Profiles | User profiles and account types, synchronised with Auth0 users |
 | Catalog | Categories, locations and listings |
 | Ordering | Orders placed by buyers |
-| Shopping | Buyer-side shopping flow before an order is placed |
-| Financial | Payments and payouts |
-| Delivering | Shipping and delivery of orders |
-| Promotion | Promoted listings and discounts |
-| Interaction | Interactions between buyers and sellers |
+| Shopping | Carts, favorites and wishlists |
+| Payments | Payments, refunds and seller payouts |
+| Deliveries | Shipping and delivery of orders |
+| Promotions | Promoted listings and discounts |
+| Reviews | Buyer reviews and seller ratings |
+| Conversations | Buyer–seller messaging about listings |
 | Notifications | User notifications |
-| Statistics | Marketplace analytics |
+| Analytics | Marketplace analytics and KPIs |
 
 Only Profiles and Catalog run in the local Aspire environment. Ordering and Notifications are started only by the isolated integration-test composition. The rest are scaffolded with the four-project layout.
 

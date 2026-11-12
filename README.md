@@ -37,13 +37,14 @@ flowchart LR
 | Profiles | User profiles and account types | Active |
 | Catalog | Categories, locations and listings | Active |
 | Ordering | Orders | Scaffolded |
-| Shopping | Buyer shopping flow | Scaffolded |
-| Financial | Payments and payouts | Scaffolded |
-| Delivering | Shipping and delivery | Scaffolded |
-| Promotion | Promoted listings and discounts | Scaffolded |
-| Interaction | Buyer–seller interactions | Scaffolded |
+| Shopping | Carts, favorites and wishlists | Scaffolded |
+| Payments | Payments, refunds and seller payouts | Scaffolded |
+| Deliveries | Shipping and delivery of orders | Scaffolded |
+| Promotions | Promoted listings and discounts | Scaffolded |
+| Reviews | Buyer reviews and seller ratings | Scaffolded |
+| Conversations | Buyer–seller messaging about listings | Scaffolded |
 | Notifications | User notifications | Scaffolded |
-| Statistics | Marketplace analytics | Scaffolded |
+| Analytics | Marketplace analytics and KPIs | Scaffolded |
 
 Cross-cutting code (authentication defaults, result types, pagination, seeding) lives in `Services/Shared`.
 
