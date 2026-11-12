@@ -2,7 +2,14 @@ import { parseListingCondition, parseListingSort } from "@/entities/listing";
 import { parsePositiveInteger } from "@/shared/lib";
 import type { AppliedListingSearch } from "./listingSearchStore";
 
+export const PAGE_SIZES: readonly number[] = [12, 24, 48];
 export const DEFAULT_PAGE_SIZE = 12;
+
+// Only the sizes the UI offers; anything else (e.g. ?pageSize=5000) falls back to the default.
+const parsePageSize = (value: string | null) => {
+  const size = parsePositiveInteger(value);
+  return size !== null && PAGE_SIZES.includes(size) ? size : DEFAULT_PAGE_SIZE;
+};
 
 // The part of an applied search that lives in the Browse URL.
 export type UrlListingSearch = Omit<
@@ -19,7 +26,7 @@ export function searchFromParams(params: URLSearchParams): UrlListingSearch {
     maxPrice: parsePositiveInteger(params.get("maxPrice")),
     minPrice: parsePositiveInteger(params.get("minPrice")),
     pageIndex: parsePositiveInteger(params.get("pageIndex")) ?? 1,
-    pageSize: parsePositiveInteger(params.get("pageSize")) ?? DEFAULT_PAGE_SIZE,
+    pageSize: parsePageSize(params.get("pageSize")),
   };
 }
 

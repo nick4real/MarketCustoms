@@ -7,3 +7,5 @@ export { ConditionFilter } from "./ui/ConditionFilter";
 export { PriceFilter } from "./ui/PriceFilter";
 export { SortSelect } from "./ui/SortSelect";
 export { SearchButton } from "./ui/SearchButton";
+export { PageSizeSelect } from "./ui/PageSizeSelect";
+export { SearchPagination } from "./ui/SearchPagination";

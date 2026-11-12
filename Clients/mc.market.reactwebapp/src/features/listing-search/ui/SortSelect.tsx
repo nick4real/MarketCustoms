@@ -13,6 +13,7 @@ export function SortSelect() {
         Sort
       </span>
       <select
+        aria-label="Sort listings"
         value={selectedSort ?? "dateDesc"}
         onChange={(e) => setSelectedSort(e.target.value as ListingSort)}
         className="border-border bg-card text-foreground focus:border-primary cursor-pointer rounded-xs border px-2 py-1.5 text-xs focus:outline-none md:px-3 md:text-sm"

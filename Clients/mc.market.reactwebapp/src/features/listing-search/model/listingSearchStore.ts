@@ -36,6 +36,8 @@ export interface ListingSearchState {
     setSelectedMaxPrice: (price: number | null) => void;
     setSelectedMinPrice: (price: number | null) => void;
     applySearch: () => AppliedListingSearch;
+    setPage: (pageIndex: number) => void;
+    setPageSize: (pageSize: number) => void;
     loadSearch: (search: UrlListingSearch) => void;
   };
 }
@@ -108,6 +110,13 @@ export const createListingSearchStore = (
         }));
         return get().applied;
       },
+      // Pages through the applied search; unapplied selections stay pending.
+      setPage: (pageIndex: number) =>
+        set((state) => ({ applied: { ...state.applied, pageIndex } })),
+      setPageSize: (pageSize: number) =>
+        set((state) => ({
+          applied: { ...state.applied, pageIndex: 1, pageSize },
+        })),
       // Replaces both the selections and the applied search, e.g. after Back/Forward.
       loadSearch: (search: UrlListingSearch) =>
         set((state) => {

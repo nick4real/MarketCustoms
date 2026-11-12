@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { AppliedListingSearch } from "../listingSearchStore";
-import { listingSearchQueryKey } from "../useListingSearchQuery";
+import {
+  isPageChangeOnly,
+  listingSearchQueryKey,
+} from "../useListingSearchQuery";
 
 const applied: AppliedListingSearch = {
   searchText: null,
@@ -23,5 +26,22 @@ describe("listingSearchQueryKey", () => {
     expect(
       listingSearchQueryKey({ ...applied, condition: "used" }),
     ).not.toEqual(listingSearchQueryKey({ ...applied, condition: null }));
+  });
+});
+
+describe("isPageChangeOnly", () => {
+  const key = (overrides: Partial<AppliedListingSearch>) =>
+    listingSearchQueryKey({ ...applied, ...overrides });
+
+  it("is true when only the page differs", () => {
+    expect(isPageChangeOnly(key({ pageIndex: 1 }), key({ pageIndex: 2 }))).toBe(
+      true,
+    );
+  });
+
+  it("is false when the search itself differs", () => {
+    expect(isPageChangeOnly(key({}), key({ condition: "used" }))).toBe(false);
+    expect(isPageChangeOnly(key({}), key({ searchId: 1 }))).toBe(false);
+    expect(isPageChangeOnly(key({}), key({ pageSize: 24 }))).toBe(false);
   });
 });

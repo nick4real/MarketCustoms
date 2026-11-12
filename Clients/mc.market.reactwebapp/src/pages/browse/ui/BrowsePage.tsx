@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ListingCard } from "@/entities/listing";
 import {
   ListingSearchProvider,
+  PageSizeSelect,
+  SearchPagination,
   SortSelect,
   useListingSearchQuery,
   useListingSearchState,
@@ -36,7 +38,7 @@ function BrowseContent() {
       : "";
 
   return (
-    <div className="bg-background flex min-h-screen">
+    <div className="bg-background flex">
       {/* Desktop sidebar */}
       <aside className="border-border sticky top-14 hidden h-[calc(100vh-56px)] w-56 shrink-0 self-start overflow-y-auto border-r p-6 md:block">
         <FilterPanel />
@@ -82,6 +84,7 @@ function BrowseContent() {
               )}
             </button>
 
+            <PageSizeSelect />
             <SortSelect />
           </div>
         </div>
@@ -106,17 +109,24 @@ function BrowseContent() {
           ) : listingsQuery.isError ? (
             <StatusMessage size="block" message="Couldn't load listings" />
           ) : items.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((item) => (
-                <ListingCard key={item.id} listing={item} showLocation />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {items.map((item) => (
+                  <ListingCard key={item.id} listing={item} showLocation />
+                ))}
+              </div>
+              <SearchPagination />
+            </>
           ) : (
-            <StatusMessage
-              size="block"
-              symbol="∅"
-              message="No listings match your filters"
-            />
+            <>
+              <StatusMessage
+                size="block"
+                symbol="∅"
+                message="No listings match your filters"
+              />
+              {/* Lets an out-of-range page link get back to real results. */}
+              <SearchPagination />
+            </>
           )}
         </div>
       </main>

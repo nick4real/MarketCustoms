@@ -3,6 +3,7 @@ import {
   DEFAULT_PAGE_SIZE,
   isSameSearch,
   isSameSearchUrl,
+  PAGE_SIZES,
   searchFromParams,
   searchToParams,
   type UrlListingSearch,
@@ -56,6 +57,19 @@ describe("searchFromParams", () => {
       "sort=cheapest&condition=mint&categoryId=-1&maxPrice=abc&pageIndex=0&pageSize=1.5",
     );
     expect(searchFromParams(params)).toEqual(emptySearch);
+  });
+});
+
+describe("searchFromParams page size", () => {
+  it("accepts only the offered page sizes", () => {
+    for (const size of PAGE_SIZES) {
+      expect(
+        searchFromParams(new URLSearchParams(`pageSize=${size}`)).pageSize,
+      ).toBe(size);
+    }
+    expect(
+      searchFromParams(new URLSearchParams("pageSize=5000")).pageSize,
+    ).toBe(DEFAULT_PAGE_SIZE);
   });
 });
 
