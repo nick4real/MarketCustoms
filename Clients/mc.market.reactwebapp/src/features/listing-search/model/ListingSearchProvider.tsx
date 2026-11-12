@@ -1,9 +1,8 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { useSearchParams } from "react-router";
 import { ListingSearchContext } from "./context";
 import { createListingSearchStore } from "./listingSearchStore";
-import { useSearchParams } from "react-router";
-import { parsePositiveInteger } from "@/shared/lib";
-import { parseListingCondition, parseListingSort } from "@/entities/listing";
+import { isSameSearch, searchFromParams } from "./searchParams";
 
 export const ListingSearchProvider = ({
   children,
@@ -12,40 +11,27 @@ export const ListingSearchProvider = ({
 }) => {
   const [searchParams] = useSearchParams();
   const [listingStore] = useState(() => {
-    const searchText = searchParams.get("search")?.trim() || null;
-    const selectedSort = parseListingSort(searchParams.get("sort"));
-    const selectedCondition = parseListingCondition(
-      searchParams.get("condition"),
-    );
-    const selectedCategoryId = parsePositiveInteger(
-      searchParams.get("categoryId"),
-    );
-    const selectedMaxPrice = parsePositiveInteger(searchParams.get("maxPrice"));
-    const selectedMinPrice = parsePositiveInteger(searchParams.get("minPrice"));
-    const pageSize = parsePositiveInteger(searchParams.get("pageSize")) ?? 12;
-    const pageIndex = parsePositiveInteger(searchParams.get("pageIndex")) ?? 1;
-
+    const search = searchFromParams(searchParams);
     return createListingSearchStore({
-      searchText,
-      selectedSort,
-      selectedCondition,
-      selectedCategoryId,
-      selectedMaxPrice,
-      selectedMinPrice,
-      applied: {
-        searchText,
-        sort: selectedSort,
-        condition: selectedCondition,
-        categoryId: selectedCategoryId,
-        categoryName: null,
-        maxPrice: selectedMaxPrice,
-        minPrice: selectedMinPrice,
-        pageIndex,
-        pageSize,
-        searchId: 0,
-      },
+      searchText: search.searchText,
+      selectedSort: search.sort,
+      selectedCondition: search.condition,
+      selectedCategoryId: search.categoryId,
+      selectedMaxPrice: search.maxPrice,
+      selectedMinPrice: search.minPrice,
+      applied: { ...search, categoryName: null, searchId: 0 },
     });
   });
+
+  // Search writes the applied search to the URL, so a mismatch here means the
+  // URL changed from elsewhere (Back/Forward, a link) and the store must follow.
+  useEffect(() => {
+    const search = searchFromParams(searchParams);
+    const { applied, actions } = listingStore.getState();
+    if (!isSameSearch(search, applied)) {
+      actions.loadSearch(search);
+    }
+  }, [listingStore, searchParams]);
 
   return (
     <ListingSearchContext.Provider value={listingStore}>

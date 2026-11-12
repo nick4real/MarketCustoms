@@ -1,45 +1,11 @@
-import {
-  type Category,
-  getCategoryById,
-  getCategoryWithChildren,
-  useRootCategoriesQuery,
-} from "@/entities/category";
+import { type Category, useRootCategoriesQuery } from "@/entities/category";
 import { Eyebrow, StatusMessage } from "@/shared/ui";
-import { isNotFoundError } from "@/shared/api";
+import { loadCategoryLevel } from "../api/loadCategoryLevel";
 import { useListingSearchState } from "../model/listingSearchStore";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import { useSearchParams } from "react-router";
-
-type CategoryLevel = {
-  category: Category;
-  children: Category[];
-};
-
-async function loadCategoryLevel(
-  categoryId: number,
-  signal: AbortSignal,
-): Promise<CategoryLevel> {
-  try {
-    const node = await getCategoryWithChildren(categoryId, signal);
-    return {
-      category: { id: node.id, name: node.name },
-      children: (node.childCategories ?? []).map(({ id, name }) => ({
-        id,
-        name,
-      })),
-    };
-  } catch (error) {
-    if (!isNotFoundError(error)) {
-      throw error;
-    }
-    const category = await getCategoryById(categoryId, signal);
-    return { category, children: [] };
-  }
-}
 
 export function CategoryFilter() {
-  const [, setSearchParams] = useSearchParams();
   const visited = useRef(
     new Map<number, { name: string; parentId: number | null }>(),
   );
@@ -100,14 +66,6 @@ export function CategoryFilter() {
   ]);
 
   const selectCategory = (categoryId: number | null, name: string | null) => {
-    setSearchParams((prev) => {
-      if (categoryId === null) {
-        prev.delete("categoryId");
-      } else {
-        prev.set("categoryId", categoryId.toString());
-      }
-      return prev;
-    });
     setSelectedCategoryId(categoryId);
     setSelectedCategoryName(name);
   };

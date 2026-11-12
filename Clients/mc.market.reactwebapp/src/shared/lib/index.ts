@@ -1,4 +1,5 @@
 export { cx } from "./cx";
+export { formatDate } from "./formatDate";
 export { getInitials } from "./getInitials";
 export {
   readBoolean,

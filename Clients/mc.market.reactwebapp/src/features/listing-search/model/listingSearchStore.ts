@@ -2,6 +2,7 @@ import { createStore, useStore } from "zustand";
 import type { ListingCondition, ListingSort } from "@/entities/listing";
 import { useContext } from "react";
 import { ListingSearchContext } from "./context";
+import { DEFAULT_PAGE_SIZE, type UrlListingSearch } from "./searchParams";
 
 export interface AppliedListingSearch {
   searchText: string | null;
@@ -34,7 +35,8 @@ export interface ListingSearchState {
     setSelectedCondition: (condition: ListingCondition | null) => void;
     setSelectedMaxPrice: (price: number | null) => void;
     setSelectedMinPrice: (price: number | null) => void;
-    applySearch: () => void;
+    applySearch: () => AppliedListingSearch;
+    loadSearch: (search: UrlListingSearch) => void;
   };
 }
 
@@ -49,14 +51,14 @@ const defaultApplied = (
   maxPrice: initialState.selectedMaxPrice ?? null,
   minPrice: initialState.selectedMinPrice ?? null,
   pageIndex: 1,
-  pageSize: 12,
+  pageSize: DEFAULT_PAGE_SIZE,
   searchId: 0,
 });
 
 export const createListingSearchStore = (
   initialState: Partial<ListingSearchState>,
 ) => {
-  return createStore<ListingSearchState>((set) => ({
+  return createStore<ListingSearchState>((set, get) => ({
     searchText: initialState.searchText ?? null,
     selectedSort: initialState.selectedSort ?? null,
     selectedCondition: initialState.selectedCondition ?? null,
@@ -89,7 +91,7 @@ export const createListingSearchStore = (
         set({ selectedMaxPrice: price }),
       setSelectedMinPrice: (price: number | null) =>
         set({ selectedMinPrice: price }),
-      applySearch: () =>
+      applySearch: () => {
         set((state) => ({
           applied: {
             searchText: state.searchText?.trim() || null,
@@ -103,7 +105,31 @@ export const createListingSearchStore = (
             pageSize: state.applied.pageSize,
             searchId: state.applied.searchId + 1,
           },
-        })),
+        }));
+        return get().applied;
+      },
+      // Replaces both the selections and the applied search, e.g. after Back/Forward.
+      loadSearch: (search: UrlListingSearch) =>
+        set((state) => {
+          const categoryName =
+            search.categoryId === state.applied.categoryId
+              ? state.applied.categoryName
+              : null;
+          return {
+            searchText: search.searchText,
+            selectedSort: search.sort,
+            selectedCondition: search.condition,
+            selectedCategoryId: search.categoryId,
+            selectedCategoryName: categoryName,
+            selectedMaxPrice: search.maxPrice,
+            selectedMinPrice: search.minPrice,
+            applied: {
+              ...search,
+              categoryName,
+              searchId: state.applied.searchId,
+            },
+          };
+        }),
     },
   }));
 };

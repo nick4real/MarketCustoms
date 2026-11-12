@@ -19,6 +19,7 @@ import {
 } from "@/shared/ui";
 import { isNotFoundError } from "@/shared/api";
 import { routes } from "@/shared/config";
+import { formatDate } from "@/shared/lib";
 
 function ListingGallery({
   images,
@@ -197,7 +198,7 @@ export function ListingDetailsPage() {
               <dl className="border-border border-t">
                 {[
                   { name: "Item ID", value: listingSku(listing.id) },
-                  { name: "Listed", value: listing.createdAt },
+                  { name: "Listed", value: formatDate(listing.createdAt) },
                   {
                     name: "Condition",
                     value: listing.condition

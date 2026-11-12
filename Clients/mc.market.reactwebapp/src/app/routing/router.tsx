@@ -1,6 +1,6 @@
 import { Navigate, createBrowserRouter } from "react-router";
-import MainLayout from "@/app/layouts/MainLayout";
-import AuthLayout from "@/app/layouts/AuthLayout";
+import MainLayout from "../layouts/MainLayout";
+import AuthLayout from "../layouts/AuthLayout";
 import { routes } from "@/shared/config";
 import { AccountGate } from "./AccountGate";
 import { HomePage } from "@/pages/home";

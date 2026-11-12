@@ -11,8 +11,8 @@ export function SearchFilter() {
       <input
         type="text"
         placeholder="Search listings..."
-        value={searchText ?? undefined}
-        onChange={(e) => setSearchText(e.target.value ?? null)}
+        value={searchText ?? ""}
+        onChange={(e) => setSearchText(e.target.value)}
         className="border-border bg-surface text-foreground placeholder-foreground-subtle focus:border-primary w-full rounded-xs border px-3 py-2 pl-8 text-sm transition-colors focus:outline-none"
       />
       <svg
