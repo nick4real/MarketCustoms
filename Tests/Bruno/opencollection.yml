@@ -2,6 +2,17 @@ opencollection: 1.0.0
 
 info:
   name: WebStore
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
 
 request:
   auth:
@@ -11,7 +22,7 @@ request:
     accessTokenUrl: https://wsnh.eu.auth0.com/oauth/token
     callbackUrl: https://oauth.pstmn.io/v1/callback
     credentials:
-      clientId: "{{vault:cliendId}}"
+      clientId: "{{auth0_clientId}}"
       placement: body
     additionalParameters:
       authorizationRequest:
@@ -25,6 +36,9 @@ request:
       placement:
         header: Bearer
       source: access_token
+    settings:
+      autoFetchToken: true
+      autoRefreshToken: false
   variables:
     - name: json_web_token_0plm
       value: ""
