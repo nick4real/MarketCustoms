@@ -3,7 +3,7 @@ import { routes } from "@/shared/config";
 
 export function VerifyEmailPage() {
   return (
-    <div className="flex min-h-[calc(100vh-56px)] items-center justify-center px-6 py-16">
+    <div className="flex flex-1 items-center justify-center px-6 py-16">
       <div className="w-full max-w-lg">
         <div className="mb-6 flex items-center gap-3">
           <span className="bg-primary h-px w-6 shrink-0" />

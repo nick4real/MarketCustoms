@@ -11,7 +11,7 @@ export function AccountGate() {
 
   if (session.status === "authenticating") {
     return (
-      <div className="flex min-h-[calc(100vh-56px)] items-center justify-center px-6">
+      <div className="flex flex-1 items-center justify-center px-6">
         <StatusMessage size="inline" message="Loading your account…" />
       </div>
     );

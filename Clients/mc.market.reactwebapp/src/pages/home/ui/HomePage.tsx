@@ -1,6 +1,5 @@
 import { routes } from "@/shared/config";
 import { Button, ButtonLink } from "@/shared/ui";
-import { SiteFooter } from "@/widgets/footer";
 import { TrendingStrip } from "./TrendingStrip";
 import { CategoriesStrip } from "./CategoriesStrip";
 import { StatsStrip } from "./StatsStrip";
@@ -78,7 +77,6 @@ export function HomePage() {
       <StatsStrip />
       <CategoriesStrip />
       <TrendingStrip />
-      <SiteFooter />
     </div>
   );
 }

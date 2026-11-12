@@ -95,7 +95,7 @@ export function SettingsPage() {
   const initials = getInitials(account?.displayName, account?.email);
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background">
       {/* Mobile: horizontal scrollable tabs */}
       <div className="border-border overflow-x-auto border-b px-4 md:hidden">
         <div className="flex w-max gap-1 py-3">

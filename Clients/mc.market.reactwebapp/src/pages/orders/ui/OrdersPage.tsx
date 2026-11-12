@@ -84,7 +84,7 @@ export function OrdersPage() {
     filter === "All" ? orders : orders.filter((o) => o.status === filter);
 
   return (
-    <div className="bg-background min-h-screen px-4 py-8 md:px-12 lg:px-16 lg:py-12">
+    <div className="bg-background px-4 py-8 md:px-12 lg:px-16 lg:py-12">
       {/* Header */}
       <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between lg:mb-10">
         <div>

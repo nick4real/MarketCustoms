@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cx } from "../lib/cx";
 
 const CONTAINERS = {
-  page: "bg-background flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 text-center",
+  page: "bg-background flex flex-1 flex-col items-center justify-center px-6 text-center",
   block: "flex flex-col items-center justify-center py-24 text-center",
 } as const;
 

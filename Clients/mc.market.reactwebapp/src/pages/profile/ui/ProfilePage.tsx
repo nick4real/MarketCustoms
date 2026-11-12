@@ -92,7 +92,7 @@ export function ProfilePage() {
   const initials = getInitials(account?.displayName, account?.email);
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background">
       {/* Cover */}
       <div className="bg-surface relative h-36 overflow-hidden md:h-52">
         <img

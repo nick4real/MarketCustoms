@@ -102,7 +102,7 @@ export function ListingDetailsPage() {
   const location = listingLocationLabel(listing.location);
 
   return (
-    <div className="bg-background min-h-[calc(100vh-56px)]">
+    <div className="bg-background flex-1">
       <div className="px-6 pt-8 pb-4 md:px-12 lg:px-16">
         <nav className="text-muted-foreground flex flex-wrap items-center gap-2 font-mono text-[11px]">
           <Link
