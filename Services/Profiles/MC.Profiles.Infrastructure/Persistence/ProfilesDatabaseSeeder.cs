@@ -10,7 +10,7 @@ public class ProfilesDatabaseSeeder(
     AppRelationalDbContext context,
     IOptions<SeedingOptions> options,
     IOptions<ProfilesSeedingOptions> profilesSeedingOptions)
-    : RelationalDatabaseSeeder<AppRelationalDbContext>(context, SchemaStrategy.EnsureCreated)
+    : RelationalDatabaseSeeder<AppRelationalDbContext>(context, SchemaStrategy.Migrations)
 {
     public override async Task<bool> IsEmptyAsync(CancellationToken ct)
         => !await Context.Profiles.AnyAsync(ct);
