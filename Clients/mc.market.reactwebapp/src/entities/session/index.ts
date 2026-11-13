@@ -4,6 +4,7 @@ export {
   showAccountNav,
   showGuestAuthActions,
   showIdentityControl,
+  showOrdersNav,
 } from "./model/selectors";
 export { mapSessionError } from "./lib/sessionError";
 export { SessionContextProvider } from "./model/SessionContextProvider";

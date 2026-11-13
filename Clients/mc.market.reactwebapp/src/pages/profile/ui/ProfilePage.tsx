@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router";
+import { routes } from "@/shared/config";
 import { useVisitorSession } from "@/entities/session";
 import { ConditionBadge, type ListingCondition } from "@/entities/listing";
 import { Avatar, Button, Tabs } from "@/shared/ui";
@@ -113,9 +115,23 @@ export function ProfilePage() {
               <h1 className="text-foreground font-display text-[24px] leading-none font-bold md:text-[28px]">
                 {displayName}
               </h1>
-              <span className="bg-primary text-primary-foreground rounded-xs px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
-                VERIFIED
-              </span>
+              {account?.emailVerified ? (
+                <span className="bg-primary text-primary-foreground rounded-xs px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
+                  VERIFIED
+                </span>
+              ) : (
+                <>
+                  <span className="border-border text-muted-foreground rounded-xs border px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
+                    UNVERIFIED
+                  </span>
+                  <Link
+                    to={routes.settings}
+                    className="text-primary font-mono text-xs"
+                  >
+                    Verify email
+                  </Link>
+                </>
+              )}
             </div>
             <p className="text-muted-foreground font-mono text-xs">{handle}</p>
           </div>

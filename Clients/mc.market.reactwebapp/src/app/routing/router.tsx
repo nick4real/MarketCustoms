@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import { routes } from "@/shared/config";
 import { AccountGate } from "./AccountGate";
+import { VerifiedGate } from "./VerifiedGate";
 import { HomePage } from "@/pages/home";
 import { BrowsePage } from "@/pages/browse";
 import { ListingDetailsPage } from "@/pages/listing-details";
@@ -25,10 +26,15 @@ export const router = createBrowserRouter([
         children: [
           { path: "profile", Component: ProfilePage },
           { path: "settings", Component: SettingsPage },
-          { path: "orders", Component: OrdersPage },
           {
-            path: "verify-email",
-            element: <Navigate to={routes.home} replace />,
+            Component: VerifiedGate,
+            children: [
+              { path: "orders", Component: OrdersPage },
+              {
+                path: "verify-email",
+                element: <Navigate to={routes.home} replace />,
+              },
+            ],
           },
         ],
       },

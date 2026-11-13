@@ -10,8 +10,13 @@ export function showIdentityControl(session: VisitorSessionView): boolean {
   return session.status === "signed-in" && session.account != null;
 }
 
-// Function to determine if the account is activated and navigation links should be shown
+// Function to determine if account navigation (Profile, Settings) should be shown; available to unverified accounts too
 export function showAccountNav(session: VisitorSessionView): boolean {
+  return session.status === "signed-in" && session.account != null;
+}
+
+// Function to determine if the Orders link should be shown; requires a fully usable (verified) account
+export function showOrdersNav(session: VisitorSessionView): boolean {
   return (
     session.status === "signed-in" && session.account?.isFullyUsable === true
   );

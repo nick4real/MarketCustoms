@@ -32,8 +32,12 @@ describe("getNavLinks", () => {
     expect(paths(session("guest"))).toEqual([routes.browse]);
   });
 
-  it("shows only Browse while the account is not fully usable", () => {
-    expect(paths(session("signed-in", false))).toEqual([routes.browse]);
+  it("shows Browse, Profile and Settings while the account is not fully usable", () => {
+    expect(paths(session("signed-in", false))).toEqual([
+      routes.browse,
+      routes.profile,
+      routes.settings,
+    ]);
   });
 
   it("adds account pages for a fully usable signed-in account", () => {

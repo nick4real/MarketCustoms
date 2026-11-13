@@ -83,6 +83,32 @@ function Toggle({
   );
 }
 
+function EmailVerificationNotice({ email }: { email: string | null }) {
+  return (
+    <div className="border-border bg-card mb-8 rounded-xs border p-4 md:p-5">
+      <p className="text-muted-foreground text-sm font-medium">
+        {email ? (
+          <>
+            Your email <span className="text-foreground">{email}</span> isn't
+            verified yet.
+          </>
+        ) : (
+          "Your email isn't verified yet."
+        )}
+      </p>
+      <p className="text-muted-foreground mt-1 mb-4 font-mono text-xs">
+        Verify your email to unlock orders.
+      </p>
+      <Button variant="outline" size="sm" disabled>
+        Resend verification email
+      </Button>
+      <p className="text-muted-foreground mt-2 font-mono text-xs">
+        Coming soon
+      </p>
+    </div>
+  );
+}
+
 export function SettingsPage() {
   const [section, setSection] = useState<Section>("account");
   const { account } = useVisitorSession();
@@ -149,6 +175,10 @@ export function SettingsPage() {
               <h3 className="text-foreground font-display mb-7 text-[22px] font-bold md:mb-8 md:text-[26px]">
                 Account
               </h3>
+
+              {account?.emailVerified === false && (
+                <EmailVerificationNotice email={account.email} />
+              )}
 
               <div className="border-border mb-8 flex flex-col gap-4 border-b pb-8 sm:flex-row sm:items-center">
                 <Avatar size="lg" src={account?.photoUrl} initials={initials} />
@@ -344,7 +374,12 @@ export function SettingsPage() {
                 <p className="text-muted-foreground mb-4 font-mono text-xs">
                   Permanently delete your account and all associated data.
                 </p>
-                <Button variant="danger">Delete account</Button>
+                <Button variant="danger" disabled>
+                  Delete account
+                </Button>
+                <p className="text-muted-foreground mt-2 font-mono text-xs">
+                  Coming soon
+                </p>
               </div>
             </div>
           )}

@@ -1,4 +1,8 @@
-import { showAccountNav, type VisitorSessionView } from "@/entities/session";
+import {
+  showAccountNav,
+  showOrdersNav,
+  type VisitorSessionView,
+} from "@/entities/session";
 import { routes } from "@/shared/config";
 
 export interface NavItem {
@@ -13,7 +17,7 @@ export function getNavLinks(session: VisitorSessionView): NavItem[] {
   }
   return [
     browse,
-    { to: routes.orders, label: "Orders" },
+    ...(showOrdersNav(session) ? [{ to: routes.orders, label: "Orders" }] : []),
     { to: routes.profile, label: "Profile" },
     { to: routes.settings, label: "Settings" },
   ];

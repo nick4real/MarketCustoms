@@ -15,13 +15,16 @@ export function VerifyEmailPage() {
           Check your inbox.
         </h1>
         <p className="text-muted-foreground mb-8 text-[15px] leading-relaxed font-light">
-          You're signed in, but this account isn't fully usable until you verify
-          your email. Profile, orders, and settings stay closed until then. You
-          can keep browsing the market.
+          You're signed in, but orders stay closed until you verify your email.
+          You can still open your profile and settings, and keep browsing the
+          market.
         </p>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink to={routes.home} size="lg">
             Continue browsing
+          </ButtonLink>
+          <ButtonLink to={routes.settings} variant="outline" size="lg">
+            Open settings
           </ButtonLink>
           <ButtonLink to={routes.browse} variant="outline" size="lg">
             Browse listings
