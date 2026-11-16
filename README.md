@@ -116,6 +116,10 @@ npm run ef:remove -- Catalog
 
 See [STRUCTURE.md](STRUCTURE.md) for the repository layout, the service layering rules and what each project contains.
 
+## Roadmap
+
+See [ROADMAP.md](docs/development_plan/ROADMAP.md) for the phased development plan, from the MVP to later features.
+
 ## License
 
 Released under the [MIT License](LICENSE.md).
