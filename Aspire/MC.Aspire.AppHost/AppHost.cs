@@ -38,9 +38,25 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
         .WithContainerName("MC.MongoDB")
         .WithLifetime(ContainerLifetime.Persistent)
         .WithDataVolume("MC.MongoDB.DataVolume")
+        .WithSingleNodeReplicaSet();
+
+    // Credentials are URL-encoded; the default user name is the literal "admin".
+    var meUserName = mongoServer.Resource.UserNameParameter is { } userName
+        ? ReferenceExpression.Create($"{userName:uri}")
+        : ReferenceExpression.Create($"admin");
+
+    mongoServer
         .WithMongoExpress(o =>
         {
             o.WithContainerName("MC.MongoExpress");
+            // The replica set advertises localhost:27017, so Mongo Express must not do topology discovery.
+            // mongo-express ignores ME_CONFIG_MONGODB_URL while ME_CONFIG_MONGODB_SERVER is set, and Aspire sets it.
+            o.WithEnvironment(context =>
+            {
+                context.EnvironmentVariables.Remove("ME_CONFIG_MONGODB_SERVER");
+                context.EnvironmentVariables["ME_CONFIG_MONGODB_URL"] = ReferenceExpression.Create(
+                    $"mongodb://{meUserName}:{mongoServer.Resource.PasswordParameter!:uri}@{mongoServer.Resource.Name}:27017/?authSource=admin&directConnection=true");
+            });
             o.WithLifetime(ContainerLifetime.Persistent);
         });
 
@@ -58,14 +74,16 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
     var catalogSqlDatabaseName = "catalogSqlDatabase";
     var catalogMongoDatabaseName = "catalogMongoDatabase";
     var catalogSqlDatabase = sqlServer.AddDatabase(catalogSqlDatabaseName);
-    var catalogMongoDatabase = mongoServer.AddDatabase(catalogMongoDatabaseName);
+    var catalogMongoDatabase = mongoServer.AddDatabase(catalogMongoDatabaseName)
+        .WithDirectConnectionHealthCheck();
     var catalogService = builder.AddProject<Projects.MC_Catalog_API>("catalogService")
         .WithAuth0Parameters(auth0Parameters)
         .WithSeeding(builder.Configuration)
         .WaitFor(catalogSqlDatabase)
         .WaitFor(catalogMongoDatabase)
         .WithReference(catalogSqlDatabase, catalogSqlDatabaseName)
-        .WithReference(catalogMongoDatabase, catalogMongoDatabaseName);
+        .WithReference(catalogMongoDatabase, catalogMongoDatabaseName)
+        .WithEnvironment("CATALOGMONGODATABASE_DIRECTCONNECTION", "true");
 
     // React Web App
     var reactwebapp = builder

@@ -29,4 +29,8 @@
     <ProjectReference Include="..\..\Services\Analytics\MC.Analytics.API\MC.Analytics.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Mongo\mongo-replset-entrypoint.sh" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

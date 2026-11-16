@@ -31,16 +31,19 @@ internal static class IsolatedTestComposition
         var sqlServer = builder.AddSqlServer("sqlServer")
             .WithLifetime(ContainerLifetime.Session);
         var mongoServer = builder.AddMongoDB("mongoServer")
-            .WithLifetime(ContainerLifetime.Session);
+            .WithLifetime(ContainerLifetime.Session)
+            .WithSingleNodeReplicaSet();
 
         var catalogSqlDatabase = sqlServer.AddDatabase("catalogSqlDatabase");
-        var catalogMongoDatabase = mongoServer.AddDatabase("catalogMongoDatabase");
+        var catalogMongoDatabase = mongoServer.AddDatabase("catalogMongoDatabase")
+            .WithDirectConnectionHealthCheck();
 
         builder.AddProject<Projects.MC_Catalog_API>("catalogService")
             .WaitFor(catalogSqlDatabase)
             .WaitFor(catalogMongoDatabase)
             .WithReference(catalogSqlDatabase, "catalogSqlDatabase")
             .WithReference(catalogMongoDatabase, "catalogMongoDatabase")
+            .WithEnvironment("CATALOGMONGODATABASE_DIRECTCONNECTION", "true")
             .WithEnvironment(LocalTestIdentityEnvironment, "true")
             .WithHttpHealthCheck("/health");
     }

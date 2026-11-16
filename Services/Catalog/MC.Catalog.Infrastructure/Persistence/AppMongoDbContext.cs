@@ -18,7 +18,10 @@ public class AppMongoDbContext
     {
         var mongoOptions = options.Value;
 
-        _mongoClient = new MongoClient(mongoOptions.Uri);
+        // Opt-in: needed when the server advertises an address the client cannot reach (local replica set container).
+        var settings = MongoClientSettings.FromConnectionString(mongoOptions.Uri);
+        if (mongoOptions.DirectConnection) settings.DirectConnection = true;
+        _mongoClient = new MongoClient(settings);
         _mongoDatabase = _mongoClient.GetDatabase(mongoOptions.DatabaseName);
         _listings = _mongoDatabase.GetCollection<ListingBson>(mongoOptions.ListingCollectionName);
     }
