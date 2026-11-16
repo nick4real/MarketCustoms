@@ -1,61 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
+import { isNotFoundError } from "@/shared/api";
 import { routes } from "@/shared/config";
 import { useVisitorSession } from "@/entities/session";
-import { ConditionBadge, type ListingCondition } from "@/entities/listing";
-import { Avatar, Button, Tabs } from "@/shared/ui";
+import { usePublicProfileQuery } from "@/entities/profile";
+import { Avatar, Button, ButtonLink, StatusMessage, Tabs } from "@/shared/ui";
 import { getInitials } from "@/shared/lib";
-
-const listings: {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  condition: ListingCondition;
-}[] = [
-  {
-    id: 1,
-    title: "Rolleiflex 2.8F",
-    price: 1650,
-    image: "photo-1471341971476-ae15ff5dd4ea",
-    condition: "used",
-  },
-  {
-    id: 2,
-    title: "Barbour Beaufort Jacket",
-    price: 290,
-    image: "photo-1544441893-675973e31985",
-    condition: "used",
-  },
-  {
-    id: 3,
-    title: "Braun LE1 Speakers",
-    price: 480,
-    image: "photo-1545454675-3531b543be5d",
-    condition: "used",
-  },
-  {
-    id: 4,
-    title: "Patagonia Baggies 1990",
-    price: 75,
-    image: "photo-1473966968600-fa801b869a1a",
-    condition: "used",
-  },
-  {
-    id: 5,
-    title: "Nikon FM2 Chrome",
-    price: 420,
-    image: "photo-1516035069371-29a1b244cc32",
-    condition: "used",
-  },
-  {
-    id: 6,
-    title: "Muji Stationery Set",
-    price: 55,
-    image: "photo-1517971071642-34a2d3ecc9cd",
-    condition: "new",
-  },
-];
+import { resolveProfileTarget } from "../lib/resolveProfileTarget";
+import { ProfileListings } from "./ProfileListings";
 
 const reviews = [
   {
@@ -87,11 +39,57 @@ const tabs: { id: Tab; label: string }[] = [
 ];
 
 export function ProfilePage() {
+  const { profileId: paramId } = useParams();
+  const { account } = useVisitorSession();
+  const { profileId, isOwn } = resolveProfileTarget(
+    paramId,
+    account?.profileId,
+  );
+
+  if (profileId === null) {
+    return <StatusMessage size="page" message="Loading..." />;
+  }
+
+  // Keyed so tab and listings page reset when navigating between profiles.
+  return <ProfileView key={profileId} profileId={profileId} isOwn={isOwn} />;
+}
+
+function ProfileView({
+  profileId,
+  isOwn,
+}: {
+  profileId: string;
+  isOwn: boolean;
+}) {
   const [tab, setTab] = useState<Tab>("listings");
   const { account } = useVisitorSession();
-  const displayName = account?.displayName ?? account?.email ?? "Your profile";
-  const handle = account?.email ?? "Signed in";
-  const initials = getInitials(account?.displayName, account?.email);
+  const profileQuery = usePublicProfileQuery(profileId);
+
+  if (isNotFoundError(profileQuery.error)) {
+    return (
+      <StatusMessage size="page" symbol="∅" message="Profile not found">
+        <ButtonLink to={routes.browse} size="lg">
+          Back to Browse
+        </ButtonLink>
+      </StatusMessage>
+    );
+  }
+
+  if (profileQuery.isPending) {
+    return <StatusMessage size="page" message="Loading..." />;
+  }
+
+  if (profileQuery.isError) {
+    return (
+      <StatusMessage
+        size="page"
+        symbol="Whoops!"
+        message="Error loading profile"
+      />
+    );
+  }
+
+  const profile = profileQuery.data;
 
   return (
     <div className="bg-background">
@@ -108,32 +106,41 @@ export function ProfilePage() {
       <div className="px-4 md:px-12 lg:px-16">
         {/* Profile header */}
         <div className="relative z-10 -mt-10 mb-6 flex flex-col gap-4 sm:flex-row sm:items-end md:-mt-14">
-          <Avatar size="xl" src={account?.photoUrl} initials={initials} />
+          <Avatar
+            size="xl"
+            src={profile.pictureUrl ?? (isOwn ? account?.photoUrl : null)}
+            initials={getInitials(profile.displayName)}
+          />
 
           <div className="flex-1 sm:pb-1">
             <div className="mb-1 flex flex-wrap items-center gap-2">
               <h1 className="text-foreground font-display text-[24px] leading-none font-bold md:text-[28px]">
-                {displayName}
+                {profile.displayName}
               </h1>
-              {account?.emailVerified ? (
-                <span className="bg-primary text-primary-foreground rounded-xs px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
-                  VERIFIED
-                </span>
-              ) : (
-                <>
-                  <span className="border-border text-muted-foreground rounded-xs border px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
-                    UNVERIFIED
+              {isOwn &&
+                (account?.emailVerified ? (
+                  <span className="bg-primary text-primary-foreground rounded-xs px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
+                    VERIFIED
                   </span>
-                  <Link
-                    to={routes.settings}
-                    className="text-primary font-mono text-xs"
-                  >
-                    Verify email
-                  </Link>
-                </>
-              )}
+                ) : (
+                  <>
+                    <span className="border-border text-muted-foreground rounded-xs border px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider">
+                      UNVERIFIED
+                    </span>
+                    <Link
+                      to={routes.settings}
+                      className="text-primary font-mono text-xs"
+                    >
+                      Verify email
+                    </Link>
+                  </>
+                ))}
             </div>
-            <p className="text-muted-foreground font-mono text-xs">{handle}</p>
+            {isOwn && account?.email && (
+              <p className="text-muted-foreground font-mono text-xs">
+                {account.email}
+              </p>
+            )}
           </div>
 
           <div className="flex gap-2 self-start sm:gap-3 sm:self-auto sm:pb-1">
@@ -175,37 +182,7 @@ export function ProfilePage() {
         />
 
         {/* Listings */}
-        {tab === "listings" && (
-          <div className="grid grid-cols-1 gap-4 pb-16 sm:grid-cols-2 lg:grid-cols-3">
-            {listings.map((item) => (
-              <div
-                key={item.id}
-                className="group border-border bg-card hover:border-border-hover cursor-pointer overflow-hidden rounded-xs border transition-all"
-              >
-                <div className="bg-surface aspect-4/3 overflow-hidden">
-                  <img
-                    src={`https://images.unsplash.com/${item.image}?w=600&h=450&fit=crop&auto=format`}
-                    alt={item.title}
-                    className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-4">
-                  <div className="mb-3 flex items-start justify-between">
-                    <h3 className="text-foreground text-sm font-medium">
-                      {item.title}
-                    </h3>
-                    <span className="ml-2">
-                      <ConditionBadge condition={item.condition} />
-                    </span>
-                  </div>
-                  <span className="text-foreground font-display text-xl font-bold">
-                    ${item.price.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        {tab === "listings" && <ProfileListings ownerId={profileId} />}
 
         {/* Reviews */}
         {tab === "reviews" && (
@@ -249,15 +226,8 @@ export function ProfilePage() {
         {/* About */}
         {tab === "about" && (
           <div className="max-w-lg pb-16">
-            <p className="text-foreground-dim mb-5 text-[15px] leading-relaxed font-light">
-              Based in Tokyo. I collect and sell considered objects — cameras,
-              audio equipment, well-made clothing. Everything I list has been
-              part of my own collection. I sell when something has found a
-              better home.
-            </p>
             <p className="text-foreground-dim text-[15px] leading-relaxed font-light">
-              Specialties: vintage photography (Leica, Hasselblad, Nikon),
-              Japanese audio, classic outerwear.
+              {profile.bio ?? "No bio yet."}
             </p>
           </div>
         )}

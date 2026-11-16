@@ -17,6 +17,11 @@ public class ListingParamsValidator : AbstractValidator<ListingParams>
             .When(p => !string.IsNullOrWhiteSpace(p.Title))
             .WithMessage("Search text is too long.");
 
+        RuleFor(p => p.OwnerId)
+            .NotEqual(Guid.Empty)
+            .When(p => p.OwnerId.HasValue)
+            .WithMessage("Owner ID cannot be empty.");
+
         RuleForEach(p => p.Parameters)
             .ChildRules(parameter =>
             {

@@ -34,6 +34,7 @@ public class ProfileService(
         return Result<PublicProfileResponse>.Success(new PublicProfileResponse(
             Id: profile.Id,
             DisplayName: profile.DisplayName,
+            PictureUrl: profile.PictureUrl,
             Bio: profile.Bio,
             IsSeller: profile.AccountType != AccountType.Basic));
     }

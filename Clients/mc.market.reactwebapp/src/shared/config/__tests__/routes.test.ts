@@ -7,6 +7,10 @@ describe("routes", () => {
     expect(routes.listing("a/b?c#d")).toBe("/listings/a%2Fb%3Fc%23d");
   });
 
+  it("encodes user profile ids", () => {
+    expect(routes.userProfile("a b")).toBe("/profile/a%20b");
+  });
+
   it("builds a category-filtered browse link", () => {
     expect(routes.browseCategory(42)).toBe("/browse?categoryId=42");
   });

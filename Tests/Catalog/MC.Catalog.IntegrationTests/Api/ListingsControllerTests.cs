@@ -79,6 +79,64 @@ public sealed class ListingsControllerTests
         Assert.Equal(categoryId, fetched.CategoryId);
     }
 
+    [Fact]
+    public async Task Search_by_owner_returns_only_that_owners_listings()
+    {
+        using var anonymous = _fixture.CreateAnonymousClient();
+        using var authenticated = _fixture.CreateAuthenticatedClient();
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        var createCategory = await authenticated.PostAsJsonAsync(
+            "/Categories",
+            new { name = $"Integration Category {Guid.NewGuid():N}", parentId = (uint?)null },
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, createCategory.StatusCode);
+        var categoriesResponse = await anonymous.GetAsync("/Categories", cancellationToken);
+        var categories = await categoriesResponse.Content.ReadFromJsonAsync<CategoryBody[]>(JsonOptions, cancellationToken);
+        Assert.NotNull(categories);
+        Assert.NotEmpty(categories);
+        var categoryId = categories[0].Id;
+
+        var ownerA = Guid.NewGuid();
+        var ownerB = Guid.NewGuid();
+        var titleA = $"Owner A Listing {Guid.NewGuid():N}";
+        var titleB = $"Owner B Listing {Guid.NewGuid():N}";
+        var createA = await authenticated.PostAsJsonAsync("/Listings/create", NewOwnedListing(categoryId, titleA, ownerA), cancellationToken);
+        var createB = await authenticated.PostAsJsonAsync("/Listings/create", NewOwnedListing(categoryId, titleB, ownerB), cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, createA.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, createB.StatusCode);
+
+        var byOwnerA = await anonymous.PostAsJsonAsync("/Listings?pageSize=40", new { ownerId = ownerA }, cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, byOwnerA.StatusCode);
+        var pageA = await byOwnerA.Content.ReadFromJsonAsync<ListingPage>(JsonOptions, cancellationToken);
+        Assert.NotNull(pageA);
+        var item = Assert.Single(pageA.Items);
+        Assert.Equal(titleA, item.Title);
+
+        var byUnknown = await anonymous.PostAsJsonAsync("/Listings", new { ownerId = Guid.NewGuid() }, cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, byUnknown.StatusCode);
+        var pageUnknown = await byUnknown.Content.ReadFromJsonAsync<ListingPage>(JsonOptions, cancellationToken);
+        Assert.NotNull(pageUnknown);
+        Assert.Empty(pageUnknown.Items);
+
+        var byEmpty = await anonymous.PostAsJsonAsync("/Listings", new { ownerId = Guid.Empty }, cancellationToken);
+        Assert.Equal(HttpStatusCode.BadRequest, byEmpty.StatusCode);
+    }
+
+    private static object NewOwnedListing(uint categoryId, string title, Guid ownerGuid) => new
+    {
+        ownerGuid,
+        title,
+        description = "Created by Catalog integration tests",
+        categoryId,
+        location = new { country = "Testland", region = "R", city = "C", district = (string?)null, latitude = 0m, longitude = 0m },
+        price = 9.99m,
+        stockQuantity = 1,
+        imageLinks = Array.Empty<string>(),
+        tags = Array.Empty<string>(),
+        parameters = Array.Empty<object>()
+    };
+
     private static async Task<string> FindListingIdByTitle(HttpClient client, string title, CancellationToken cancellationToken)
     {
         var listResponse = await client.GetAsync("/Listings", cancellationToken);
@@ -96,6 +154,7 @@ public sealed class ListingsControllerTests
         title,
         description = "Created by Catalog integration tests",
         categoryId,
+        location = new { country = "Testland", region = "R", city = "C", district = (string?)null, latitude = 0m, longitude = 0m },
         price = 9.99m,
         stockQuantity = 1,
         imageLinks = Array.Empty<string>(),

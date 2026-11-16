@@ -4,6 +4,7 @@ export const routes = {
   listing: (id: string) => `/listings/${encodeURIComponent(id)}`,
   browseCategory: (categoryId: number) => `/browse?categoryId=${categoryId}`,
   profile: "/profile",
+  userProfile: (id: string) => `/profile/${encodeURIComponent(id)}`,
   orders: "/orders",
   settings: "/settings",
   verifyEmail: "/verify-email",

@@ -1,2 +1,3 @@
-export type { CurrentUserMetadata } from "./model/types";
-export { ensureCurrentUserMetadata } from "./api/profiles";
+export type { CurrentUserMetadata, PublicProfile } from "./model/types";
+export { ensureCurrentUserMetadata, getPublicProfile } from "./api/profiles";
+export { usePublicProfileQuery } from "./api/usePublicProfileQuery";

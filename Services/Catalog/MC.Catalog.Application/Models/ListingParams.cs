@@ -7,4 +7,5 @@ public record ListingParams(
     string? Title,
     string? Sort,
     Condition? Condition,
-    List<Tuple<string, string>>? Parameters);
+    List<Tuple<string, string>>? Parameters,
+    Guid? OwnerId);

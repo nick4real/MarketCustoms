@@ -24,6 +24,23 @@ describe("listingSearchBody", () => {
     });
   });
 
+  it("trims the owner id", () => {
+    expect(listingSearchBody({ ownerId: "  abc " })).toEqual({
+      ownerId: "abc",
+    });
+  });
+
+  it("returns undefined for a blank owner id", () => {
+    expect(listingSearchBody({ ownerId: "   " })).toBeUndefined();
+  });
+
+  it("combines the owner id with other filters", () => {
+    expect(listingSearchBody({ ownerId: "abc", sort: "priceAsc" })).toEqual({
+      ownerId: "abc",
+      sort: "priceAsc",
+    });
+  });
+
   it("drops category ids that are not positive integers", () => {
     expect(listingSearchBody({ categoryId: 0 })).toBeUndefined();
     expect(listingSearchBody({ categoryId: -2 })).toBeUndefined();

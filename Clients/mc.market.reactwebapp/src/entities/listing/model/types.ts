@@ -8,6 +8,7 @@ export interface ListingQueryParams {
   condition?: ListingCondition;
   sort?: ListingSort;
   title?: string;
+  ownerId?: string;
 }
 
 export interface ListingParameter {

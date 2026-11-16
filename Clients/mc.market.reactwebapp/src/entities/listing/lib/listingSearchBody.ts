@@ -21,11 +21,16 @@ export function listingSearchBody(
   if (title) {
     body.title = title;
   }
+  const ownerId = input?.ownerId?.trim();
+  if (ownerId) {
+    body.ownerId = ownerId;
+  }
 
   return body.categoryId !== undefined ||
     body.sort !== undefined ||
     body.title !== undefined ||
-    body.condition !== undefined
+    body.condition !== undefined ||
+    body.ownerId !== undefined
     ? body
     : undefined;
 }

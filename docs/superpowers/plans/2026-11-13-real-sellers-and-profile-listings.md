@@ -230,3 +230,29 @@ Depends on Tasks 3 and 4.
   - Webapp: lint, test, build.
   - Backend: `dotnet build MarketCustoms.slnx` and the Catalog integration tests.
   - Unit-test projects: status reported.
+
+---
+
+## Addendum (approved 2026-11-16)
+
+### Task 6: Mongo as a single-node replica set (dotnet-coder, no TDD: infrastructure)
+
+**Root cause:** `UnitOfWork.ExecuteInTransactionAsync` opens a Mongo transaction, and Aspire's `AddMongoDB` runs a standalone `mongod`. As a result, `POST /Listings/create` returns 500 ("Standalone servers do not support transactions") in both the dev stack and the isolated test stack, and the Task 1 test can't pass.
+
+**Files:**
+- Create: `Aspire/MC.Aspire.AppHost/Mongo/mongo-replset-entrypoint.sh`
+- Create: `Aspire/MC.Aspire.AppHost/MongoReplicaSetExtensions.cs` (`WithSingleNodeReplicaSet(this IResourceBuilder<MongoDBServerResource>)`)
+- Modify: `Aspire/MC.Aspire.AppHost/AppHost.cs`, `Aspire/MC.Aspire.AppHost/IsolatedTestComposition.cs` (`AddCatalog`)
+- Modify: `Services/Catalog/MC.Catalog.Infrastructure/Persistence/AppMongoDbContext.cs` (`DirectConnection = true`)
+- Modify: `Tests/Catalog/MC.Catalog.IntegrationTests/Api/ListingsControllerTests.cs` (add `location` to the body of `Authenticated_create_persists_listing_in_isolated_stores`)
+
+**Approach:**
+- The entrypoint script generates a keyfile owned by `mongodb` with mode 400, then execs `docker-entrypoint.sh mongod --replSet rs0 --keyFile … --bind_ip_all`.
+- In the background, the script waits for `mongod`, then runs `rs.initiate` with member `localhost:27017` using the root credentials. It only does this when `rs.status()` fails, so it is idempotent on existing volumes.
+- The script is mounted and set as the entrypoint using Aspire APIs. No new packages.
+- The Catalog Mongo client uses `DirectConnection = true`, because the advertised member host differs from the host-mapped port.
+
+**Verification:**
+- `dotnet test Tests/Catalog/MC.Catalog.IntegrationTests -c Release --filter "FullyQualifiedName~Search_by_owner"` passes.
+- The full Catalog integration suite runs, and its results are reported.
+- Dev stack, after a restart: creating a listing succeeds, and the seeded data survives.

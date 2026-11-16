@@ -21,6 +21,7 @@ export const router = createBrowserRouter([
       { index: true, Component: HomePage },
       { path: "browse", Component: BrowsePage },
       { path: "listings/:listingId", Component: ListingDetailsPage },
+      { path: "profile/:profileId", Component: ProfilePage },
       {
         Component: AccountGate,
         children: [

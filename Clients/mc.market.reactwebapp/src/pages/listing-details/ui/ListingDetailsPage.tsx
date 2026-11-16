@@ -9,6 +9,7 @@ import {
   useListingQuery,
   useRelatedListingsQuery,
 } from "@/entities/listing";
+import { usePublicProfileQuery } from "@/entities/profile";
 import {
   Avatar,
   Button,
@@ -19,7 +20,7 @@ import {
 } from "@/shared/ui";
 import { isNotFoundError } from "@/shared/api";
 import { routes } from "@/shared/config";
-import { formatDate } from "@/shared/lib";
+import { formatDate, getInitials } from "@/shared/lib";
 
 function ListingGallery({
   images,
@@ -73,6 +74,7 @@ export function ListingDetailsPage() {
   const { listingId } = useParams();
   const listingQuery = useListingQuery(listingId);
   const relatedQuery = useRelatedListingsQuery(listingQuery.data);
+  const sellerQuery = usePublicProfileQuery(listingQuery.data?.ownerId);
 
   if (isNotFoundError(listingQuery.error)) {
     return (
@@ -166,12 +168,22 @@ export function ListingDetailsPage() {
             </div>
 
             <Link
-              to={routes.profile}
+              to={routes.userProfile(listing.ownerId)}
               className="border-border bg-card hover:border-border-hover mb-8 flex items-center gap-3 rounded-xs border p-4 transition-colors"
             >
-              <Avatar size="md" initials="—" />
+              <Avatar
+                size="md"
+                src={sellerQuery.data?.pictureUrl}
+                initials={
+                  sellerQuery.data
+                    ? getInitials(sellerQuery.data.displayName)
+                    : "—"
+                }
+              />
               <div className="min-w-0 flex-1">
-                <div className="text-foreground text-sm font-medium">—</div>
+                <div className="text-foreground text-sm font-medium">
+                  {sellerQuery.data?.displayName ?? "—"}
+                </div>
                 <div className="text-muted-foreground font-mono text-[10px]">
                   {listing.sellerRating?.toFixed(1) ?? "—"} rating ·{" "}
                   {listing.sellerSales ?? "—"} sales · {location}

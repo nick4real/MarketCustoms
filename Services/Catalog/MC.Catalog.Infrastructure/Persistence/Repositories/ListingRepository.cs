@@ -63,6 +63,11 @@ public class ListingRepository(AppRelationalDbContext sqlContext, AppMongoDbCont
                 filter &= filterBuilder.Eq(p => p.Condition, listingParams.Condition.Value);
             }
 
+            if (listingParams.OwnerId.HasValue)
+            {
+                filter &= filterBuilder.Eq(p => p.OwnerGuid, listingParams.OwnerId.Value);
+            }
+
             if (!string.IsNullOrWhiteSpace(listingParams.Title))
             {
                 var title = Regex.Escape(listingParams.Title.Trim());

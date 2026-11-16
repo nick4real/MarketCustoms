@@ -196,6 +196,7 @@ export async function getListings(
     condition?: ListingCondition;
     sort?: ListingSort;
     title?: string;
+    ownerId?: string;
   },
   signal?: AbortSignal,
 ): Promise<ListingPaginatedResponse> {

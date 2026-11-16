@@ -1,6 +1,6 @@
-import type { CurrentUserMetadata } from "../model/types";
+import type { CurrentUserMetadata, PublicProfile } from "../model/types";
 import { readResponse } from "@/shared/api";
-import { readStringNonEmpty } from "@/shared/lib";
+import { readBoolean, readStringNonEmpty } from "@/shared/lib";
 
 /* Profiles API */
 const metadataUrl = "/api/profiles/me/current-user-metadata";
@@ -27,7 +27,42 @@ export function mapCurrentUserMetadata(body: unknown): CurrentUserMetadata {
   };
 }
 
+export function mapPublicProfile(body: unknown): PublicProfile {
+  if (!body || typeof body !== "object") {
+    throw new Error("Invalid public profile");
+  }
+
+  const row = body as Record<string, unknown>;
+  const id = readStringNonEmpty(row.id);
+  const displayName = readStringNonEmpty(row.displayName);
+  const isSeller = readBoolean(row.isSeller);
+  if (!id || !displayName || isSeller === null) {
+    throw new Error("Invalid public profile");
+  }
+
+  return {
+    id,
+    displayName,
+    bio: readStringNonEmpty(row.bio),
+    pictureUrl: readStringNonEmpty(row.pictureUrl),
+    isSeller,
+  };
+}
+
 /* API */
+export async function getPublicProfile(
+  id: string,
+  signal?: AbortSignal,
+): Promise<PublicProfile> {
+  const response = await fetch(`/api/profiles/${encodeURIComponent(id)}`, {
+    signal,
+  });
+
+  return mapPublicProfile(
+    await readResponse(response, "Public profile request"),
+  );
+}
+
 export async function ensureCurrentUserMetadata(
   accessToken: string,
   input: { displayName: string; pictureUrl: string | null },
