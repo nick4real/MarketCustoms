@@ -78,3 +78,20 @@ Each technology's job is kept separate: RabbitMQ handles workflow commands and e
 
 - Wording, the exact definition-of-done checklist, and the open decisions listed for each phase.
 - Rough size estimates for each phase, if they help.
+
+## Amendment (2026-11-16): Azure on demand
+
+Approved after the original design. The author has an Azure for Students account and wants hands-on Azure experience **without spending money**. An always-on live demo is ruled out: the system is deployed for a short demo and then deleted.
+
+- **New Phase 5, "Azure on demand"**, after the MVP. The former Phases 5–9 become 6–10, unchanged apart from the Azure additions below.
+  - `azd up` deploys the Aspire AppHost to Azure Container Apps (consumption plan) in one resource group. `azd down --purge` deletes it.
+  - Managed services where a free offer covers them: Azure SQL Database (free serverless offer), Blob Storage, Key Vault (Auth0 and Stripe secrets), a container registry, and managed identity instead of connection-string secrets.
+  - MongoDB locally, **Azure DocumentDB** (formerly Cosmos DB for MongoDB vCore, free tier) in Azure. Only the connection string differs. The free cluster can outlive `azd down`.
+  - RabbitMQ locally, Azure Service Bus in Azure, to prove the messaging library hides the transport.
+  - Redis and Mailpit run as containers in Container Apps (the managed versions cost money).
+  - An Azure Function generates listing image thumbnails (Blob trigger). It also runs locally against Azurite.
+  - A manually triggered GitHub Actions workflow (OIDC, no stored secret): deploy, smoke test, tear down.
+  - Cost guards: a $1 budget alert, a teardown checklist, and "nothing left running" as a done-when item.
+- **Phase 6 (Search):** Azure AI Vision tags and alt text for listing images, with tags feeding search facets. Azure AI Search moves from the parking lot to an optional comparison.
+- **Phase 10 (Reviews, promotions, admin):** Azure AI Content Safety flags images and text into an admin moderation queue.
+- **Rules:** local runs always use emulators or local containers. Azure AI services, which have no emulator, sit behind interfaces with a fake used when no key is configured. AKS stays in the parking lot with a cost warning (the free VMs are too small for its nodes). Retired Azure services from the student offer list are not used. Phase 5 should come soon after the MVP because the student credit and 12-month free services expire.
