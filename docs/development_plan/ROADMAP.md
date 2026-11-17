@@ -8,7 +8,7 @@ The roadmap starts with an MVP (Phases 0–4) that covers the core story: **a se
 
 - This document stays high-level. When a phase starts, it gets its own design and plan in `docs/superpowers/specs/` and `docs/superpowers/plans/`, broken into tasks for each endpoint and each slice.
 - Update the **Status** column in the phase overview when a phase starts and when it finishes.
-- Every new technology or library choice gets a short ADR (Architecture Decision Record) in `docs/adr/`: the context, the options considered, the decision and its consequences. The folder is created in Phase 0. Each phase lists the decisions it has to make under **Open decisions**.
+- Every new technology or library choice gets a short ADR (Architecture Decision Record) in [`docs/adr/`](../adr/README.md): the context, the options considered, the decision and its consequences. Each phase lists the decisions it has to make under **Open decisions**.
 - Ideas that don't belong to a phase yet go into the [parking lot](#parking-lot), not into a phase's scope.
 
 ## Principles
@@ -21,19 +21,19 @@ The roadmap starts with an MVP (Phases 0–4) that covers the core story: **a se
   - gateway route in YARP;
   - client slice in the React app (Feature-Sliced Design);
   - CI green;
-  - docs updated (`README.md`, `STRUCTURE.md`, ADR if a technology or library was chosen).
+  - docs updated (`README.md`, `STRUCTURE.md`, an [ADR](../adr/README.md) if a technology or library was chosen).
 - **Run only what you are working on.** SQL Server, MongoDB, RabbitMQ, Redis, Elasticsearch, Kafka, 11 APIs, the gateway and Vite will not all fit in 16 GB of RAM. Add services to the AppHost when their phase starts, and consider launch profiles or flags to switch groups off.
 - **Each technology has its own job.** See the [technology map](#technology-map). If two tools would do the same job, the ADR says why only one of them does it. The exception is deliberate local/cloud pairs (RabbitMQ and Service Bus, MongoDB and DocumentDB), where the point is that only configuration changes.
 - **Local runs never need Azure.** `aspire run` uses emulators and containers (Azurite, RabbitMQ, MongoDB, SQL Server). Azure AI services have no emulator, so they sit behind an interface with a fake that is used when no key is configured.
 
 ## Where we are today
 
-- Only **Profiles** and **Catalog** run in the AppHost. The other 9 services (Ordering, Shopping, Payments, Deliveries, Promotions, Reviews, Conversations, Notifications, Analytics) are scaffolds with the four-project layout. Ordering and Notifications have test projects.
-- **CI:** only `.github/workflows/backend-catalog-ci.yml` exists. It triggers on the `staging` branch while the repository uses `main`, and its path filter points to `backend-catalog.ci.yml` instead of `backend-catalog-ci.yml`, so it never runs. The frontend has no CI.
+- Only **Profiles** and **Catalog** run in the AppHost. The other 9 services (Ordering, Shopping, Payments, Deliveries, Promotions, Reviews, Conversations, Notifications, Analytics) are scaffolds with the four-project layout. Ordering and Notifications have test projects, but no real tests yet.
+- **CI and branching:** a single workflow, `.github/workflows/ci.yml`, tests the changed backend areas (Catalog, Profiles, Shared) and the client on every PR into `main`. Its `ci-ok` job is the only required check. The repository uses GitHub flow: `main` is the only long-lived branch ([ADR 0001](../adr/0001-github-flow.md), [ADR 0002](../adr/0002-single-ci-workflow.md)).
 - **Profiles:** account types are `Basic`, `Individual` and `Business`. There is no separate buyer or seller role.
 - **Catalog:** listings live in MongoDB, and categories and locations in SQL Server. `Listing` has `StockQuantity` (a listing can have several units) and no status. Listings can be read, searched and created, but not updated or deleted. `POST /categories` is open to any authenticated user.
 - **Web client:** `home`, `browse`, `listing-details`, `profile`, `settings`, `orders`, `login`, `callback` and `verify-email` pages exist. Several show placeholder data.
-- `Seeding:Mode` defaults to `Reset`, which drops and reseeds the databases on every start.
+- `Seeding:Mode` defaults to `IfEmpty`, which seeds only empty databases.
 
 ## Technology map
 
@@ -71,7 +71,7 @@ The roadmap starts with an MVP (Phases 0–4) that covers the core story: **a se
 
 | # | Phase | Demo at the end | New technology | Status |
 | --- | --- | --- | --- | --- |
-| 0 | Foundation | CI on `main` for every service plus the frontend; definition of done; ADR folder | GitHub Actions CI | Not started |
+| 0 | Foundation | Single CI workflow required on `main`; GitHub flow; ADR folder | GitHub Actions CI | In progress |
 | 1 | Seller catalog | Owners create, edit and remove listings with images; listing status; admin-only categories | Auth0 roles/permissions, Azure Blob (Azurite), first Redis cache | Not started |
 | 2 | Buy now | Single-listing purchase in Stripe test mode; stock reserved, then decremented; seller sees the paid order | RabbitMQ, outbox, checkout saga, Stripe Checkout + webhooks | Not started |
 | 3 | Fulfilment & notifications | Tracking number, buyer confirms receipt, then seller payout; email and live notifications | Stripe Connect payouts, SignalR | Not started |
@@ -109,25 +109,28 @@ Phases 5–9 depend on the MVP but not on each other, so their order can change 
 
 **Services touched:** none (repository and docs).
 
+**Spec and plan:** [design](../superpowers/specs/2026-11-16-phase-0-foundation-design.md), [plan](../superpowers/plans/2026-11-17-phase-0-foundation.md).
+
 **Scope:**
 
-- Fix or replace `backend-catalog-ci.yml`: trigger on `main`, fix the path filter, and add a workflow for every active service (Profiles, Catalog, Shared) and for the client (`npm run validate`, `npm run test`, `npm run build`). Ubuntu runners have Docker, so the Aspire integration tests run there.
-- Branch protection on `main` that requires the CI checks.
-- Write down the definition of done (above) in `CONTRIBUTING.md` or `STRUCTURE.md`.
-- Create `docs/adr/` with a template and a first ADR recording the existing choices (Aspire, YARP, Auth0, SQL Server plus MongoDB in Catalog).
-- Switch `Seeding:Mode` to `IfEmpty` once you start creating your own test data.
+- Replace the broken `backend-catalog-ci.yml` with a single `ci.yml`: a `changes` job, a backend matrix over the changed areas (Catalog, Profiles, Shared; Ordering and Notifications join in Phases 2 and 3), a `client` job (`npm run validate`, `npm run test`, `npm run build`) and an aggregate `ci-ok` job. Ubuntu runners have Docker, so the Aspire integration tests run there.
+- GitHub flow: delete the `staging` and `production` branches, and add a ruleset on `main` that requires a PR and the `ci-ok` check and blocks force pushes and deletion.
+- Create `docs/adr/` with a template, ADR 0001 (GitHub flow) and ADR 0002 (single CI workflow).
+- A short project `CLAUDE.md` that points to the definition of done above, the ADR rule and the branching model.
+- Switch `Seeding:Mode` to `IfEmpty`.
 
-**Out of scope:** deployment (Phase 4), new features.
+**Out of scope:** deployment (Phase 4), new features, `dotnet format` and `format:check` in CI, coverage, Dependabot.
 
 **New technology:** GitHub Actions (beyond the one broken workflow).
 
-**Open decisions:** one workflow per service vs one workflow with a matrix and path filters.
+**Open decisions:** resolved. One workflow with change detection ([ADR 0002](../adr/0002-single-ci-workflow.md)).
 
 **Done when:**
 
-- [ ] A PR that touches only Catalog runs the Catalog and Shared tests. A PR that touches the client runs the client checks.
-- [ ] A deliberately failing test blocks the merge.
-- [ ] `docs/adr/` exists with at least one ADR.
+- [ ] A PR that touches only Catalog runs only the Catalog backend job. A PR that touches only the client runs only the client checks. A PR that touches `Services/Shared` runs every backend area.
+- [ ] A deliberately failing test makes `ci-ok` fail, and the ruleset blocks the merge.
+- [ ] `docs/adr/` exists with ADRs 0001 and 0002.
+- [ ] `staging` and `production` no longer exist on the remote.
 
 ## Phase 1: Seller catalog
 

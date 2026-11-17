@@ -20,8 +20,14 @@ Tests/
   Bruno/                      Bruno API collection for manual requests against the gateway and services
 scripts/
   ef.js                       EF Core migration helper behind the root npm scripts
-.github/workflows/            GitHub Actions pipelines
+docs/
+  adr/                        Architecture decision records (index in its README)
+  development_plan/           Roadmap
+  superpowers/                Design specs and implementation plans per change
+.github/workflows/
+  ci.yml                      Single CI workflow (see below)
 
+CLAUDE.md                     Pointers for Claude Code: roadmap, ADRs, branching
 MarketCustoms.slnx            Solution file (XML format)
 Directory.Packages.props      Central NuGet package versions
 aspire.config.json            Points the Aspire CLI at the AppHost
@@ -115,6 +121,17 @@ Tests/
 ```
 
 Test projects exist for Catalog, Profiles, Ordering, Notifications and Shared. They use xUnit v3.
+
+## CI
+
+`.github/workflows/ci.yml` runs on pull requests into `main` and pushes to `main` ([ADR 0002](docs/adr/0002-single-ci-workflow.md)):
+
+- `changes` detects which areas changed. Changes to `Services/Shared`, `Aspire`, `Gateway`, the central build files or the workflow run every backend area.
+- `backend` runs the test projects under `Tests/<Area>/` for each changed area: Catalog, Profiles, Shared. Ordering and Notifications are added when their roadmap phases give them real tests.
+- `client` runs `npm ci`, `validate`, `test` and `build` for the web client.
+- `ci-ok` aggregates the results and is the only required check on `main`. Skipped jobs count as passing.
+
+The repository uses GitHub flow ([ADR 0001](docs/adr/0001-github-flow.md)): `main` is the only long-lived branch, and changes reach it through pull requests.
 
 ## Conventions
 

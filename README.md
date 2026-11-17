@@ -83,9 +83,9 @@ cd Clients/mc.market.reactwebapp && npm install && cd ../..
 aspire run
 ```
 
-The Aspire dashboard opens with every resource, its logs and its traces. Open the **marketCustomsGateway** endpoint to use the storefront. SQL Server is exposed on host port `14333`. Database containers and their volumes persist between runs, but seeding may still reset the data (see below).
+The Aspire dashboard opens with every resource, its logs and its traces. Open the **marketCustomsGateway** endpoint to use the storefront. SQL Server is exposed on host port `14333`. Database containers and their volumes persist between runs, and so does your data (see below).
 
-> **Seeding:** `Seeding:Mode` in `Aspire/MC.Aspire.AppHost/appsettings.json` defaults to `Reset`, which drops and reseeds the databases on every start. Set it to `IfEmpty` or `None` to keep your data.
+> **Seeding:** `Seeding:Mode` in `Aspire/MC.Aspire.AppHost/appsettings.json` defaults to `IfEmpty`, which seeds only empty databases. Set it to `Reset` to drop and reseed the databases on every start, or `None` to skip seeding.
 
 ## Testing
 
