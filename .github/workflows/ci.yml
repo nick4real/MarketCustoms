@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  changes:
+    name: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      backend: ${{ steps.areas.outputs.backend }}
+      client: ${{ steps.filter.outputs.client }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - id: filter
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            Catalog:
+              - "Services/Catalog/**"
+              - "Tests/Catalog/**"
+            Profiles:
+              - "Services/Profiles/**"
+              - "Tests/Profiles/**"
+            Shared:
+              - "Tests/Shared/**"
+            common:
+              - "Services/Shared/**"
+              - "Aspire/**"
+              - "Gateway/**"
+              - "Directory.Packages.props"
+              - "Tests/Directory.Build.props"
+              - "MarketCustoms.slnx"
+              - "dotnet-tools.json"
+              - ".github/workflows/ci.yml"
+            client:
+              - "Clients/mc.market.reactwebapp/**"
+              - ".github/workflows/ci.yml"
+
+      # Changes shared by every service (Shared, Aspire, Gateway, build files) run all backend areas.
+      - id: areas
+        env:
+          CHANGES: ${{ steps.filter.outputs.changes }}
+        run: |
+          all='["Catalog","Profiles","Shared"]'
+          if echo "$CHANGES" | jq -e 'index("common")' > /dev/null; then
+            backend="$all"
+          else
+            backend=$(echo "$CHANGES" | jq -c --argjson all "$all" 'map(select(. as $c | $all | index($c)))')
+          fi
+          echo "backend=$backend" >> "$GITHUB_OUTPUT"
+          echo "Backend areas: $backend"
+
+  backend:
+    name: backend (${{ matrix.area }})
+    needs: changes
+    if: needs.changes.outputs.backend != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        area: ${{ fromJSON(needs.changes.outputs.backend) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+          cache: true
+          cache-dependency-path: Directory.Packages.props
+
+      - name: Test
+        env:
+          AREA: ${{ matrix.area }}
+        run: |
+          set -e
+          for proj in Tests/"$AREA"/*/*.csproj; do
+            echo "::group::dotnet test $proj"
+            dotnet test "$proj" --logger "console;verbosity=normal"
+            echo "::endgroup::"
+          done
+
+  client:
+    name: client
+    needs: changes
+    if: needs.changes.outputs.client == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: Clients/mc.market.reactwebapp
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: Clients/mc.market.reactwebapp/package-lock.json
+
+      - run: npm ci
+      - run: npm run validate
+      - run: npm run test
+      - run: npm run build
+
+  # The only required check: skipped jobs pass, failed or cancelled ones fail.
+  ci-ok:
+    name: ci-ok
+    needs: [changes, backend, client]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "Job results: $RESULTS"
+          for r in $RESULTS; do
+            if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
+              exit 1
+            fi
+          done
