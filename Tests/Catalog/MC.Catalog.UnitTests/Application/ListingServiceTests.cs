@@ -9,7 +9,7 @@ public sealed class ListingServiceTests
     [Fact]
     public async Task GetDetailedListingByIdAsync_rejects_non_24_character_id()
     {
-        var service = new ListingService(new FakeListingRepository());
+        var service = new ListingService(new FakeListingRepository(), new FakeCategoryRepository());
 
         var result = await service.GetDetailedListingByIdAsync("not-a-valid-id", CancellationToken.None);
 
