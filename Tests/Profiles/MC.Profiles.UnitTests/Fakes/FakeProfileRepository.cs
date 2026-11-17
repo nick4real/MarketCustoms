@@ -7,19 +7,24 @@ internal sealed class FakeProfileRepository : IProfileRepository
 {
     private readonly List<Profile> _profiles = [];
 
-    public Task<Profile?> GetProfileByExternalIdAsync(string auth0Id)
-        => Task.FromResult(_profiles.FirstOrDefault(profile => profile.ExternalUserId == auth0Id));
+    public int CreateCalls { get; private set; }
+    public int SaveCalls { get; private set; }
+    public int Count => _profiles.Count;
 
-    public Task<Profile?> GetProfileByIdAsync(Guid id)
+    public Task<Profile?> GetProfileByExternalIdAsync(string externalUserId, CancellationToken ct)
+        => Task.FromResult(_profiles.FirstOrDefault(profile => profile.ExternalUserId == externalUserId));
+
+    public Task<Profile?> GetProfileByIdAsync(Guid id, CancellationToken ct)
         => Task.FromResult(_profiles.FirstOrDefault(profile => profile.Id == id));
 
-    public Task CreateProfileAsync(Profile profile)
+    public Task CreateProfileAsync(Profile profile, CancellationToken ct)
     {
+        CreateCalls++;
         _profiles.Add(profile);
         return Task.CompletedTask;
     }
 
-    public Task<Profile> AddOrGetByExternalUserIdAsync(Profile profile)
+    public Task<Profile> AddOrGetByExternalUserIdAsync(Profile profile, CancellationToken ct)
     {
         var existing = _profiles.FirstOrDefault(item => item.ExternalUserId == profile.ExternalUserId);
         if (existing is not null)
@@ -29,5 +34,9 @@ internal sealed class FakeProfileRepository : IProfileRepository
         return Task.FromResult(profile);
     }
 
-    public Task SaveChangesAsync() => Task.CompletedTask;
+    public Task SaveChangesAsync(CancellationToken ct)
+    {
+        SaveCalls++;
+        return Task.CompletedTask;
+    }
 }

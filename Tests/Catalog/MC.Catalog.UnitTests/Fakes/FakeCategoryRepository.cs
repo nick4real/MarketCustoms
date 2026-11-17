@@ -17,6 +17,30 @@ internal sealed class FakeCategoryRepository : ICategoryRepository
     public Task<Category?> GetCategoryWithChildrenAsync(CancellationToken ct, uint categoryId)
         => GetCategoryAsync(ct, categoryId);
 
+    public Task<Category[]?> GetCategoryExpandedAsync(CancellationToken ct, uint categoryId)
+    {
+        var result = new List<Category>();
+        var pending = new Queue<uint>([categoryId]);
+
+        while (pending.Count > 0)
+        {
+            var currentId = pending.Dequeue();
+            var current = _categories.FirstOrDefault(category => category.Id == currentId);
+            if (current is null)
+            {
+                continue;
+            }
+
+            result.Add(current);
+            foreach (var child in _categories.Where(category => category.ParentCategoryId == currentId))
+            {
+                pending.Enqueue(child.Id);
+            }
+        }
+
+        return Task.FromResult<Category[]?>(result.ToArray());
+    }
+
     public Task<Category[]?> GetRootCategoriesAsync(CancellationToken ct)
         => Task.FromResult<Category[]?>(_categories.Where(category => category.ParentCategoryId is null).ToArray());
 
