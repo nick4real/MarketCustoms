@@ -33,3 +33,4 @@ npm run build
 ```
 
 The app talks to the backend through the `/api` gateway proxy configured in `vite.config.ts`. Auth0 is enabled when `VITE_AUTH0_DOMAIN` and `VITE_AUTH0_CLIENT_ID` are present.
+
