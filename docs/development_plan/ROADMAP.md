@@ -71,7 +71,7 @@ The roadmap starts with an MVP (Phases 0–4) that covers the core story: **a se
 
 | # | Phase | Demo at the end | New technology | Status |
 | --- | --- | --- | --- | --- |
-| 0 | Foundation | Single CI workflow required on `main`; GitHub flow; ADR folder | GitHub Actions CI | In progress |
+| 0 | Foundation | Single CI workflow required on `main`; GitHub flow; ADR folder | GitHub Actions CI | Done |
 | 1 | Seller catalog | Owners create, edit and remove listings with images; listing status; admin-only categories | Auth0 roles/permissions, Azure Blob (Azurite), first Redis cache | Not started |
 | 2 | Buy now | Single-listing purchase in Stripe test mode; stock reserved, then decremented; seller sees the paid order | RabbitMQ, outbox, checkout saga, Stripe Checkout + webhooks | Not started |
 | 3 | Fulfilment & notifications | Tracking number, buyer confirms receipt, then seller payout; email and live notifications | Stripe Connect payouts, SignalR | Not started |
@@ -127,10 +127,10 @@ Phases 5–9 depend on the MVP but not on each other, so their order can change 
 
 **Done when:**
 
-- [ ] A PR that touches only Catalog runs only the Catalog backend job. A PR that touches only the client runs only the client checks. A PR that touches `Services/Shared` runs every backend area.
-- [ ] A deliberately failing test makes `ci-ok` fail, and the ruleset blocks the merge.
-- [ ] `docs/adr/` exists with ADRs 0001 and 0002.
-- [ ] `staging` and `production` no longer exist on the remote.
+- [x] A PR that touches only Catalog runs only the Catalog backend job. A PR that touches only the client runs only the client checks. A PR that touches `Services/Shared` runs every backend area.
+- [x] A deliberately failing test makes `ci-ok` fail, and the ruleset blocks the merge.
+- [x] `docs/adr/` exists with ADRs 0001 and 0002.
+- [x] `staging` and `production` no longer exist on the remote.
 
 ## Phase 1: Seller catalog
 
