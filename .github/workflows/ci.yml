@@ -88,9 +88,10 @@ jobs:
       # On Linux, .NET trusts it through SSL_CERT_DIR.
       - name: Trust HTTPS dev certificate
         run: |
-          dotnet dev-certs https --check --trust || echo "No trusted dev certificate yet"
-          dotnet dev-certs https --trust
-          echo "SSL_CERT_DIR=$HOME/.aspnet/dev-certs/trust:/etc/ssl/certs" >> "$GITHUB_ENV"
+          export SSL_CERT_DIR="$HOME/.aspnet/dev-certs/trust:/usr/lib/ssl/certs"
+          echo "SSL_CERT_DIR=$SSL_CERT_DIR" >> "$GITHUB_ENV"
+          # Exit code 4 means partial trust (OpenSSL trusted, browser stores not); .NET only needs OpenSSL.
+          dotnet dev-certs https --trust || [ $? -eq 4 ]
 
       - name: Test
         env:
