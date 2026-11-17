@@ -84,6 +84,14 @@ jobs:
           cache: true
           cache-dependency-path: Directory.Packages.props
 
+      # Aspire integration tests health-check services over HTTPS, which needs a trusted dev certificate.
+      # On Linux, .NET trusts it through SSL_CERT_DIR.
+      - name: Trust HTTPS dev certificate
+        run: |
+          dotnet dev-certs https --check --trust || echo "No trusted dev certificate yet"
+          dotnet dev-certs https --trust
+          echo "SSL_CERT_DIR=$HOME/.aspnet/dev-certs/trust:/etc/ssl/certs" >> "$GITHUB_ENV"
+
       - name: Test
         env:
           AREA: ${{ matrix.area }}
