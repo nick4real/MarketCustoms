@@ -22,7 +22,7 @@ scripts/
   ef.js                       EF Core migration helper behind the root npm scripts
 docs/
   adr/                        Architecture decision records (index in its README)
-  development_plan/           Roadmap
+  development_plan/           Roadmap, with one file per phase in phases/
   superpowers/                Design specs and implementation plans per change
 .github/workflows/
   ci.yml                      Single CI workflow (see below)

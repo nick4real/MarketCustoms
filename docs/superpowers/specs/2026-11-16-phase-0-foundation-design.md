@@ -1,7 +1,7 @@
 # Phase 0 (Foundation): design
 
 Date: 2026-11-16
-Roadmap: [Phase 0: Foundation](../../development_plan/ROADMAP.md#phase-0-foundation)
+Roadmap: [Phase 0: Foundation](../../development_plan/phases/phase-00-foundation.md)
 Scope: CI, branching, repository rules and docs. No application code changes apart from one config value.
 
 ## Intent
