@@ -54,9 +54,9 @@ Chosen over having Catalog ask Profiles for the account type on each write.
 - **Token refresh:** a token issued before a change doesn't show it. The client gets a fresh token (`getAccessTokenSilently` with `cacheMode: 'off'`) after the profile is first created (to pick up `profile_id`) and after the account type changes (to pick up `listings:write`).
 - **In `MC.Shared.API`:**
   - one authorization policy per permission (for example `[Authorize(Policy = Permissions.ListingsWrite)]`), checking the `permissions` claim;
-  - `ICurrentUserService` gains `ProfileId` (from the custom claim) and `HasPermission(...)`/`IsAdmin`.
+  - `ICurrentUserService` gains `ProfileId` (from the custom claim) and `HasPermission(string)`; there is no `IsAdmin` member, so admin checks ask for a permission (Catalog checks `listings:moderate`).
 - **Tests:** `LocalTestAuthenticationHandler` accepts `permissions=a,b` and `profile_id=<guid>` in its header, so integration tests can act as a seller, an admin or a stranger without Auth0.
-- **In the repo:** the Action's source in `infra/auth0/` with a short setup note (roles, permissions, RBAC toggle, Management API scopes the backend M2M client needs: `update:users`, `create:role_members`, `delete:role_members`, `read:roles`), and an ADR.
+- **In the repo:** the Action's source in `infra/auth0/` with a short setup note (roles, permissions, RBAC toggle, Management API scopes the backend M2M client needs: `update:users`, `create:role_members`, `delete:role_members`), and an ADR. The `seller` role id is configured (`Auth0-SellerRoleId`), so Profiles needs no role lookup and no `read:roles` scope.
 
 ### 2. Listing lifecycle
 
