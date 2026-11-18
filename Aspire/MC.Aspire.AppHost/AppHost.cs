@@ -22,9 +22,10 @@ static void AddDeveloperGraph(IDistributedApplicationBuilder builder)
     var auth0BackendClientId = builder.AddParameter("Auth0-BackendM2M-ClientId", true);
     var auth0BackendClientSecret = builder.AddParameter("Auth0-BackendM2M-ClientSecret", true);
     var auth0FrontendClientId = builder.AddParameter("Auth0-Frontend-ClientId", true);
+    var auth0SellerRoleId = builder.AddParameter("Auth0-SellerRoleId");
 
     var auth0Parameters = new Auth0Parameters(auth0Domain, auth0Audience);
-    var auth0ManagementParameters = new Auth0ManagementParameters(auth0BackendClientId, auth0BackendClientSecret);
+    var auth0ManagementParameters = new Auth0ManagementParameters(auth0BackendClientId, auth0BackendClientSecret, auth0SellerRoleId);
     var auth0WebAppParameters = new Auth0WebAppParameters(auth0Domain, auth0Audience, auth0FrontendClientId);
 
     // Servers

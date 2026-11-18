@@ -179,6 +179,44 @@ public sealed class ProfilesControllerTests
         Assert.True(profile.IsSeller);
     }
 
+    [Fact]
+    public async Task Clarify_account_type_with_unknown_type_returns_400()
+    {
+        using var client = _fixture.CreateAuthenticatedClient($"clarify-bad-{Guid.NewGuid():N}");
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await EnsureProfileAsync(client, "Ada", cancellationToken);
+
+        var response = await client.PostAsJsonAsync(
+            "/Profiles/me/clarify-account-type",
+            new { accountType = "Seller" },
+            cancellationToken);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Clarify_account_type_to_basic_returns_200_and_is_not_seller()
+    {
+        using var client = _fixture.CreateAuthenticatedClient($"clarify-basic-{Guid.NewGuid():N}");
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await EnsureProfileAsync(client, "Ada", cancellationToken);
+        var seller = await client.PostAsJsonAsync(
+            "/Profiles/me/clarify-account-type",
+            new { accountType = "Individual" },
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, seller.StatusCode);
+
+        var response = await client.PostAsJsonAsync(
+            "/Profiles/me/clarify-account-type",
+            new { accountType = "Basic" },
+            cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var profile = await response.Content.ReadFromJsonAsync<OwnerProfileBody>(JsonOptions, cancellationToken);
+        Assert.NotNull(profile);
+        Assert.False(profile.IsSeller);
+    }
+
     private static async Task<MetadataBody> EnsureProfileAsync(
         HttpClient client,
         string displayName,

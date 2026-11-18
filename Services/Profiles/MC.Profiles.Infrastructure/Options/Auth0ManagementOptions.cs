@@ -5,4 +5,5 @@ public class Auth0ManagementOptions
     public string Domain { get; set; } = string.Empty;
     public string ClientId { get; set; } = string.Empty;
     public string ClientSecret { get; set; } = string.Empty;
+    public string SellerRoleId { get; set; } = string.Empty;
 }

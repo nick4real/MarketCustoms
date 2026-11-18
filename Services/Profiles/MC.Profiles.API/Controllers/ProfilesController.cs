@@ -18,7 +18,6 @@ public class ProfilesController(IProfileService profileService) : CustomControll
         return HandleResult(result);
     }
 
-    // TODO
     [HttpPost("me/clarify-account-type")]
     public async Task<IActionResult> ClarifyAccountType(
         [FromBody] ClarifyAccountTypeRequest request,

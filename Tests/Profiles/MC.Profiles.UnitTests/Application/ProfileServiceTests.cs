@@ -11,11 +11,12 @@ public sealed class ProfileServiceTests
 {
     private readonly FakeProfileRepository _repository = new();
     private readonly FakeCurrentUserService _currentUser = new();
+    private readonly FakeIdentityService _identity = new();
     private readonly ProfileService _service;
 
     public ProfileServiceTests()
     {
-        _service = new ProfileService(_repository, _currentUser);
+        _service = new ProfileService(_repository, _currentUser, _identity);
     }
 
     [Fact]
@@ -163,6 +164,153 @@ public sealed class ProfileServiceTests
         Assert.Equal(AccountType.Business, profile.AccountType);
         Assert.True(result.Value!.IsSeller);
         Assert.Equal(1, _repository.SaveCalls);
+    }
+
+    [Fact]
+    public async Task GetAndEnsureCurrentUserProfile_writes_profile_id_before_saving_new_profile()
+    {
+        SignIn("user-1");
+
+        var result = await _service.GetAndEnsureCurrentUserProfile(
+            new CurrentUserMetadataRequest("Ada", null), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal([$"profile-id:user-1:{result.Value!.Id}"], _identity.Calls);
+        Assert.Equal(1, _repository.SaveCalls);
+    }
+
+    [Fact]
+    public async Task GetAndEnsureCurrentUserProfile_does_not_save_when_identity_provider_fails()
+    {
+        SignIn("user-1");
+        _identity.FailWith = Result.Failure(new Error(ErrorCode.InternalServerError, "boom"));
+
+        var result = await _service.GetAndEnsureCurrentUserProfile(
+            new CurrentUserMetadataRequest("Ada", null), CancellationToken.None);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal(ErrorCode.InternalServerError, result.Error!.Code);
+        Assert.Equal(0, _repository.Count);
+        Assert.Equal(0, _repository.SaveCalls);
+    }
+
+    [Fact]
+    public async Task GetAndEnsureCurrentUserProfile_writes_profile_id_for_existing_profile_when_token_lacks_it()
+    {
+        SignIn("user-1");
+        _currentUser.ProfileId = null;
+        var profile = await AddProfile("user-1");
+
+        var result = await _service.GetAndEnsureCurrentUserProfile(
+            new CurrentUserMetadataRequest("Ada", null), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal([$"profile-id:user-1:{profile.Id}"], _identity.Calls);
+    }
+
+    [Fact]
+    public async Task GetAndEnsureCurrentUserProfile_skips_identity_provider_when_token_has_profile_id()
+    {
+        SignIn("user-1");
+        var profile = await AddProfile("user-1");
+        _currentUser.ProfileId = profile.Id;
+
+        var result = await _service.GetAndEnsureCurrentUserProfile(
+            new CurrentUserMetadataRequest("Ada", null), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Empty(_identity.Calls);
+    }
+
+    [Theory]
+    [InlineData("Individual")]
+    [InlineData("BUSINESS")]
+    public async Task ClarifyAccountType_grants_seller_for_individual_and_business(string accountType)
+    {
+        SignIn("user-1");
+        var profile = await AddProfile("user-1");
+
+        var result = await _service.ClarifyAccountType(
+            new ClarifyAccountTypeRequest(accountType), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(["grant:user-1"], _identity.Calls);
+        Assert.Equal(Enum.Parse<AccountType>(accountType, true), profile.AccountType);
+        Assert.Equal(1, _repository.SaveCalls);
+    }
+
+    [Fact]
+    public async Task ClarifyAccountType_grants_seller_again_when_type_unchanged()
+    {
+        SignIn("user-1");
+        var profile = await AddProfile("user-1");
+        profile.AccountType = AccountType.Business;
+
+        var result = await _service.ClarifyAccountType(
+            new ClarifyAccountTypeRequest("Business"), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(["grant:user-1"], _identity.Calls);
+    }
+
+    [Fact]
+    public async Task ClarifyAccountType_revokes_seller_when_switching_to_basic()
+    {
+        SignIn("user-1");
+        var profile = await AddProfile("user-1");
+        profile.AccountType = AccountType.Individual;
+
+        var result = await _service.ClarifyAccountType(
+            new ClarifyAccountTypeRequest("Basic"), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(["revoke:user-1"], _identity.Calls);
+        Assert.Equal(AccountType.Basic, profile.AccountType);
+        Assert.False(result.Value!.IsSeller);
+    }
+
+    [Fact]
+    public async Task ClarifyAccountType_makes_no_identity_call_for_basic_to_basic()
+    {
+        SignIn("user-1");
+        await AddProfile("user-1");
+
+        var result = await _service.ClarifyAccountType(
+            new ClarifyAccountTypeRequest("Basic"), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Empty(_identity.Calls);
+    }
+
+    [Fact]
+    public async Task ClarifyAccountType_keeps_account_type_when_identity_provider_fails()
+    {
+        SignIn("user-1");
+        var profile = await AddProfile("user-1");
+        _identity.FailWith = Result.Failure(new Error(ErrorCode.InternalServerError, "boom"));
+
+        var result = await _service.ClarifyAccountType(
+            new ClarifyAccountTypeRequest("Individual"), CancellationToken.None);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal(ErrorCode.InternalServerError, result.Error!.Code);
+        Assert.Equal(AccountType.Basic, profile.AccountType);
+        Assert.Equal(0, _repository.SaveCalls);
+    }
+
+    [Fact]
+    public async Task ClarifyAccountType_rejects_unknown_type()
+    {
+        SignIn("user-1");
+        await AddProfile("user-1");
+
+        var result = await _service.ClarifyAccountType(
+            new ClarifyAccountTypeRequest("Seller"), CancellationToken.None);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal(ErrorCode.ValidationFailed, result.Error!.Code);
+        Assert.Equal("Unknown account type.", result.Error.Message);
+        Assert.Empty(_identity.Calls);
     }
 
     private void SignIn(string userId, string? email = null)

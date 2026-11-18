@@ -18,7 +18,8 @@ internal static class ServiceParameterExtension
         {
             return builder
                 .WithEnvironment("Auth0:Management:ClientId", parameters.ClientId)
-                .WithEnvironment("Auth0:Management:ClientSecret", parameters.ClientSecret);
+                .WithEnvironment("Auth0:Management:ClientSecret", parameters.ClientSecret)
+                .WithEnvironment("Auth0:Management:SellerRoleId", parameters.SellerRoleId);
         }
 
         public IResourceBuilder<T> WithSeeding(IConfiguration configuration)

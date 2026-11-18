@@ -38,6 +38,7 @@ public static class ServiceCollectionExtension
                 options.Domain = configuration["Auth0:Domain"] ?? string.Empty;
                 options.ClientId = configuration["Auth0:Management:ClientId"] ?? string.Empty;
                 options.ClientSecret = configuration["Auth0:Management:ClientSecret"] ?? string.Empty;
+                options.SellerRoleId = configuration["Auth0:Management:SellerRoleId"] ?? string.Empty;
             });
 
             // Repositories
