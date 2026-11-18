@@ -1,9 +1,14 @@
-import type { CurrentUserMetadata, PublicProfile } from "../model/types";
-import { readResponse } from "@/shared/api";
+import type {
+  AccountType,
+  CurrentUserMetadata,
+  PublicProfile,
+} from "../model/types";
+import { HttpError, readResponse } from "@/shared/api";
 import { readBoolean, readStringNonEmpty } from "@/shared/lib";
 
 /* Profiles API */
 const metadataUrl = "/api/profiles/me/current-user-metadata";
+const clarifyAccountTypeUrl = "/api/profiles/me/clarify-account-type";
 
 /* Maps */
 export function mapCurrentUserMetadata(body: unknown): CurrentUserMetadata {
@@ -84,4 +89,27 @@ export async function ensureCurrentUserMetadata(
   return mapCurrentUserMetadata(
     await readResponse(response, "Profile metadata request"),
   );
+}
+
+export async function clarifyAccountType(
+  accessToken: string,
+  accountType: AccountType,
+  signal?: AbortSignal,
+): Promise<void> {
+  const response = await fetch(clarifyAccountTypeUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ accountType }),
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new HttpError(
+      response.status,
+      `Account type request failed (${response.status})`,
+    );
+  }
 }

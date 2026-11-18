@@ -8,3 +8,4 @@ export {
   readStringNonEmpty,
 } from "./readJson";
 export { parsePositiveInteger } from "./parsePositiveInteger";
+export { readJwtClaim } from "./readJwtClaim";

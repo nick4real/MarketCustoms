@@ -14,3 +14,9 @@ export {
   toVisitorSession,
   type ProfileLoadState,
 } from "./model/toVisitorSession";
+export {
+  PROFILE_ID_CLAIM,
+  SessionActionsContext,
+  useSessionActions,
+  type SessionActions,
+} from "./model/actions";

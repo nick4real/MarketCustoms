@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import { useVisitorSession } from "@/entities/session";
+import { AccountTypeSection } from "@/features/account-type";
 import { Avatar, Button, Eyebrow } from "@/shared/ui";
 import { cx, getInitials } from "@/shared/lib";
 
@@ -179,6 +180,8 @@ export function SettingsPage() {
               {account?.emailVerified === false && (
                 <EmailVerificationNotice email={account.email} />
               )}
+
+              {account && <AccountTypeSection />}
 
               <div className="border-border mb-8 flex flex-col gap-4 border-b pb-8 sm:flex-row sm:items-center">
                 <Avatar size="lg" src={account?.photoUrl} initials={initials} />
