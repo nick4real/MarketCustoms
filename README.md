@@ -71,10 +71,17 @@ dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-Bac
 dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-BackendM2M-ClientSecret" "<m2m-client-secret>"
 ```
 
+`Parameters:Auth0-SellerRoleId` is not a secret. Set it to the id of the `seller` role in your tenant. The AppHost passes it to Profiles, which assigns the role when a user becomes a seller. You can set it as a user secret as well:
+
+```bash
+dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-SellerRoleId" "<seller-role-id>"
+```
+
 In the Auth0 dashboard:
 
 - **Single-page application:** add `https://localhost:7117/callback` to Allowed Callback URLs, and `https://localhost:7117` to Allowed Logout URLs and Allowed Web Origins. This is the gateway's local address.
-- **Machine-to-machine application:** authorise it for the Auth0 Management API. The Profiles service uses it to sync users.
+- **Machine-to-machine application:** authorise it for the Auth0 Management API with the scopes `update:users`, `create:role_members` and `delete:role_members`. The Profiles service uses it to sync users and assign roles.
+- **Roles, permissions and the Action:** follow [infra/auth0/README.md](infra/auth0/README.md).
 
 ### Run
 

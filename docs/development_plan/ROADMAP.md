@@ -73,7 +73,7 @@ The roadmap starts with an MVP (Phases 0–4) that covers the core story: **a se
 | # | Phase | Demo at the end | New technology | Status |
 | --- | --- | --- | --- | --- |
 | 0 | [Foundation](phases/phase-00-foundation.md) | Single CI workflow required on `main`; GitHub flow; ADR folder | GitHub Actions CI | Done |
-| 1 | [Seller catalog](phases/phase-01-seller-catalog.md) | Owners create, edit and remove listings with images; listing status; admin-only categories | Auth0 roles/permissions, Azure Blob (Azurite), first Redis cache | Not started |
+| 1 | [Seller catalog](phases/phase-01-seller-catalog.md) | Owners create, edit and remove listings with images; listing status; admin-only categories | Auth0 roles/permissions, Azure Blob (Azurite), first Redis cache | In progress |
 | 2 | [Buy now](phases/phase-02-buy-now.md) | Single-listing purchase in Stripe test mode; stock reserved, then decremented; seller sees the paid order | RabbitMQ, outbox, checkout saga, Stripe Checkout + webhooks | Not started |
 | 3 | [Fulfilment & notifications](phases/phase-03-fulfilment-and-notifications.md) | Tracking number, buyer confirms receipt, then seller payout; email and live notifications | Stripe Connect payouts, SignalR | Not started |
 | 4 | [Ship the MVP](phases/phase-04-ship-the-mvp.md) | Full system on a local `kind` cluster, auto-deployed from `main` | Kubernetes, Helm, GHCR images, CD | Not started |

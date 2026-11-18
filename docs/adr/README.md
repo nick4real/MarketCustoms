@@ -22,3 +22,4 @@ Small, local choices that are easy to reverse don't need one.
 | --- | --- | --- |
 | [0001](0001-github-flow.md) | GitHub flow | Accepted |
 | [0002](0002-single-ci-workflow.md) | Single CI workflow | Accepted |
+| [0003](0003-auth0-roles-and-permissions.md) | Auth0 roles and permissions | Accepted |
