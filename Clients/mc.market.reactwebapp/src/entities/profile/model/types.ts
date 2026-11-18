@@ -12,3 +12,5 @@ export interface PublicProfile {
   pictureUrl: string | null;
   isSeller: boolean;
 }
+
+export type AccountType = "Basic" | "Individual" | "Business";

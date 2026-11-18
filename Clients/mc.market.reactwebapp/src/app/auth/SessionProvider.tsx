@@ -1,13 +1,17 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ensureCurrentUserMetadata } from "@/entities/profile";
 import {
+  PROFILE_ID_CLAIM,
+  SessionActionsContext,
   SessionContextProvider,
   mapAccount,
   toVisitorSession,
   type ProfileLoadState,
+  type SessionActions,
 } from "@/entities/session";
 import { isAuth0Configured } from "@/shared/config";
+import { readJwtClaim } from "@/shared/lib";
 
 const idleProfile: ProfileLoadState = { status: "idle" };
 
@@ -17,6 +21,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const userSub = isAuthenticated ? (user?.sub?.trim() ?? "") : "";
   const [trackedSub, setTrackedSub] = useState("");
   const [profile, setProfile] = useState<ProfileLoadState>(idleProfile);
+  const [reloadCount, setReloadCount] = useState(0);
+  const forceFreshToken = useRef(false);
 
   if (userSub !== trackedSub) {
     setTrackedSub(userSub);
@@ -37,7 +43,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
     void (async () => {
       try {
-        const token = (await getAccessTokenSilently()) ?? "";
+        const force = forceFreshToken.current;
+        forceFreshToken.current = false;
+        const token =
+          (await (force
+            ? getAccessTokenSilently({ cacheMode: "off" })
+            : getAccessTokenSilently())) ?? "";
         const metadata = await ensureCurrentUserMetadata(
           token,
           {
@@ -46,6 +57,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           },
           controller.signal,
         );
+        if (controller.signal.aborted) {
+          return;
+        }
+        // Profiles writes the profile id to Auth0 on first call; a fresh token carries it.
+        if (readJwtClaim(token, PROFILE_ID_CLAIM) !== metadata.id) {
+          await getAccessTokenSilently({ cacheMode: "off" });
+        }
         if (!controller.signal.aborted) {
           setProfile({ status: "ready", metadata });
         }
@@ -63,7 +81,18 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return () => {
       controller.abort();
     };
-  }, [getAccessTokenSilently, user, userSub]);
+  }, [getAccessTokenSilently, reloadCount, user, userSub]);
+
+  const actions = useMemo<SessionActions>(
+    () => ({
+      getAccessToken: async () => (await getAccessTokenSilently()) ?? "",
+      reloadSession: () => {
+        forceFreshToken.current = true;
+        setReloadCount((count) => count + 1);
+      },
+    }),
+    [getAccessTokenSilently],
+  );
 
   const session = useMemo(
     () =>
@@ -79,8 +108,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <SessionContextProvider session={session}>
-      {children}
-    </SessionContextProvider>
+    <SessionActionsContext.Provider value={actions}>
+      <SessionContextProvider session={session}>
+        {children}
+      </SessionContextProvider>
+    </SessionActionsContext.Provider>
   );
 }
