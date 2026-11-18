@@ -22,6 +22,16 @@ export const accountTypeOptions: {
   },
 ];
 
-export function isSellerAccountType(type: string | null): boolean {
+export function isSellerAccountType(
+  type: string | null,
+): type is Extract<AccountType, "Individual" | "Business"> {
   return type === "Individual" || type === "Business";
+}
+
+/** Re-saving a seller type re-runs the Auth0 seller grant, which repairs accounts that lack the role. */
+export function canSaveAccountType(
+  selected: AccountType,
+  current: AccountType,
+): boolean {
+  return selected !== current || isSellerAccountType(selected);
 }

@@ -24,6 +24,14 @@ describe("readJwtClaim", () => {
     expect(readJwtClaim("a.b", "x")).toBeUndefined();
   });
 
+  it("returns_undefined_for_payload_that_is_not_json", () => {
+    expect(readJwtClaim("a.bm90anNvbg.c", "x")).toBeUndefined();
+  });
+
+  it("returns_undefined_for_payload_that_is_not_an_object", () => {
+    expect(readJwtClaim(tokenWith(42), "x")).toBeUndefined();
+  });
+
   it("returns_undefined_for_missing_claim", () => {
     expect(readJwtClaim(tokenWith({ a: 1 }), "b")).toBeUndefined();
   });

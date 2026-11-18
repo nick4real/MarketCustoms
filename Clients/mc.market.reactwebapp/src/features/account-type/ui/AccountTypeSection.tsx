@@ -2,28 +2,28 @@ import { useState } from "react";
 import type { AccountType } from "@/entities/profile";
 import { useSessionActions, useVisitorSession } from "@/entities/session";
 import { Button } from "@/shared/ui";
-import { accountTypeOptions } from "../model/accountTypeOptions";
+import {
+  accountTypeOptions,
+  canSaveAccountType,
+  isSellerAccountType,
+} from "../model/accountTypeOptions";
 import { useChangeAccountType } from "../model/useChangeAccountType";
 
 export function AccountTypeSection() {
   const { account } = useVisitorSession();
   const { reloadSession } = useSessionActions();
   const mutation = useChangeAccountType();
-  const current: AccountType =
-    account?.accountType === "Individual" || account?.accountType === "Business"
-      ? account.accountType
-      : "Basic";
+  const accountType = account?.accountType ?? null;
+  const current: AccountType = isSellerAccountType(accountType)
+    ? accountType
+    : "Basic";
+  // The selection is kept after saving so the radio does not flick back while the session reloads.
   const [selected, setSelected] = useState<AccountType | null>(null);
   const value = selected ?? current;
-  const unchanged = value === current;
+  const canSave = canSaveAccountType(value, current);
 
   function save() {
-    mutation.mutate(value, {
-      onSuccess: () => {
-        setSelected(null);
-        reloadSession();
-      },
-    });
+    mutation.mutate(value, { onSuccess: () => reloadSession() });
   }
 
   return (
@@ -64,7 +64,7 @@ export function AccountTypeSection() {
       <Button
         variant="primary"
         className="mt-4 w-full sm:w-auto"
-        disabled={unchanged || mutation.isPending}
+        disabled={!canSave || mutation.isPending}
         onClick={save}
       >
         Save
