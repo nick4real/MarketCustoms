@@ -1,4 +1,5 @@
-﻿using MC.Shared.Application.Interfaces.Services;
+﻿using MC.Shared.Application.Common;
+using MC.Shared.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -14,4 +15,9 @@ public class Auth0CurrentUserService(IHttpContextAccessor httpContextAccessor) :
         ?? User?.FindFirstValue("email");
 
     public bool IsAuthenticated => User?.Identity?.IsAuthenticated ?? false;
+
+    public Guid? ProfileId => Guid.TryParse(User?.FindFirstValue(AuthClaimTypes.ProfileId), out var id) ? id : null;
+
+    public bool HasPermission(string permission)
+        => User?.HasClaim(AuthClaimTypes.Permissions, permission) ?? false;
 }
