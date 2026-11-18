@@ -1,6 +1,7 @@
 using MC.Profiles.Application.Interfaces.Services;
 using MC.Profiles.Infrastructure.Options;
 using MC.Shared.Application.Common;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -10,7 +11,8 @@ namespace MC.Profiles.Infrastructure.Services;
 
 public sealed class Auth0ManagementIdentityService(
     IHttpClientFactory httpClientFactory,
-    IOptions<Auth0ManagementOptions> options) : IIdentityService
+    IOptions<Auth0ManagementOptions> options,
+    ILogger<Auth0ManagementIdentityService> logger) : IIdentityService
 {
     public const string HttpClientName = "Auth0Management";
 
@@ -65,11 +67,19 @@ public sealed class Auth0ManagementIdentityService(
         request.Content = JsonContent.Create(body);
 
         using var response = await client.SendAsync(request, ct);
-        return response.IsSuccessStatusCode
-            ? Result.Success()
-            : Result.Failure(new Error(
-                ErrorCode.InternalServerError,
-                "The identity provider rejected the account update. Try again."));
+        if (response.IsSuccessStatusCode)
+            return Result.Success();
+
+        var responseBody = await response.Content.ReadAsStringAsync(ct);
+        logger.LogWarning(
+            "Auth0 Management API {Method} {Path} failed with {StatusCode}: {ResponseBody}",
+            method.Method,
+            path,
+            (int)response.StatusCode,
+            responseBody);
+        return Result.Failure(new Error(
+            ErrorCode.InternalServerError,
+            "The identity provider rejected the account update. Try again."));
     }
 
     private static void ValidateSellerRole(Auth0ManagementOptions op)
