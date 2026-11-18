@@ -8,12 +8,13 @@ using MC.Catalog.Application.Responses;
 using MC.Catalog.Domain.Entities;
 using MC.Catalog.Domain.Views;
 using MC.Shared.Application.Common;
+using MC.Shared.Application.Interfaces.Services;
 using MC.Shared.Application.Models;
 using MC.Shared.Application.Requests;
 
 namespace MC.Catalog.Application.Services;
 
-public class ListingService(IListingRepository listingRepository, ICategoryRepository categoryRepository) : IListingService
+public class ListingService(IListingRepository listingRepository, ICategoryRepository categoryRepository, ICurrentUserService currentUser) : IListingService
 {
     public async Task<Result<ListingDetailedResponse>> GetDetailedListingByIdAsync(string id, CancellationToken ct)
     {
@@ -70,11 +71,16 @@ public class ListingService(IListingRepository listingRepository, ICategoryRepos
 
     public async Task<Result<ListingDetailedResponse>> CreateListingAsync(CreateListingRequest request, CancellationToken ct)
     {
+        if (currentUser.ProfileId is not { } profileId)
+        {
+            return Result<ListingDetailedResponse>.Failure(new Error(ErrorCode.Forbidden, "Your account has no profile id yet. Sign out and sign in again."));
+        }
+
         try
         {
             var listing = new Listing
             {
-                OwnerGuid = request.OwnerGuid,
+                OwnerGuid = profileId,
                 Title = request.Title,
                 Description = request.Description,
                 CategoryId = request.CategoryId,
