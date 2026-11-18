@@ -1,4 +1,5 @@
-﻿using MC.Catalog.Application.Interfaces.Services;
+﻿using MC.Catalog.Application.Common;
+using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Requests;
 using MC.Shared.API.Controllers;
 using Microsoft.AspNetCore.Authorization;
@@ -44,6 +45,7 @@ public class CategoriesController(ICategoryService categoryService) : CustomCont
     }
 
     [HttpPost]
+    [Authorize(Policy = Permissions.CategoriesWrite)]
     public async Task<IActionResult> CreateCategory(CancellationToken ct, [FromBody] CreateCategoryRequest request)
     {
         var result = await categoryService.AddNewCategoryAsync(ct, request);

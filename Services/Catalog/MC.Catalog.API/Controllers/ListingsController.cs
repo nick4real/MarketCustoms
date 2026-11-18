@@ -1,3 +1,4 @@
+using MC.Catalog.Application.Common;
 using MC.Catalog.Application.Interfaces.Services;
 using MC.Catalog.Application.Models;
 using MC.Catalog.Application.Requests;
@@ -38,6 +39,7 @@ public class ListingsController(IListingService listingService) : CustomControll
     }
 
     [HttpPost("create")]
+    [Authorize(Policy = Permissions.ListingsWrite)]
     public async Task<IActionResult> CreateListing(CancellationToken ct, [FromBody] CreateListingRequest listing)
     {
         var result = await listingService.CreateListingAsync(listing, ct);

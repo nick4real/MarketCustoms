@@ -1,4 +1,5 @@
 using MC.Catalog.Application;
+using MC.Catalog.Application.Common;
 using MC.Catalog.Infrastructure;
 using MC.Shared.API;
 using MC.Shared.Infrastructure.Seeding;
@@ -13,7 +14,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 
 builder.AddAuthenticationDefaults();
-builder.Services.AddAuthorization();
+builder.Services.AddPermissionAuthorization(Permissions.All);
 
 if (builder.Environment.IsDevelopment())
 {

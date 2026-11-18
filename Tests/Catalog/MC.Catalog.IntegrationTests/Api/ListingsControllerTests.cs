@@ -1,3 +1,4 @@
+using MC.Catalog.Application.Common;
 using MC.Catalog.IntegrationTests.Fixtures;
 using System.Net;
 using System.Net.Http.Json;
@@ -45,24 +46,56 @@ public sealed class ListingsControllerTests
     }
 
     [Fact]
+    public async Task Create_listing_without_listings_write_returns_403()
+    {
+        using var client = _fixture.CreateAuthenticatedClient(profileId: Guid.NewGuid());
+
+        var response = await client.PostAsJsonAsync("/Listings/create", NewListing(1), TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Create_listing_without_profile_id_returns_403()
+    {
+        using var client = _fixture.CreateAuthenticatedClient(permissions: Permissions.ListingsWrite);
+
+        var response = await client.PostAsJsonAsync("/Listings/create", NewListing(1), TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Create_listing_sets_owner_from_token()
+    {
+        var profileId = Guid.NewGuid();
+        using var anonymous = _fixture.CreateAnonymousClient();
+        using var admin = _fixture.CreateAuthenticatedClient(permissions: Permissions.CategoriesWrite);
+        using var client = _fixture.CreateAuthenticatedClient(profileId: profileId, permissions: Permissions.ListingsWrite);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var categoryId = await CreateCategoryAsync(admin, anonymous, cancellationToken);
+
+        var title = $"Owned Listing {Guid.NewGuid():N}";
+        var create = await client.PostAsJsonAsync("/Listings/create", NewListing(categoryId, title), cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, create.StatusCode);
+        var created = await create.Content.ReadFromJsonAsync<ListingBody>(JsonOptions, cancellationToken);
+        var listingId = created is { Id.Length: 24 } ? created.Id : await FindListingIdByTitle(anonymous, title, cancellationToken);
+        var get = await anonymous.GetAsync($"/Listings/{listingId}", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, get.StatusCode);
+        var fetched = await get.Content.ReadFromJsonAsync<ListingBody>(JsonOptions, cancellationToken);
+        Assert.NotNull(fetched);
+        Assert.Equal(profileId, fetched.OwnerId);
+    }
+
+    [Fact]
     public async Task Authenticated_create_persists_listing_in_isolated_stores()
     {
         using var anonymous = _fixture.CreateAnonymousClient();
-        using var authenticated = _fixture.CreateAuthenticatedClient();
+        using var admin = _fixture.CreateAuthenticatedClient(permissions: Permissions.CategoriesWrite);
+        using var authenticated = _fixture.CreateAuthenticatedClient(profileId: Guid.NewGuid(), permissions: Permissions.ListingsWrite);
         var cancellationToken = TestContext.Current.CancellationToken;
-
-        var createCategory = await authenticated.PostAsJsonAsync(
-            "/Categories",
-            new { name = $"Integration Category {Guid.NewGuid():N}", parentId = (uint?)null },
-            cancellationToken);
-        Assert.Equal(HttpStatusCode.OK, createCategory.StatusCode);
-
-        var categoriesResponse = await anonymous.GetAsync("/Categories", cancellationToken);
-        Assert.Equal(HttpStatusCode.OK, categoriesResponse.StatusCode);
-        var categories = await categoriesResponse.Content.ReadFromJsonAsync<CategoryBody[]>(JsonOptions, cancellationToken);
-        Assert.NotNull(categories);
-        Assert.NotEmpty(categories);
-        var categoryId = categories[0].Id;
+        var categoryId = await CreateCategoryAsync(admin, anonymous, cancellationToken);
 
         var title = $"Integration Listing {Guid.NewGuid():N}";
         var createListing = await authenticated.PostAsJsonAsync("/Listings/create", NewListing(categoryId, title), cancellationToken);
@@ -82,27 +115,19 @@ public sealed class ListingsControllerTests
     [Fact]
     public async Task Search_by_owner_returns_only_that_owners_listings()
     {
-        using var anonymous = _fixture.CreateAnonymousClient();
-        using var authenticated = _fixture.CreateAuthenticatedClient();
-        var cancellationToken = TestContext.Current.CancellationToken;
-
-        var createCategory = await authenticated.PostAsJsonAsync(
-            "/Categories",
-            new { name = $"Integration Category {Guid.NewGuid():N}", parentId = (uint?)null },
-            cancellationToken);
-        Assert.Equal(HttpStatusCode.OK, createCategory.StatusCode);
-        var categoriesResponse = await anonymous.GetAsync("/Categories", cancellationToken);
-        var categories = await categoriesResponse.Content.ReadFromJsonAsync<CategoryBody[]>(JsonOptions, cancellationToken);
-        Assert.NotNull(categories);
-        Assert.NotEmpty(categories);
-        var categoryId = categories[0].Id;
-
         var ownerA = Guid.NewGuid();
         var ownerB = Guid.NewGuid();
+        using var anonymous = _fixture.CreateAnonymousClient();
+        using var admin = _fixture.CreateAuthenticatedClient(permissions: Permissions.CategoriesWrite);
+        using var clientA = _fixture.CreateAuthenticatedClient(profileId: ownerA, permissions: Permissions.ListingsWrite);
+        using var clientB = _fixture.CreateAuthenticatedClient(profileId: ownerB, permissions: Permissions.ListingsWrite);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var categoryId = await CreateCategoryAsync(admin, anonymous, cancellationToken);
+
         var titleA = $"Owner A Listing {Guid.NewGuid():N}";
         var titleB = $"Owner B Listing {Guid.NewGuid():N}";
-        var createA = await authenticated.PostAsJsonAsync("/Listings/create", NewOwnedListing(categoryId, titleA, ownerA), cancellationToken);
-        var createB = await authenticated.PostAsJsonAsync("/Listings/create", NewOwnedListing(categoryId, titleB, ownerB), cancellationToken);
+        var createA = await clientA.PostAsJsonAsync("/Listings/create", NewListing(categoryId, titleA), cancellationToken);
+        var createB = await clientB.PostAsJsonAsync("/Listings/create", NewListing(categoryId, titleB), cancellationToken);
         Assert.Equal(HttpStatusCode.OK, createA.StatusCode);
         Assert.Equal(HttpStatusCode.OK, createB.StatusCode);
 
@@ -123,19 +148,21 @@ public sealed class ListingsControllerTests
         Assert.Equal(HttpStatusCode.BadRequest, byEmpty.StatusCode);
     }
 
-    private static object NewOwnedListing(uint categoryId, string title, Guid ownerGuid) => new
+    private static async Task<uint> CreateCategoryAsync(HttpClient admin, HttpClient anonymous, CancellationToken cancellationToken)
     {
-        ownerGuid,
-        title,
-        description = "Created by Catalog integration tests",
-        categoryId,
-        location = new { country = "Testland", region = "R", city = "C", district = (string?)null, latitude = 0m, longitude = 0m },
-        price = 9.99m,
-        stockQuantity = 1,
-        imageLinks = Array.Empty<string>(),
-        tags = Array.Empty<string>(),
-        parameters = Array.Empty<object>()
-    };
+        var createCategory = await admin.PostAsJsonAsync(
+            "/Categories",
+            new { name = $"Integration Category {Guid.NewGuid():N}", parentId = (uint?)null },
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, createCategory.StatusCode);
+
+        var categoriesResponse = await anonymous.GetAsync("/Categories", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, categoriesResponse.StatusCode);
+        var categories = await categoriesResponse.Content.ReadFromJsonAsync<CategoryBody[]>(JsonOptions, cancellationToken);
+        Assert.NotNull(categories);
+        Assert.NotEmpty(categories);
+        return categories[0].Id;
+    }
 
     private static async Task<string> FindListingIdByTitle(HttpClient client, string title, CancellationToken cancellationToken)
     {
@@ -150,7 +177,6 @@ public sealed class ListingsControllerTests
 
     private static object NewListing(uint categoryId, string title = "Unauthorized listing") => new
     {
-        ownerId = CatalogAppFixture.LocalTestUserId,
         title,
         description = "Created by Catalog integration tests",
         categoryId,
@@ -164,7 +190,7 @@ public sealed class ListingsControllerTests
 
     private sealed record ErrorBody(int Code, string Message);
     private sealed record CategoryBody(uint Id, string Name);
-    private sealed record ListingBody(string Id, string Title, uint CategoryId);
+    private sealed record ListingBody(string Id, string Title, uint CategoryId, Guid OwnerId);
     private sealed record ListingPage(ListingItem[] Items);
     private sealed record ListingItem(string Id, string Title);
 }

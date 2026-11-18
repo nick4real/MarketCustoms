@@ -41,10 +41,21 @@ public sealed class CatalogAppFixture : IAsyncLifetime
 
     public HttpClient CreateAnonymousClient() => App.CreateHttpClient(ServiceName);
 
-    public HttpClient CreateAuthenticatedClient(string userId = LocalTestUserId)
+    public HttpClient CreateAuthenticatedClient(string userId = LocalTestUserId, Guid? profileId = null, params string[] permissions)
     {
+        var value = userId;
+        if (profileId is { } id)
+        {
+            value += $";profile_id={id}";
+        }
+
+        if (permissions.Length > 0)
+        {
+            value += $";permissions={string.Join(',', permissions)}";
+        }
+
         var client = CreateAnonymousClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(LocalTestScheme, userId);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(LocalTestScheme, value);
         return client;
     }
 

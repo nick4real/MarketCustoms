@@ -10,6 +10,8 @@ internal sealed class FakeListingRepository : IListingRepository
 {
     private readonly List<Listing> _listings = [];
 
+    public IReadOnlyList<Listing> Listings => _listings;
+
     public Task<PagedCollection<ListingCardView>> GetListingsCatalogViewAsync(
         int skip,
         int take,
