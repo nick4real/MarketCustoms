@@ -1,3 +1,4 @@
+using MC.Shared.Application.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -57,9 +58,14 @@ public sealed class LocalTestAuthenticationHandler(
                 {
                     claims.Add(new Claim("phone_number", value));
                 }
-                else if (key.Equals("is_seller", StringComparison.OrdinalIgnoreCase) && value.Equals("true", StringComparison.OrdinalIgnoreCase))
+                else if (key.Equals("permissions", StringComparison.OrdinalIgnoreCase))
                 {
-                    claims.Add(new Claim("is_seller", "true"));
+                    var permissions = value.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                    claims.AddRange(permissions.Select(p => new Claim(AuthClaimTypes.Permissions, p)));
+                }
+                else if (key.Equals("profile_id", StringComparison.OrdinalIgnoreCase) && Guid.TryParse(value, out _))
+                {
+                    claims.Add(new Claim(AuthClaimTypes.ProfileId, value));
                 }
             }
         }
