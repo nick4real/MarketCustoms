@@ -298,14 +298,16 @@ public sealed class ProfileServiceTests
         Assert.Equal(0, _repository.SaveCalls);
     }
 
-    [Fact]
-    public async Task ClarifyAccountType_rejects_unknown_type()
+    [Theory]
+    [InlineData("Seller")]
+    [InlineData("1")]
+    public async Task ClarifyAccountType_rejects_unknown_type(string accountType)
     {
         SignIn("user-1");
         await AddProfile("user-1");
 
         var result = await _service.ClarifyAccountType(
-            new ClarifyAccountTypeRequest("Seller"), CancellationToken.None);
+            new ClarifyAccountTypeRequest(accountType), CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(ErrorCode.ValidationFailed, result.Error!.Code);

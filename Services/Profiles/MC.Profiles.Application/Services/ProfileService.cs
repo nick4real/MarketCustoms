@@ -1,4 +1,5 @@
-﻿using MC.Profiles.Application.Interfaces.Repositories;
+﻿using MC.Profiles.Application.Common;
+using MC.Profiles.Application.Interfaces.Repositories;
 using MC.Profiles.Application.Interfaces.Services;
 using MC.Profiles.Application.Requests;
 using MC.Profiles.Application.Responses;
@@ -92,7 +93,7 @@ public class ProfileService(
         if (existing is null)
             return Result<OwnerProfileResponse>.Failure(new Error(ErrorCode.NotFound, "Profile not found"));
 
-        if (!Enum.TryParse<AccountType>(request.AccountType, true, out var accountType) || !Enum.IsDefined(accountType))
+        if (!AccountTypeParser.TryParse(request.AccountType, out var accountType))
             return Result<OwnerProfileResponse>.Failure(new Error(ErrorCode.ValidationFailed, "Unknown account type."));
 
         var identityResult = accountType switch
