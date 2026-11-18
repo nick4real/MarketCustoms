@@ -2,4 +2,5 @@
 
 internal record Auth0ManagementParameters(
     IResourceBuilder<ParameterResource> ClientId,
-    IResourceBuilder<ParameterResource> ClientSecret);
+    IResourceBuilder<ParameterResource> ClientSecret,
+    IResourceBuilder<ParameterResource> SellerRoleId);

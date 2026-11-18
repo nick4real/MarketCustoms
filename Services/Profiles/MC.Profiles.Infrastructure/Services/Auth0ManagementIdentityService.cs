@@ -1,5 +1,6 @@
 using MC.Profiles.Application.Interfaces.Services;
 using MC.Profiles.Infrastructure.Options;
+using MC.Shared.Application.Common;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -13,56 +14,68 @@ public sealed class Auth0ManagementIdentityService(
 {
     public const string HttpClientName = "Auth0Management";
 
-    public async Task SetNameAsync(string externalUserId, string name, CancellationToken cancellationToken)
-    {
-        ValidateOptions(options.Value);
-        var settings = options.Value;
-
-        var domain = settings.Domain.Trim().TrimEnd('/');
-        var client = httpClientFactory.CreateClient(HttpClientName);
-        var token = await RequestAccessTokenAsync(client, domain, settings, cancellationToken);
-
-        using var request = new HttpRequestMessage(
+    public async Task<Result> SetProfileIdAsync(string externalUserId, Guid profileId, CancellationToken ct) =>
+        await SendManagementRequestAsync(
             HttpMethod.Patch,
-            $"https://{domain}/api/v2/users/{Uri.EscapeDataString(externalUserId)}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        request.Content = JsonContent.Create(new
-        {
-            name = name
-        });
+            UserPath(externalUserId),
+            new { app_metadata = new { profile_id = profileId.ToString() } },
+            ct);
 
-        using var response = await client.SendAsync(request, cancellationToken);
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new InvalidOperationException(
-                $"Auth0 Management API rejected the name update ({(int)response.StatusCode}).");
-        }
+    public async Task<Result> GrantSellerAsync(string externalUserId, CancellationToken ct)
+    {
+        ValidateSellerRole(options.Value);
+        return await SendManagementRequestAsync(
+            HttpMethod.Post, $"{UserPath(externalUserId)}/roles", SellerRoleBody(), ct);
     }
 
-    public async Task GrantSellerAsync(string externalUserId, CancellationToken cancellationToken)
+    public async Task<Result> RevokeSellerAsync(string externalUserId, CancellationToken ct)
+    {
+        ValidateSellerRole(options.Value);
+        return await SendManagementRequestAsync(
+            HttpMethod.Delete, $"{UserPath(externalUserId)}/roles", SellerRoleBody(), ct);
+    }
+
+    public async Task SetNameAsync(string externalUserId, string name, CancellationToken ct)
+    {
+        var result = await SendManagementRequestAsync(HttpMethod.Patch, UserPath(externalUserId), new { name }, ct);
+        if (!result.IsSuccess)
+            throw new InvalidOperationException("Auth0 Management API rejected the name update.");
+    }
+
+    private object SellerRoleBody() => new { roles = new[] { options.Value.SellerRoleId } };
+
+    private static string UserPath(string externalUserId) =>
+        $"/api/v2/users/{Uri.EscapeDataString(externalUserId)}";
+
+    private async Task<Result> SendManagementRequestAsync(
+        HttpMethod method,
+        string path,
+        object body,
+        CancellationToken ct)
     {
         ValidateOptions(options.Value);
         var settings = options.Value;
 
         var domain = settings.Domain.Trim().TrimEnd('/');
         var client = httpClientFactory.CreateClient(HttpClientName);
-        var token = await RequestAccessTokenAsync(client, domain, settings, cancellationToken);
+        var token = await RequestAccessTokenAsync(client, domain, settings, ct);
 
-        using var request = new HttpRequestMessage(
-            HttpMethod.Patch,
-            $"https://{domain}/api/v2/users/{Uri.EscapeDataString(externalUserId)}");
+        using var request = new HttpRequestMessage(method, $"https://{domain}{path}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        request.Content = JsonContent.Create(new
-        {
-            app_metadata = new { is_seller = true }
-        });
+        request.Content = JsonContent.Create(body);
 
-        using var response = await client.SendAsync(request, cancellationToken);
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new InvalidOperationException(
-                $"Auth0 Management API rejected the seller grant ({(int)response.StatusCode}).");
-        }
+        using var response = await client.SendAsync(request, ct);
+        return response.IsSuccessStatusCode
+            ? Result.Success()
+            : Result.Failure(new Error(
+                ErrorCode.InternalServerError,
+                "The identity provider rejected the account update. Try again."));
+    }
+
+    private static void ValidateSellerRole(Auth0ManagementOptions op)
+    {
+        if (string.IsNullOrWhiteSpace(op.SellerRoleId))
+            throw new InvalidOperationException("Auth0 seller role id is not configured.");
     }
 
     private static async Task<string> RequestAccessTokenAsync(

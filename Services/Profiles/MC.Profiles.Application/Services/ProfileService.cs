@@ -11,7 +11,8 @@ namespace MC.Profiles.Application.Services;
 
 public class ProfileService(
     IProfileRepository profileRepository,
-    ICurrentUserService currentUserService) : IProfileService
+    ICurrentUserService currentUserService,
+    IIdentityService identityService) : IProfileService
 {
     public async Task<Result<OwnerProfileResponse>> GetMe(CancellationToken ct)
     {
@@ -64,8 +65,19 @@ public class ProfileService(
                 CreatedAt = DateTimeOffset.UtcNow,
                 UpdatedAt = DateTimeOffset.UtcNow
             };
+
+            var created = await identityService.SetProfileIdAsync(currentUserService.UserId, profile.Id, ct);
+            if (!created.IsSuccess)
+                return Result<CurrentUserMetadataResponse>.Failure(created.Error!);
+
             await profileRepository.CreateProfileAsync(profile, ct);
             await profileRepository.SaveChangesAsync(ct);
+        }
+        else if (currentUserService.ProfileId != profile.Id)
+        {
+            var synced = await identityService.SetProfileIdAsync(currentUserService.UserId, profile.Id, ct);
+            if (!synced.IsSuccess)
+                return Result<CurrentUserMetadataResponse>.Failure(synced.Error!);
         }
 
         return Result<CurrentUserMetadataResponse>.Success(MapToMetadata(profile));
@@ -80,7 +92,19 @@ public class ProfileService(
         if (existing is null)
             return Result<OwnerProfileResponse>.Failure(new Error(ErrorCode.NotFound, "Profile not found"));
 
-        existing.AccountType = Enum.Parse<AccountType>(request.AccountType, true);
+        if (!Enum.TryParse<AccountType>(request.AccountType, true, out var accountType) || !Enum.IsDefined(accountType))
+            return Result<OwnerProfileResponse>.Failure(new Error(ErrorCode.ValidationFailed, "Unknown account type."));
+
+        var identityResult = accountType switch
+        {
+            not AccountType.Basic => await identityService.GrantSellerAsync(currentUserService.UserId!, ct),
+            _ when existing.AccountType != AccountType.Basic => await identityService.RevokeSellerAsync(currentUserService.UserId!, ct),
+            _ => Result.Success()
+        };
+        if (!identityResult.IsSuccess)
+            return Result<OwnerProfileResponse>.Failure(identityResult.Error!);
+
+        existing.AccountType = accountType;
         existing.UpdatedAt = DateTimeOffset.UtcNow;
 
         await profileRepository.SaveChangesAsync(ct);
