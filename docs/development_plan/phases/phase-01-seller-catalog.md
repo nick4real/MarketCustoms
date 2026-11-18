@@ -25,7 +25,7 @@ Part of the [MarketCustoms roadmap](../ROADMAP.md).
 **Open decisions:**
 
 - Is there a `Reserved` status for a multi-unit listing, or is reservation tracked per unit (Phase 2)? Recommendation: track it per unit, with no listing-level `Reserved`.
-- Permissions in Auth0 roles vs an app-side mapping from `AccountType`.
+- ~~Permissions in Auth0 roles vs an app-side mapping from `AccountType`.~~ Settled: Auth0 roles and permissions ([ADR 0003](../../adr/0003-auth0-roles-and-permissions.md)).
 - Upload directly to the API vs a SAS URL that lets the browser upload straight to Blob.
 
 **Done when:**

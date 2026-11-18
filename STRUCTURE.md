@@ -20,6 +20,8 @@ Tests/
   Bruno/                      Bruno API collection for manual requests against the gateway and services
 scripts/
   ef.js                       EF Core migration helper behind the root npm scripts
+infra/
+  auth0/                      Auth0 tenant setup note and the post-login Action
 docs/
   adr/                        Architecture decision records (index in its README)
   development_plan/           Roadmap, with one file per phase in phases/
