@@ -80,8 +80,21 @@ dotnet user-secrets --project Aspire/MC.Aspire.AppHost set "Parameters:Auth0-Sel
 In the Auth0 dashboard:
 
 - **Single-page application:** add `https://localhost:7117/callback` to Allowed Callback URLs, and `https://localhost:7117` to Allowed Logout URLs and Allowed Web Origins. This is the gateway's local address.
-- **Machine-to-machine application:** authorise it for the Auth0 Management API with the scopes `update:users`, `create:role_members` and `delete:role_members`. The Profiles service uses it to sync users and assign roles.
-- **Roles, permissions and the Action:** follow [infra/auth0/README.md](infra/auth0/README.md).
+- **API permissions:** on the API add `listings:write`, `listings:moderate` and `categories:write`, and turn on "Enable RBAC" and "Add Permissions in the Access Token". Authorise the single-page application for all of them (user-delegated access); each user's roles still decide what their token gets.
+- **Roles:** `seller` with `listings:write`, and `admin` with every API permission. Assign `admin` to yourself by hand; Profiles assigns and removes `seller`. Copy the `seller` role id into `Parameters:Auth0-SellerRoleId`.
+- **Machine-to-machine application:** authorise it for the Auth0 Management API (client access) with the scopes `update:users`, `create:role_members` and `delete:role_members`. The Profiles service uses it to sync users and assign roles. No application needs user-delegated access to the Management API.
+- **Post-login Action:** create one with the code below, deploy it and add it to the Login flow. It copies the profile id that Profiles stores in `app_metadata` into the access token.
+
+  ```js
+  exports.onExecutePostLogin = async (event, api) => {
+    const profileId = event.user.app_metadata?.profile_id;
+    if (profileId) {
+      api.accessToken.setCustomClaim("https://marketcustoms/profile_id", profileId);
+    }
+  };
+  ```
+
+To check the setup: a new user's second access token has `https://marketcustoms/profile_id`; after choosing "Private seller" in Settings the next token has `permissions: ["listings:write"]`; `POST /api/categories` returns 403 for that user and 200 for an admin.
 
 ### Run
 

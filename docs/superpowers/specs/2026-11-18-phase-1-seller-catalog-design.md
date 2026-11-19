@@ -56,7 +56,7 @@ Chosen over having Catalog ask Profiles for the account type on each write.
   - one authorization policy per permission (for example `[Authorize(Policy = Permissions.ListingsWrite)]`), checking the `permissions` claim;
   - `ICurrentUserService` gains `ProfileId` (from the custom claim) and `HasPermission(string)`; there is no `IsAdmin` member, so admin checks ask for a permission (Catalog checks `listings:moderate`).
 - **Tests:** `LocalTestAuthenticationHandler` accepts `permissions=a,b` and `profile_id=<guid>` in its header, so integration tests can act as a seller, an admin or a stranger without Auth0.
-- **In the repo:** the Action's source in `infra/auth0/` with a short setup note (roles, permissions, RBAC toggle, Management API scopes the backend M2M client needs: `update:users`, `create:role_members`, `delete:role_members`), and an ADR. The `seller` role id is configured (`Auth0-SellerRoleId`), so Profiles needs no role lookup and no `read:roles` scope.
+- **In the repo:** the Action's source and a short setup note in the README's "Configure Auth0" section (roles, permissions, RBAC toggle, Management API scopes the backend M2M client needs: `update:users`, `create:role_members`, `delete:role_members`), and an ADR. The `seller` role id is configured (`Auth0-SellerRoleId`), so Profiles needs no role lookup and no `read:roles` scope.
 
 ### 2. Listing lifecycle
 
@@ -153,7 +153,7 @@ Each step is shippable on its own, as one PR:
   - image upload through the API instead of SAS (decision 4);
   - HybridCache with Redis for the category tree (decision 5).
 - `phases/phase-01-seller-catalog.md`: scope and open decisions updated to match this design, "Done when" reworded, status `In progress` then `Done` in the roadmap table.
-- `README.md`: the Auth0 setup steps (roles, Action, M2M scopes), and the new Azurite and Redis containers. `STRUCTURE.md`: `infra/auth0/`.
+- `README.md`: the Auth0 setup steps (roles, Action, M2M scopes), and the new Azurite and Redis containers.
 
 ## Left to the builder
 
