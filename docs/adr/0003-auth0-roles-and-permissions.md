@@ -18,7 +18,7 @@ Option 1. Permissions in the token keep Catalog independent of Profiles and give
 
 ## Consequences
 
-- The tenant needs manual setup: permissions, RBAC, roles, an Action and Management API scopes. The steps are in [infra/auth0/README.md](../../infra/auth0/README.md).
+- The tenant needs manual setup: permissions, RBAC, roles, an Action and Management API scopes. The steps are under "Configure Auth0" in the [README](../../README.md#configure-auth0).
 - A token issued before an account-type change doesn't show it. The client gets a fresh token after the profile is created and after the account type changes.
 - The `app_metadata.is_seller` write and the `is_seller` option of the test identity handler are removed. The `seller` role replaces them.
 - `admin` holds every permission of the API, so each new permission has to be added to it by hand.
